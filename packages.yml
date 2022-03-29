@@ -1,0 +1,2 @@
+packages:
+  - local: ../dbt_apple_store_source
