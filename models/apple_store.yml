@@ -103,6 +103,7 @@ models:
       - name: active_devices_last_30_days
       - name: deletions
       - name: installations
+<<<<<<< HEAD
       - name: sessions 
 
   - name: apple_store__overview_report
@@ -126,4 +127,6 @@ models:
       - name: active_devices_last_30_days
       - name: deletions
       - name: installations
+=======
+>>>>>>> 831a811 (final models - subscription, device, territory)
       - name: sessions 

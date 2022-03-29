@@ -29,7 +29,7 @@ joined as (
         base.subscription_name,
         base.country,
         case
-            when base.state is null or trim(base.state) = '' then 'Not Available' else base.state
+            when replace(base.state, ' ', '') = '' then 'Not Available' else base.state
           end as state,
         base.active_free_trial_introductory_offer_subscriptions,
         base.active_pay_as_you_go_introductory_offer_subscriptions,
