@@ -1,0 +1,25 @@
+
+version: 2
+
+models:
+  - name: apple_store__subscription_report
+    description: Each record represents daily subscription metrics by account, app, subscription name, country and state
+    tests: 
+      - dbt_utils.unique_combination_of_columns:
+          combination_of_columns:
+            - date_day
+            - account_id
+            - app_id
+            - subscription_name
+            - country
+            - state
+    columns:
+      - name: date_day
+      - name: account_id
+      - name: account_name
+      - name: app_id
+      - name: app_name
+      - name: subscription_name
+      - name: country
+      - name: state
+
