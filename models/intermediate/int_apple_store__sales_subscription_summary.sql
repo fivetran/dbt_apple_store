@@ -27,15 +27,15 @@ with base as (
         , subscription_name
         , country
         , case
-            when state is null then 'Not Available' else state
-          end as state 
+            when state is null or trim(state) = '' then 'Not Available' else state
+          end as state  
         , active_free_trial_introductory_offer_subscriptions
         , active_pay_as_you_go_introductory_offer_subscriptions
         , active_pay_up_front_introductory_offer_subscriptions
         , active_standard_price_subscriptions
     from base
     left join app on base.app_name = app.app_name
-    left join sales_account on base.account_id = sales_account.account_name
+    left join sales_account on base.account_id = sales_account.account_id
 )
 
 select *

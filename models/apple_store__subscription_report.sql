@@ -42,6 +42,7 @@ with subscription_summary as (
         , reporting_grain.account_id
         , reporting_grain.account_name 
         , reporting_grain.app_id
+        , reporting_grain.app_name
         , reporting_grain.subscription_name 
         , reporting_grain.country
         , reporting_grain.state

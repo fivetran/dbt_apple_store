@@ -59,7 +59,7 @@ with base as (
         , subscription_name
         , country
         , case
-            when state is null then 'Not Available' else state
+            when state is null or trim(state) = '' then 'Not Available' else state
           end as state 
         {% for event_val in var('apple_store__subscription_events') %}
         , {{ 'event_' ~ event_val | replace(' ', '_') | trim | lower }}
@@ -68,7 +68,7 @@ with base as (
     left join app 
         on pivoted.app_name = app.app_name
     left join sales_account 
-        on pivoted.account_id = sales_account.account_name
+        on pivoted.account_id = sales_account.account_id
 )
 
 select *
