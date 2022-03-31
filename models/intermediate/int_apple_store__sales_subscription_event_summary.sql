@@ -24,10 +24,9 @@ with base as (
         in (
             {% for event_val in var('apple_store__subscription_events') %}
                 {% if loop.index0 != 0 %}
-                , '{{ var("apple_store__subscription_events")[loop.index0] | trim |lower }}'
-                {% else %}
-                '{{ var("apple_store__subscription_events")[loop.index0] | trim | lower }}'
+                , 
                 {% endif %}
+                '{{ var("apple_store__subscription_events")[loop.index0] | trim | lower }}'
             {% endfor %}   
         )
 )
