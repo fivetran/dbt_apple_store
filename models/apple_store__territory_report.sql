@@ -16,6 +16,12 @@ with app_store_territory_report as (
     from {{ var('usage_territory_report') }}
 )
 
+, app as (
+
+    select * 
+    from {{ var('app') }}
+)
+
 , reporting_grain as (
 
     select
@@ -45,6 +51,7 @@ with app_store_territory_report as (
     select 
         reporting_grain.date_day
         , reporting_grain.app_id 
+        , app.app_name
         , reporting_grain.source_type
         , reporting_grain.territory
         , coalesce(app_store_territory_report.impressions, 0) as impressions
@@ -60,6 +67,8 @@ with app_store_territory_report as (
         , coalesce(usage_territory_report.installations, 0) as installations
         , coalesce(usage_territory_report.sessions, 0) as sessions
     from reporting_grain
+    left join app 
+        on reporting_grain.app_id = app.app_id
     left join app_store_territory_report 
         on reporting_grain.date_day = app_store_territory_report.date_day
         and reporting_grain.app_id = app_store_territory_report.app_id 

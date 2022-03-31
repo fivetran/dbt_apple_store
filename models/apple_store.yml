@@ -49,3 +49,32 @@ models:
       - name: deletions
       - name: installations
       - name: sessions 
+
+  - name: apple_store__device_report
+    description: Each record represents daily subscription metrics by app_id, source_type and device
+    tests: 
+      - dbt_utils.unique_combination_of_columns:
+          combination_of_columns:
+            - date_day
+            - app_id
+            - source_type
+            - device
+    columns:
+      - name: date_day
+      - name: app_id
+      - name: source_type
+        description: a little weird bc crashes doesn't have corresponding source type
+      - name: device
+      - name: impressions
+      - name: impressions_unique_device
+      - name: page_views
+      - name: page_views_unique_device
+      - name: first_time_downloads
+      - name: redownloads
+      - name: total_downloads
+      - name: active_devices
+      - name: active_devices_last_30_days
+      - name: deletions
+      - name: installations
+      - name: sessions 
+      - name: crashes
