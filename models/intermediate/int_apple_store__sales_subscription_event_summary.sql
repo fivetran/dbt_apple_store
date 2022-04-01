@@ -1,22 +1,24 @@
+{{ config(enabled=var('apple_store__using_subscriptions', True)) }}
+
 with base as (
 
     select *
     from {{ var('sales_subscription_event_summary') }}
-)
+),
 
-, app as (
+app as (
     
     select *
     from {{ var('app') }}
-)
+),
 
-, sales_account as (
+sales_account as (
     
     select * 
     from {{ var('sales_account') }}
-)
+),
 
-, filtered as (
+filtered as (
 
     select *
     from base 
@@ -29,9 +31,9 @@ with base as (
                 '{{ var("apple_store__subscription_events")[loop.index0] | trim | lower }}'
             {% endfor %}   
         )
-)
+),
 
-, pivoted as (
+pivoted as (
     
     select
         date_day
@@ -45,23 +47,23 @@ with base as (
         {% endfor %}
     from filtered
     {{ dbt_utils.group_by(6) }}
-)
+),
 
-, joined as (
+joined as (
 
     select 
-        pivoted.date_day
-        , pivoted.account_id
-        , sales_account.account_name
-        , app.app_id
-        , pivoted.app_name
-        , subscription_name
-        , country
-        , case
-            when state is null or trim(state) = '' then 'Not Available' else state
-          end as state 
+        pivoted.date_day,
+        pivoted.account_id,
+        sales_account.account_name,
+        app.app_id,
+        pivoted.app_name,
+        pivoted.subscription_name,
+        pivoted.country,
+        case
+            when pivoted.state is null or trim(pivoted.state) = '' then 'Not Available' else pivoted.state
+          end as state
         {% for event_val in var('apple_store__subscription_events') %}
-        , {{ 'event_' ~ event_val | replace(' ', '_') | trim | lower }}
+        , pivoted.{{ 'event_' ~ event_val | replace(' ', '_') | trim | lower }}
         {% endfor %}
     from pivoted
     left join app 
@@ -70,5 +72,4 @@ with base as (
         on pivoted.account_id = sales_account.account_id
 )
 
-select *
-from joined
+select * from joined

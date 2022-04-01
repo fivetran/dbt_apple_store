@@ -2,7 +2,7 @@
 version: 2
 
 models:
-  - name: apple_store__subscription_report
+  - name: apple_store__subscriptions_report
     description: Each record represents daily subscription metrics by account, app, subscription name, country and state
     tests: 
       - dbt_utils.unique_combination_of_columns:
@@ -78,3 +78,29 @@ models:
       - name: installations
       - name: sessions 
       - name: crashes
+        description: The number of reported crashes for a given report day; a value of 0 indicates there were 0 crash reports or no value from the crash report that day
+
+  - name: apple_store__source_type_report
+    description: Each record represents daily subscription metrics by app_id and source_type
+    tests: 
+      - dbt_utils.unique_combination_of_columns:
+          combination_of_columns:
+            - date_day
+            - app_id
+            - source_type
+    columns:
+      - name: date_day
+      - name: app_id
+      - name: source_type
+      - name: impressions
+      - name: impressions_unique_device
+      - name: page_views
+      - name: page_views_unique_device
+      - name: first_time_downloads
+      - name: redownloads
+      - name: total_downloads
+      - name: active_devices
+      - name: active_devices_last_30_days
+      - name: deletions
+      - name: installations
+      - name: sessions 

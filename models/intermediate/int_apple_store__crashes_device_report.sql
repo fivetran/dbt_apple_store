@@ -2,9 +2,9 @@ with base as (
 
     select *
     from {{ var('crashes_app_version_device_report') }}
-)
+),
 
-, aggregated as (
+aggregated as (
 
     select 
         date_day, 
@@ -15,5 +15,4 @@ with base as (
     {{ dbt_utils.group_by(3) }}
 )
 
-select *
-from aggregated
+select * from aggregated
