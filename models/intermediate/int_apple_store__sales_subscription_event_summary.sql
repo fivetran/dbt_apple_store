@@ -50,16 +50,16 @@ with base as (
 , joined as (
 
     select 
-        pivoted.date_day
-        , pivoted.account_id
-        , sales_account.account_name
-        , app.app_id
-        , pivoted.app_name
-        , subscription_name
-        , country
-        , case
+        pivoted.date_day,
+        pivoted.account_id,
+        sales_account.account_name,
+        app.app_id,
+        pivoted.app_name,
+        subscription_name,
+        country,
+        case
             when state is null or trim(state) = '' then 'Not Available' else state
-          end as state 
+          end as state
         {% for event_val in var('apple_store__subscription_events') %}
         , {{ 'event_' ~ event_val | replace(' ', '_') | trim | lower }}
         {% endfor %}
@@ -70,5 +70,4 @@ with base as (
         on pivoted.account_id = sales_account.account_id
 )
 
-select *
-from joined
+select * from joined
