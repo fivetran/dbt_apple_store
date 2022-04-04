@@ -1,22 +1,24 @@
+{{ config(enabled=var('apple_store__using_subscriptions', True)) }}
+
 with base as (
 
     select *
     from {{ var('sales_subscription_summary') }}
-)
+),
 
-, app as (
+app as (
     
     select *
     from {{ var('app') }}
-)
+),
 
-, sales_account as (
+sales_account as (
     
     select * 
     from {{ var('sales_account') }}
-)
+),
 
-, joined as (
+joined as (
 
     select 
         base.date_day,
@@ -24,18 +26,20 @@ with base as (
         sales_account.account_name,
         app.app_id,
         base.app_name,
-        subscription_name,
-        country,
+        base.subscription_name,
+        base.country,
         case
-            when state is null or trim(state) = '' then 'Not Available' else state
+            when base.state is null or trim(base.state) = '' then 'Not Available' else base.state
           end as state,
-        active_free_trial_introductory_offer_subscriptions,
-        active_pay_as_you_go_introductory_offer_subscriptions,
-        active_pay_up_front_introductory_offer_subscriptions,
-        active_standard_price_subscriptions
+        base.active_free_trial_introductory_offer_subscriptions,
+        base.active_pay_as_you_go_introductory_offer_subscriptions,
+        base.active_pay_up_front_introductory_offer_subscriptions,
+        base.active_standard_price_subscriptions
     from base
-    left join app on base.app_name = app.app_name
-    left join sales_account on base.account_id = sales_account.account_id
+    left join app 
+        on base.app_name = app.app_name
+    left join sales_account 
+        on base.account_id = sales_account.account_id
 )
 
 select * from joined

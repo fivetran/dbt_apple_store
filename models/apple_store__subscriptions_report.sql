@@ -1,16 +1,18 @@
+{{ config(enabled=var('apple_store__using_subscriptions', True)) }}
+
 with subscription_summary as (
 
     select *
     from {{ ref('int_apple_store__sales_subscription_summary') }}
-)
+),
 
-, subscription_events as (
+subscription_events as (
 
     select *
     from {{ ref('int_apple_store__sales_subscription_event_summary') }}
-)
+),
 
-, reporting_grain as (
+reporting_grain as (
 
     select
         cast(date_day as date) as date_day,
@@ -33,9 +35,9 @@ with subscription_summary as (
         country,
         state 
     from subscription_events
-)
+),
 
-, joined as (
+joined as (
 
     select 
         reporting_grain.date_day,

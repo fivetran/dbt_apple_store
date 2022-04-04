@@ -2,9 +2,9 @@ with base as (
 
     select *
     from {{ var('usage_device_report') }}
-)
+),
 
-, aggregated as (
+aggregated as (
 
     select 
         date_day,

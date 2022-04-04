@@ -2,51 +2,37 @@ with app_store_territory_report as (
 
     select *
     from {{ var('app_store_territory_report') }}
-)
+),
 
-, downloads_territory_report as (
+downloads_territory_report as (
 
     select *
     from {{ var('downloads_territory_report') }}
-)
+),
 
-, usage_territory_report as (
+usage_territory_report as (
 
     select * 
     from {{ var('usage_territory_report') }}
-)
+),
 
-, app as (
+app as (
 
     select * 
     from {{ var('app') }}
-)
+),
 
-, reporting_grain as (
+reporting_grain as (
 
-    select
+    select distinct
         date_day,
         app_id,
         source_type,
         territory 
     from app_store_territory_report
-    union 
-    select
-        date_day,
-        app_id,
-        source_type,
-        territory
-    from downloads_territory_report
-    union
-    select 
-        date_day,
-        app_id,
-        source_type,
-        territory
-    from usage_territory_report
-)
+),
 
-, joined as (
+joined as (
 
     select 
         reporting_grain.date_day,

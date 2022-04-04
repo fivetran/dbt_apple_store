@@ -78,6 +78,7 @@ models:
       - name: installations
       - name: sessions 
       - name: crashes
+        description: The number of reported crashes for a given report day; a value of 0 indicates there were 0 crash reports or no value from the crash report that day
 
   - name: apple_store__source_type_report
     description: Each record represents daily subscription metrics by app_id and source_type

@@ -2,63 +2,43 @@ with app_store_device_report as (
 
     select *
     from {{ var('app_store_device_report') }}
-)
-, downloads_device_report as (
+),
+
+downloads_device_report as (
 
     select *
     from {{ var('downloads_device_report') }}
-)
+),
 
-, usage_device_report as (
+usage_device_report as (
 
     select *
     from {{ var('usage_device_report') }}
-)
+),
 
-, crashes_device_report as (
+crashes_device_report as (
 
     select *
     from {{ ref('int_apple_store__crashes_device_report') }}
-)
+),
 
-, app as (
+app as (
 
     select * 
     from {{ var('app') }}
-)
+),
 
-, reporting_grain as (
+reporting_grain as (
 
-    select
+    select distinct
         date_day,
         app_id,
         source_type,
         device 
     from app_store_device_report
-    union 
-    select
-        date_day,
-        app_id,
-        source_type,
-        device
-    from downloads_device_report
-    union
-    select 
-        date_day,
-        app_id,
-        source_type,
-        device
-    from usage_device_report
-    union 
-    select
-        date_day,
-        app_id,
-        'No Source Type' as source_type,
-        device
-    from crashes_device_report
-)
+),
 
-, joined as (
+joined as (
 
     select 
         reporting_grain.date_day,

@@ -2,48 +2,36 @@ with app_store_source_type_report as (
 
     select *
     from {{ ref('int_apple_store__app_store_source_type_report') }}
-)
+),
 
-, downloads_source_type_report as (
+downloads_source_type_report as (
 
     select *
     from {{ ref('int_apple_store__downloads_source_type_report') }}
-)
+),
 
-, usage_source_type_report as (
+usage_source_type_report as (
 
     select *
     from {{ ref('int_apple_store__usage_source_type_report') }}
-)
+),
 
-, app as (
+app as (
 
     select * 
     from {{ var('app') }}
-)
+),
 
-, reporting_grain as (
+reporting_grain as (
 
-    select
+    select distinct
         date_day,
         app_id,
         source_type
     from app_store_source_type_report
-    union 
-    select 
-        date_day,
-        app_id,
-        source_type
-    from usage_source_type_report
-    union 
-    select 
-        date_day,
-        app_id,
-        source_type
-    from downloads_source_type_report
-)
+),
 
-, joined as (
+joined as (
 
     select 
         reporting_grain.date_day,
