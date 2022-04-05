@@ -60,7 +60,7 @@ joined as (
         pivoted.subscription_name,
         pivoted.country,
         case
-            when pivoted.state is null or trim(pivoted.state) = '' then 'Not Available' else pivoted.state
+            when replace(pivoted.state, ' ', '') = '' then 'Not Available' else pivoted.state
           end as state
         {% for event_val in var('apple_store__subscription_events') %}
         , pivoted.{{ 'event_' ~ event_val | replace(' ', '_') | trim | lower }}
