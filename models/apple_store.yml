@@ -35,6 +35,7 @@ models:
     columns:
       - name: date_day
       - name: app_id
+      - name: app_name
       - name: source_type
       - name: territory
       - name: impressions
@@ -62,6 +63,7 @@ models:
     columns:
       - name: date_day
       - name: app_id
+      - name: app_name
       - name: source_type
         description: a little weird bc crashes doesn't have corresponding source type
       - name: device
@@ -91,6 +93,7 @@ models:
     columns:
       - name: date_day
       - name: app_id
+      - name: app_name
       - name: source_type
       - name: impressions
       - name: impressions_unique_device
@@ -116,6 +119,34 @@ models:
     columns:
       - name: date_day
       - name: app_id
+      - name: app_name
+      - name: impressions
+      - name: impressions_unique_device
+      - name: page_views
+      - name: page_views_unique_device
+      - name: first_time_downloads
+      - name: redownloads
+      - name: total_downloads
+      - name: active_devices
+      - name: active_devices_last_30_days
+      - name: deletions
+      - name: installations
+
+  - name: apple_store__platform_version_report
+    description: Each record represents daily metrics for each by app_id, source_type and platform version
+    tests: 
+      - dbt_utils.unique_combination_of_columns:
+          combination_of_columns:
+            - date_day
+            - app_id
+            - source_type
+            - platform_version
+    columns:
+      - name: date_day
+      - name: app_id
+      - name: app_name
+      - name: source_type
+      - name: platform_version
       - name: impressions
       - name: impressions_unique_device
       - name: page_views

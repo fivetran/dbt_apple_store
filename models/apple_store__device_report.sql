@@ -30,12 +30,19 @@ app as (
 
 reporting_grain as (
 
-    select distinct
+    select
         date_day,
         app_id,
         source_type,
         device 
     from app_store_device_report
+    union
+    select
+        date_day,
+        app_id,
+        source_type,
+        device
+    from crashes_device_report
 ),
 
 joined as (
@@ -80,6 +87,7 @@ joined as (
     left join crashes_device_report
         on reporting_grain.date_day = crashes_device_report.date_day
         and reporting_grain.app_id = crashes_device_report.app_id
+        and reporting_grain.source_type = crashes_device_report.source_type
         and reporting_grain.device = crashes_device_report.device
 )
 
