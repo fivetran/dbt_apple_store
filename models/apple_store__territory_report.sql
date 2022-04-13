@@ -1,4 +1,10 @@
-with app_store_territory_report as (
+with app as (
+
+    select * 
+    from {{ var('app') }}
+),
+
+app_store_territory_report as (
 
     select *
     from {{ var('app_store_territory_report') }}
@@ -14,12 +20,6 @@ usage_territory_report as (
 
     select * 
     from {{ var('usage_territory_report') }}
-),
-
-app as (
-
-    select * 
-    from {{ var('app') }}
 ),
 
 reporting_grain as (

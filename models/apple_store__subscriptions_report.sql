@@ -48,15 +48,15 @@ joined as (
         reporting_grain.subscription_name, 
         reporting_grain.country,
         reporting_grain.state,
-        {% for event_val in var('apple_store__subscription_events') %}
-        {% set event_column = 'event_' ~ event_val | replace(' ', '_') | trim | lower %}
-        coalesce({{ 'subscription_events.' ~ event_column }}, 0)
-            as {{ event_column }}, 
-        {% endfor %}
         subscription_summary.active_free_trial_introductory_offer_subscriptions,
         subscription_summary.active_pay_as_you_go_introductory_offer_subscriptions,
         subscription_summary.active_pay_up_front_introductory_offer_subscriptions,
         subscription_summary.active_standard_price_subscriptions
+        {% for event_val in var('apple_store__subscription_events') %}
+        {% set event_column = 'event_' ~ event_val | replace(' ', '_') | trim | lower %}
+        , coalesce({{ 'subscription_events.' ~ event_column }}, 0)
+            as {{ event_column }} 
+        {% endfor %}
     from reporting_grain
     left join subscription_summary
         on reporting_grain.date_day = subscription_summary.date_day

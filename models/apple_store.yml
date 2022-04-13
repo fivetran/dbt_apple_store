@@ -127,6 +127,11 @@ models:
       - name: first_time_downloads
       - name: redownloads
       - name: total_downloads
+      - name: active_devices
+      - name: active_devices_last_30_days
+      - name: deletions
+      - name: installations
+      - name: sessions 
 
   - name: apple_store__platform_version_report
     description: Each record represents daily metrics for each by app_id, source_type and platform version
@@ -154,6 +159,7 @@ models:
       - name: active_devices_last_30_days
       - name: deletions
       - name: installations
+      - name: sessions
 
   - name: apple_store__app_version_report
     description: Each record represents daily metrics for each by app_id, source_type and platform version
@@ -170,14 +176,9 @@ models:
       - name: app_name
       - name: source_type
       - name: app_version
-      - name: impressions
-      - name: impressions_unique_device
-      - name: page_views
-      - name: page_views_unique_device
-      - name: first_time_downloads
-      - name: redownloads
-      - name: total_downloads
       - name: active_devices
       - name: active_devices_last_30_days
       - name: deletions
       - name: installations
+      - name: sessions
+      - name: crashes

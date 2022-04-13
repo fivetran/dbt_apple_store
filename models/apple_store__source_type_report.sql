@@ -1,4 +1,10 @@
-with app_store_source_type_report as (
+with app as (
+
+    select * 
+    from {{ var('app') }}
+),
+
+app_store_source_type_report as (
 
     select *
     from {{ ref('int_apple_store__app_store_source_type_report') }}
@@ -14,12 +20,6 @@ usage_source_type_report as (
 
     select *
     from {{ ref('int_apple_store__usage_source_type_report') }}
-),
-
-app as (
-
-    select * 
-    from {{ var('app') }}
 ),
 
 reporting_grain as (
