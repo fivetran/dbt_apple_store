@@ -1,3 +1,5 @@
+{{ config(enabled=var('apple_store__using_subscriptions', True)) }}
+
 with subscription_summary as (
 
     select

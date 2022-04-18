@@ -22,11 +22,13 @@ downloads as (
     from {{ ref('int_apple_store__downloads_overview_report') }}
 ),
 
+{% if var('apple_store__using_subscriptions', True) %}
 subscriptions as (
 
     select *
     from {{ ref('int_apple_store__sales_subscription_overview_report') }}
 ), 
+{% endif %}
 
 usage as (
 
@@ -60,7 +62,9 @@ joined as (
         coalesce(usage.active_devices_last_30_days, 0) as active_devices_last_30_days,
         coalesce(usage.deletions, 0) as deletions,
         coalesce(usage.installations, 0) as installations,
-        coalesce(usage.sessions, 0) as sessions,
+        coalesce(usage.sessions, 0) as sessions
+        {% if var('apple_store__using_subscriptions', True) %}
+        ,
         subscriptions.active_free_trial_introductory_offer_subscriptions,
         subscriptions.active_pay_as_you_go_introductory_offer_subscriptions,
         subscriptions.active_pay_up_front_introductory_offer_subscriptions
@@ -69,6 +73,7 @@ joined as (
         , coalesce({{ 'subscriptions.' ~ event_column }}, 0)
             as {{ event_column }} 
         {% endfor %}
+        {% endif %}
     from reporting_grain
     left join app 
         on reporting_grain.app_id = app.app_id
@@ -81,9 +86,11 @@ joined as (
     left join downloads
         on reporting_grain.date_day = downloads.date_day
         and reporting_grain.app_id = downloads.app_id
+    {% if var('apple_store__using_subscriptions', True) %}
     left join subscriptions 
         on reporting_grain.date_day = subscriptions.date_day
         and reporting_grain.app_id = subscriptions.app_id
+    {% endif %}
     left join usage
         on reporting_grain.date_day = usage.date_day
         and reporting_grain.app_id = usage.app_id        
