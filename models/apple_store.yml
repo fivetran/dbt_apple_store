@@ -182,3 +182,4 @@ models:
       - name: installations
       - name: sessions
       - name: crashes
+      - name: sessions 
