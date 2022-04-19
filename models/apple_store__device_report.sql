@@ -28,7 +28,7 @@ crashes_device_report as (
     from {{ ref('int_apple_store__crashes_device_report') }}
 ),
 
-reporting_grain as (
+reporting_grain_combined as (
 
     select
         date_day,
@@ -36,13 +36,20 @@ reporting_grain as (
         source_type,
         device 
     from app_store_device_report
-    union
+    union all
     select
         date_day,
         app_id,
         source_type,
         device
     from crashes_device_report
+),
+
+reporting_grain as (
+    
+    select
+        distinct *
+    from reporting_grain_combined
 ),
 
 joined as (

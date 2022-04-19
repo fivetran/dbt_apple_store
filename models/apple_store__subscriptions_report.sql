@@ -12,7 +12,7 @@ subscription_events as (
     from {{ ref('int_apple_store__sales_subscription_event_summary') }}
 ),
 
-reporting_grain as (
+reporting_grain_combined as (
 
     select
         cast(date_day as date) as date_day,
@@ -24,7 +24,7 @@ reporting_grain as (
         country,
         state 
     from subscription_summary
-    union 
+    union all
     select
         cast(date_day as date) as date_day,
         account_id,
@@ -36,6 +36,13 @@ reporting_grain as (
         state 
     from subscription_events
 ),
+
+reporting_grain as (
+
+    select 
+        distinct *
+    from reporting_grain_combined
+)
 
 joined as (
 

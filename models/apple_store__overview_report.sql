@@ -22,7 +22,7 @@ downloads as (
     from {{ ref('int_apple_store__downloads_overview_report') }}
 ),
 
-{% if var('apple_store__using_subscriptions', True) %}
+{% if var('apple_store__using_subscriptions', False) %}
 subscriptions as (
 
     select *
@@ -63,7 +63,7 @@ joined as (
         coalesce(usage.deletions, 0) as deletions,
         coalesce(usage.installations, 0) as installations,
         coalesce(usage.sessions, 0) as sessions
-        {% if var('apple_store__using_subscriptions', True) %}
+        {% if var('apple_store__using_subscriptions', False) %}
         ,
         subscriptions.active_free_trial_introductory_offer_subscriptions,
         subscriptions.active_pay_as_you_go_introductory_offer_subscriptions,
@@ -86,7 +86,7 @@ joined as (
     left join downloads
         on reporting_grain.date_day = downloads.date_day
         and reporting_grain.app_id = downloads.app_id
-    {% if var('apple_store__using_subscriptions', True) %}
+    {% if var('apple_store__using_subscriptions', False) %}
     left join subscriptions 
         on reporting_grain.date_day = subscriptions.date_day
         and reporting_grain.app_id = subscriptions.app_id

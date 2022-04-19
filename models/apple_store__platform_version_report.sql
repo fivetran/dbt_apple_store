@@ -28,7 +28,7 @@ usage_platform_version_report as (
     from {{ var('usage_platform_version_report') }}
 ),
 
-reporting_grain as (
+reporting_grain_combined as (
 
     select
         date_day,
@@ -36,13 +36,21 @@ reporting_grain as (
         source_type,
         platform_version
     from app_store_platform_version_report
-    union 
+    union all
     select 
         date_day,
         app_id,
         source_type,
         platform_version
     from crashes_platform_version_report
+),
+
+reporting_grain as (
+
+    select 
+        distinct *
+    from reporting_grain_combined
+
 ),
 
 joined as (
