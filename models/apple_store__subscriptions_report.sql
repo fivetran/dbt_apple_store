@@ -1,4 +1,4 @@
-{{ config(enabled=var('apple_store__using_subscriptions', True)) }}
+{{ config(enabled=var('apple_store__using_subscriptions', False)) }}
 
 with subscription_summary as (
 
@@ -12,7 +12,7 @@ subscription_events as (
     from {{ ref('int_apple_store__sales_subscription_event_summary') }}
 ),
 
-reporting_grain as (
+reporting_grain_combined as (
 
     select
         cast(date_day as date) as date_day,
@@ -24,7 +24,7 @@ reporting_grain as (
         country,
         state 
     from subscription_summary
-    union 
+    union all
     select
         cast(date_day as date) as date_day,
         account_id,
@@ -37,6 +37,13 @@ reporting_grain as (
     from subscription_events
 ),
 
+reporting_grain as (
+
+    select 
+        distinct *
+    from reporting_grain_combined
+)
+
 joined as (
 
     select 
@@ -48,15 +55,15 @@ joined as (
         reporting_grain.subscription_name, 
         reporting_grain.country,
         reporting_grain.state,
-        {% for event_val in var('apple_store__subscription_events') %}
-        {% set event_column = 'event_' ~ event_val | replace(' ', '_') | trim | lower %}
-        coalesce({{ 'subscription_events.' ~ event_column }}, 0)
-            as {{ event_column }}, 
-        {% endfor %}
         subscription_summary.active_free_trial_introductory_offer_subscriptions,
         subscription_summary.active_pay_as_you_go_introductory_offer_subscriptions,
         subscription_summary.active_pay_up_front_introductory_offer_subscriptions,
         subscription_summary.active_standard_price_subscriptions
+        {% for event_val in var('apple_store__subscription_events') %}
+        {% set event_column = 'event_' ~ event_val | replace(' ', '_') | trim | lower %}
+        , coalesce({{ 'subscription_events.' ~ event_column }}, 0)
+            as {{ event_column }} 
+        {% endfor %}
     from reporting_grain
     left join subscription_summary
         on reporting_grain.date_day = subscription_summary.date_day
