@@ -42,7 +42,7 @@ reporting_grain as (
     select 
         distinct *
     from reporting_grain_combined
-)
+),
 
 joined as (
 
