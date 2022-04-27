@@ -9,7 +9,7 @@ with subscription_summary as (
 subscription_events as (
 
     select *
-    from {{ ref('int_apple_store__sales_subscription_event_summary') }}
+    from {{ ref('int_apple_store__sales_subscription_events') }}
 ),
 
 reporting_grain_combined as (

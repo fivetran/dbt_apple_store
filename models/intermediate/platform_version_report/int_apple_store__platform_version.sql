@@ -1,7 +1,7 @@
 with base as (
 
     select *
-    from {{ var('crashes_app_version_device_report') }}
+    from {{ var('crashes_platform_version') }}
 ),
 
 aggregated as (
@@ -9,7 +9,7 @@ aggregated as (
     select 
         date_day, 
         app_id,
-        app_version,
+        platform_version,
         'No Associated Source Type' as source_type,
         sum(crashes) as crashes
     from base

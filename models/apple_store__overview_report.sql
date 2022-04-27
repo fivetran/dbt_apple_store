@@ -7,33 +7,33 @@ with app as (
 app_store as (
 
     select *
-    from {{ ref('int_apple_store__app_store_overview_report') }}
+    from {{ ref('int_apple_store__app_store_overview') }}
 ),
 
 crashes as (
 
     select *
-    from {{ ref('int_apple_store__crashes_overview_report') }}
+    from {{ ref('int_apple_store__crashes_overview') }}
 ),
 
 downloads as (
 
     select *
-    from {{ ref('int_apple_store__downloads_overview_report') }}
+    from {{ ref('int_apple_store__downloads_overview') }}
 ),
 
 {% if var('apple_store__using_subscriptions', False) %}
 subscriptions as (
 
     select *
-    from {{ ref('int_apple_store__sales_subscription_overview_report') }}
+    from {{ ref('int_apple_store__sales_subscription_overview') }}
 ), 
 {% endif %}
 
 usage as (
 
     select *
-    from {{ ref('int_apple_store__usage_overview_report') }}
+    from {{ ref('int_apple_store__usage_overview') }}
 ),
 
 reporting_grain as (

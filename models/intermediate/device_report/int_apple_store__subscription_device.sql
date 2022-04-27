@@ -1,6 +1,12 @@
 {{ config(enabled=var('apple_store__using_subscriptions', False)) }}
 
-with base as (
+with app as (
+
+    select * 
+    from {{ var('app') }}
+), 
+
+base as (
 
     select 
         date_day,
@@ -8,7 +14,7 @@ with base as (
         app_name,
         event,
         quantity
-    from {{ var('sales_subscription_event_summary') }}
+    from {{ var('sales_subscription_events') }}
     where event in ('Renew', 'Cancel', 'Subscribe')
 ), 
 
@@ -31,12 +37,6 @@ base_with_events as (
     from base
     {{ dbt_utils.group_by(4) }}
 ),
-
-app as (
-
-    select * 
-    from {{ var('app') }}
-), 
 
 joined as (
 

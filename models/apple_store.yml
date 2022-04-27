@@ -2,7 +2,7 @@
 version: 2
 
 models:
-  - name: apple_store__subscriptions_report
+  - name: apple_store__subscription_report
     description: Each record represents daily subscription metrics by account, app, subscription name, country and state
     tests: 
       - dbt_utils.unique_combination_of_columns:
@@ -15,13 +15,21 @@ models:
             - state
     columns:
       - name: date_day
+        description: '{{ doc("date_day") }}'
       - name: account_id
+        description: '{{ doc("account_id") }}'
       - name: account_name
+        description: '{{ doc("account_name") }}'
       - name: app_id
+        description: '{{ doc("app_id") }}'
       - name: app_name
+        description: '{{ doc("app_name") }}'
       - name: subscription_name
+        description: '{{ doc("subscription_name") }}'
       - name: country
+        description: '{{ doc("country") }}'
       - name: state
+        description: '{{ doc("state") }}'
 
   - name: apple_store__territory_report
     description: Each record represents daily subscription metrics by app_id, source_type and territory
@@ -34,22 +42,39 @@ models:
             - territory
     columns:
       - name: date_day
+        description: '{{ doc("date_day") }}'
       - name: app_id
+        description: '{{ doc("app_id") }}'
       - name: app_name
+        description: '{{ doc("app_name") }}'
       - name: source_type
+        description: '{{ doc("source_type") }}'
       - name: territory
+        description: '{{ doc("territory") }}'
       - name: impressions
+        description: '{{ doc("impressions") }}'
       - name: impressions_unique_device
+        description: '{{ doc("impressions_unique_device") }}'
       - name: page_views
+        description: '{{ doc("page_views") }}'
       - name: page_views_unique_device
+        description: '{{ doc("page_views_unique_device") }}'
       - name: first_time_downloads
+        description: '{{ doc("first_time_downloads") }}'
       - name: redownloads
+        description: '{{ doc("redownloads") }}'
       - name: total_downloads
+        description: '{{ doc("total_downloads") }}'
       - name: active_devices
+        description: '{{ doc("active_devices") }}'
       - name: active_devices_last_30_days
+        description: '{{ doc("active_devices_last_30_days") }}'
       - name: deletions
+        description: '{{ doc("deletions") }}'
       - name: installations
+        description: '{{ doc("installations") }}'
       - name: sessions 
+        description: '{{ doc("sessions") }}'
 
   - name: apple_store__device_report
     description: Each record represents daily subscription metrics by app_id, source_type and device
@@ -62,25 +87,41 @@ models:
             - device
     columns:
       - name: date_day
+        description: '{{ doc("date_day") }}'
       - name: app_id
+        description: '{{ doc("app_id") }}'
       - name: app_name
+        description: '{{ doc("app_name") }}'
       - name: source_type
-        description: a little weird bc crashes doesn't have corresponding source type
+        description: '{{ doc("source_type") }}'
       - name: device
-      - name: impressions
-      - name: impressions_unique_device
-      - name: page_views
-      - name: page_views_unique_device
-      - name: first_time_downloads
-      - name: redownloads
-      - name: total_downloads
-      - name: active_devices
-      - name: active_devices_last_30_days
-      - name: deletions
-      - name: installations
-      - name: sessions 
+        description: '{{ doc("device") }}'
       - name: crashes
-        description: The number of reported crashes for a given report day; a value of 0 indicates there were 0 crash reports or no value from the crash report that day
+        description: '{{ doc("crashes") }}'
+      - name: impressions
+        description: '{{ doc("impressions") }}'
+      - name: impressions_unique_device
+        description: '{{ doc("impressions_unique_device") }}'
+      - name: page_views
+        description: '{{ doc("page_views") }}'
+      - name: page_views_unique_device
+        description: '{{ doc("page_views_unique_device") }}'
+      - name: first_time_downloads
+        description: '{{ doc("first_time_downloads") }}'
+      - name: redownloads
+        description: '{{ doc("redownloads") }}'
+      - name: total_downloads
+        description: '{{ doc("total_downloads") }}'
+      - name: active_devices
+        description: '{{ doc("active_devices") }}'
+      - name: active_devices_last_30_days
+        description: '{{ doc("active_devices_last_30_days") }}'
+      - name: deletions
+        description: '{{ doc("deletions") }}'
+      - name: installations
+        description: '{{ doc("installations") }}'
+      - name: sessions 
+        description: '{{ doc("sessions") }}'
 
   - name: apple_store__source_type_report
     description: Each record represents daily metrics by app_id and source_type
@@ -92,21 +133,37 @@ models:
             - source_type
     columns:
       - name: date_day
+        description: '{{ doc("date_day") }}'
       - name: app_id
+        description: '{{ doc("app_id") }}'
       - name: app_name
+        description: '{{ doc("app_name") }}'
       - name: source_type
+        description: '{{ doc("source_type") }}'
       - name: impressions
+        description: '{{ doc("impressions") }}'
       - name: impressions_unique_device
+        description: '{{ doc("impressions_unique_device") }}'
       - name: page_views
+        description: '{{ doc("page_views") }}'
       - name: page_views_unique_device
+        description: '{{ doc("page_views_unique_device") }}'
       - name: first_time_downloads
+        description: '{{ doc("first_time_downloads") }}'
       - name: redownloads
+        description: '{{ doc("redownloads") }}'
       - name: total_downloads
+        description: '{{ doc("total_downloads") }}'
       - name: active_devices
+        description: '{{ doc("active_devices") }}'
       - name: active_devices_last_30_days
+        description: '{{ doc("active_devices_last_30_days") }}'
       - name: deletions
+        description: '{{ doc("deletions") }}'
       - name: installations
+        description: '{{ doc("installations") }}'
       - name: sessions 
+        description: '{{ doc("sessions") }}'
 
   - name: apple_store__overview_report
     description: Each record represents daily metrics for each app_id
@@ -117,21 +174,37 @@ models:
             - app_id
     columns:
       - name: date_day
+        description: '{{ doc("date_day") }}'
       - name: app_id
+        description: '{{ doc("app_id") }}'
       - name: app_name
-      - name: impressions
-      - name: impressions_unique_device
-      - name: page_views
-      - name: page_views_unique_device
+        description: '{{ doc("app_name") }}'
       - name: crashes
+        description: '{{ doc("crashes") }}'
+      - name: impressions
+        description: '{{ doc("impressions") }}'
+      - name: impressions_unique_device
+        description: '{{ doc("impressions_unique_device") }}'
+      - name: page_views
+        description: '{{ doc("page_views") }}'
+      - name: page_views_unique_device
+        description: '{{ doc("page_views_unique_device") }}'
       - name: first_time_downloads
+        description: '{{ doc("first_time_downloads") }}'
       - name: redownloads
+        description: '{{ doc("redownloads") }}'
       - name: total_downloads
+        description: '{{ doc("total_downloads") }}'
       - name: active_devices
+        description: '{{ doc("active_devices") }}'
       - name: active_devices_last_30_days
+        description: '{{ doc("active_devices_last_30_days") }}'
       - name: deletions
+        description: '{{ doc("deletions") }}'
       - name: installations
+        description: '{{ doc("installations") }}'
       - name: sessions 
+        description: '{{ doc("sessions") }}'
 
   - name: apple_store__platform_version_report
     description: Each record represents daily metrics for each by app_id, source_type and platform version
@@ -144,25 +217,44 @@ models:
             - platform_version
     columns:
       - name: date_day
+        description: '{{ doc("date_day") }}'
       - name: app_id
+        description: '{{ doc("app_id") }}'
       - name: app_name
+        description: '{{ doc("app_name") }}'
       - name: source_type
+        description: '{{ doc("source_type") }}'
       - name: platform_version
+        description: '{{ doc("platform_version") }}'
+      - name: crashes
+        description: '{{ doc("crashes") }}'
       - name: impressions
+        description: '{{ doc("impressions") }}'
       - name: impressions_unique_device
+        description: '{{ doc("impressions_unique_device") }}'
       - name: page_views
+        description: '{{ doc("page_views") }}'
       - name: page_views_unique_device
+        description: '{{ doc("page_views_unique_device") }}'
       - name: first_time_downloads
+        description: '{{ doc("first_time_downloads") }}'
       - name: redownloads
+        description: '{{ doc("redownloads") }}'
       - name: total_downloads
+        description: '{{ doc("total_downloads") }}'
       - name: active_devices
+        description: '{{ doc("active_devices") }}'
       - name: active_devices_last_30_days
+        description: '{{ doc("active_devices_last_30_days") }}'
       - name: deletions
+        description: '{{ doc("deletions") }}'
       - name: installations
-      - name: sessions
+        description: '{{ doc("installations") }}'
+      - name: sessions 
+        description: '{{ doc("sessions") }}'
 
   - name: apple_store__app_version_report
-    description: Each record represents daily metrics for each by app_id, source_type and platform version
+    description: Each record represents daily metrics for each by app_id, source_type and app version
     tests: 
       - dbt_utils.unique_combination_of_columns:
           combination_of_columns:
@@ -172,14 +264,38 @@ models:
             - app_version
     columns:
       - name: date_day
+        description: '{{ doc("date_day") }}'
       - name: app_id
+        description: '{{ doc("app_id") }}'
       - name: app_name
+        description: '{{ doc("app_name") }}'
       - name: source_type
+        description: '{{ doc("source_type") }}'
       - name: app_version
-      - name: active_devices
-      - name: active_devices_last_30_days
-      - name: deletions
-      - name: installations
-      - name: sessions
+        description: '{{ doc("app_version") }}'
       - name: crashes
+        description: '{{ doc("crashes") }}'
+      - name: impressions
+        description: '{{ doc("impressions") }}'
+      - name: impressions_unique_device
+        description: '{{ doc("impressions_unique_device") }}'
+      - name: page_views
+        description: '{{ doc("page_views") }}'
+      - name: page_views_unique_device
+        description: '{{ doc("page_views_unique_device") }}'
+      - name: first_time_downloads
+        description: '{{ doc("first_time_downloads") }}'
+      - name: redownloads
+        description: '{{ doc("redownloads") }}'
+      - name: total_downloads
+        description: '{{ doc("total_downloads") }}'
+      - name: active_devices
+        description: '{{ doc("active_devices") }}'
+      - name: active_devices_last_30_days
+        description: '{{ doc("active_devices_last_30_days") }}'
+      - name: deletions
+        description: '{{ doc("deletions") }}'
+      - name: installations
+        description: '{{ doc("installations") }}'
       - name: sessions 
+        description: '{{ doc("sessions") }}'

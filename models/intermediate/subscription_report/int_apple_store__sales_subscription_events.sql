@@ -3,7 +3,7 @@
 with base as (
 
     select *
-    from {{ var('sales_subscription_event_summary') }}
+    from {{ var('sales_subscription_events') }}
 ),
 
 app as (
