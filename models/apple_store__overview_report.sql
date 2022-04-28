@@ -54,7 +54,7 @@ joined as (
         coalesce(app_store.impressions_unique_device, 0) as impressions_unique_device,
         coalesce(app_store.page_views, 0) as page_views,
         coalesce(app_store.page_views_unique_device, 0) as page_views_unique_device,
-        coalesce(crashes.crashes) as crashes,
+        coalesce(crashes.crashes,0) as crashes,
         coalesce(downloads.first_time_downloads, 0) as first_time_downloads,
         coalesce(downloads.redownloads, 0) as redownloads,
         coalesce(downloads.total_downloads, 0) as total_downloads,
