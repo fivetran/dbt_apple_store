@@ -64,12 +64,23 @@ vars:
     apple_store_schema: your_schema_name 
     <default_source_table_name>_identifier: your_table_name
 ```
-### Disabling Components
-Your Apple App Store connector might not sync every table that this package expects. If you use subscriptions and do have the `sales_subscription_event_summary` and `sales_subscription_summary` tables synced, add the following variable to your `dbt_project.yml` file:
+### Enabling Components
+Your Apple App Store connector might not sync every table that this package expects. If you use subscriptions and have the `sales_subscription_event_summary` and `sales_subscription_summary` tables synced, add the following variable to your `dbt_project.yml` file:
 
 ```yml
 vars:
   apple_store__using_subscriptions: true # by default this is assumed to be false
+```
+
+Additionally, by default, `Subscribe`, `Renew` and `Cancel` subscription events are included and required in this package for downstream usage. If you would like to add additional subscription events, please add the below to your `dbt_project.yml`:
+
+```yml
+    apple_store__subscription_events:
+    - 'Renew'
+    - 'Cancel'
+    - 'Subscribe'
+    - '<additional_event_name>'
+    - '<additional_event_name>'
 ```
 ## (Optional) Step 4: Additional Configurations
 ### Change the Build Schema

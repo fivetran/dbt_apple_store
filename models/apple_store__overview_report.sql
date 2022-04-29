@@ -65,9 +65,10 @@ joined as (
         coalesce(usage.sessions, 0) as sessions
         {% if var('apple_store__using_subscriptions', False) %}
         ,
-        subscriptions.active_free_trial_introductory_offer_subscriptions,
-        subscriptions.active_pay_as_you_go_introductory_offer_subscriptions,
-        subscriptions.active_pay_up_front_introductory_offer_subscriptions
+        coalesce(subscriptions.active_free_trial_introductory_offer_subscriptions, 0) as active_free_trial_introductory_offer_subscriptions,
+        coalesce(subscriptions.active_pay_as_you_go_introductory_offer_subscriptions, 0) as active_pay_as_you_go_introductory_offer_subscriptions,
+        coalesce(subscriptions.active_pay_up_front_introductory_offer_subscriptions, 0) as active_pay_up_front_introductory_offer_subscriptions,
+        coalesce(subscriptions.active_standard_price_subscriptions, 0) as active_standard_price_subscriptions
         {% for event_val in var('apple_store__subscription_events') %}
         {% set event_column = 'event_' ~ event_val | replace(' ', '_') | trim | lower %}
         , coalesce({{ 'subscriptions.' ~ event_column }}, 0)

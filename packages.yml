@@ -1,5 +1,2 @@
 packages:
-## replace on release
-  - git: https://github.com/fivetran/dbt_apple_store_source.git
-    revision: dev/polish
-    warn-unpinned: false
+  - local: ../dbt_apple_store_source
