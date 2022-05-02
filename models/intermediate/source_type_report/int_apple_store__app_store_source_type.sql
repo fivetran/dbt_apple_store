@@ -1,7 +1,7 @@
 with base as (
 
     select * 
-    from {{ var('app_store_device_report') }}
+    from {{ var('app_store_device') }}
 ),
 
 aggregated as (

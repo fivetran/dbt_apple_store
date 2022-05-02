@@ -9,7 +9,7 @@ with subscription_summary as (
 subscription_events as (
 
     select *
-    from {{ ref('int_apple_store__sales_subscription_event_summary') }}
+    from {{ ref('int_apple_store__sales_subscription_events') }}
 ),
 
 reporting_grain_combined as (
@@ -55,10 +55,10 @@ joined as (
         reporting_grain.subscription_name, 
         reporting_grain.country,
         reporting_grain.state,
-        subscription_summary.active_free_trial_introductory_offer_subscriptions,
-        subscription_summary.active_pay_as_you_go_introductory_offer_subscriptions,
-        subscription_summary.active_pay_up_front_introductory_offer_subscriptions,
-        subscription_summary.active_standard_price_subscriptions
+        coalesce(subscription_summary.active_free_trial_introductory_offer_subscriptions, 0) as active_free_trial_introductory_offer_subscriptions,
+        coalesce(subscription_summary.active_pay_as_you_go_introductory_offer_subscriptions, 0) as active_pay_as_you_go_introductory_offer_subscriptions,
+        coalesce(subscription_summary.active_pay_up_front_introductory_offer_subscriptions, 0) as active_pay_up_front_introductory_offer_subscriptions,
+        coalesce(subscription_summary.active_standard_price_subscriptions, 0) as active_standard_price_subscriptions
         {% for event_val in var('apple_store__subscription_events') %}
         {% set event_column = 'event_' ~ event_val | replace(' ', '_') | trim | lower %}
         , coalesce({{ 'subscription_events.' ~ event_column }}, 0)

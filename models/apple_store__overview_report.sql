@@ -7,33 +7,33 @@ with app as (
 app_store as (
 
     select *
-    from {{ ref('int_apple_store__app_store_overview_report') }}
+    from {{ ref('int_apple_store__app_store_overview') }}
 ),
 
 crashes as (
 
     select *
-    from {{ ref('int_apple_store__crashes_overview_report') }}
+    from {{ ref('int_apple_store__crashes_overview') }}
 ),
 
 downloads as (
 
     select *
-    from {{ ref('int_apple_store__downloads_overview_report') }}
+    from {{ ref('int_apple_store__downloads_overview') }}
 ),
 
 {% if var('apple_store__using_subscriptions', False) %}
 subscriptions as (
 
     select *
-    from {{ ref('int_apple_store__sales_subscription_overview_report') }}
+    from {{ ref('int_apple_store__sales_subscription_overview') }}
 ), 
 {% endif %}
 
 usage as (
 
     select *
-    from {{ ref('int_apple_store__usage_overview_report') }}
+    from {{ ref('int_apple_store__usage_overview') }}
 ),
 
 reporting_grain as (
@@ -54,7 +54,7 @@ joined as (
         coalesce(app_store.impressions_unique_device, 0) as impressions_unique_device,
         coalesce(app_store.page_views, 0) as page_views,
         coalesce(app_store.page_views_unique_device, 0) as page_views_unique_device,
-        coalesce(crashes.crashes) as crashes,
+        coalesce(crashes.crashes,0) as crashes,
         coalesce(downloads.first_time_downloads, 0) as first_time_downloads,
         coalesce(downloads.redownloads, 0) as redownloads,
         coalesce(downloads.total_downloads, 0) as total_downloads,
@@ -65,9 +65,10 @@ joined as (
         coalesce(usage.sessions, 0) as sessions
         {% if var('apple_store__using_subscriptions', False) %}
         ,
-        subscriptions.active_free_trial_introductory_offer_subscriptions,
-        subscriptions.active_pay_as_you_go_introductory_offer_subscriptions,
-        subscriptions.active_pay_up_front_introductory_offer_subscriptions
+        coalesce(subscriptions.active_free_trial_introductory_offer_subscriptions, 0) as active_free_trial_introductory_offer_subscriptions,
+        coalesce(subscriptions.active_pay_as_you_go_introductory_offer_subscriptions, 0) as active_pay_as_you_go_introductory_offer_subscriptions,
+        coalesce(subscriptions.active_pay_up_front_introductory_offer_subscriptions, 0) as active_pay_up_front_introductory_offer_subscriptions,
+        coalesce(subscriptions.active_standard_price_subscriptions, 0) as active_standard_price_subscriptions
         {% for event_val in var('apple_store__subscription_events') %}
         {% set event_column = 'event_' ~ event_val | replace(' ', '_') | trim | lower %}
         , coalesce({{ 'subscriptions.' ~ event_column }}, 0)

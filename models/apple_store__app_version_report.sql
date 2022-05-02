@@ -7,13 +7,13 @@ with app as (
 crashes_app_version_report as (
     
     select *
-    from {{ ref('int_apple_store__app_version_report') }}
+    from {{ ref('int_apple_store__crashes_app_version') }}
 ),
 
 usage_app_version_report as (
 
     select *
-    from {{ var('usage_app_version_report') }}
+    from {{ var('usage_app_version') }}
 ),
 
 reporting_grain_combined as (

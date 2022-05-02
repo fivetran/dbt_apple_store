@@ -23,7 +23,7 @@ subscription_events as (
         , coalesce(sum({{event_column }}), 0)
             as {{ event_column }} 
         {% endfor %}
-    from {{ ref('int_apple_store__sales_subscription_event_summary') }}
+    from {{ ref('int_apple_store__sales_subscription_events') }}
     {{ dbt_utils.group_by(2) }}
 ), 
 
