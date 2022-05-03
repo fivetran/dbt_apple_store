@@ -36,6 +36,13 @@ seeds:
         _fivetran_synced: timestamp
         date: timestamp
 
+models:
+  apple_search_ads:
+    materialized: table
+    +schema: apple_store
+    intermediate:
+      +materialized: ephemeral
+
 dispatch:
   - macro_namespace: dbt_utils
     search_order: ['spark_utils', 'dbt_utils']
