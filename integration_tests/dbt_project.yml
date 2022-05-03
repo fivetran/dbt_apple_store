@@ -29,6 +29,11 @@ vars:
     sales_subscription_events: "{{ ref('sales_subscription_events') }}"
     sales_subscription_summary: "{{ ref('sales_subscription_summary') }}"
 
+    apple_store__subscription_events:
+      - 'Renew'
+      - 'Cancel'
+      - 'Subscribe'
+
 seeds:
   apple_store_integration_tests:
       +quote_columns: "{{ true if target.type == 'redshift' else false }}"
