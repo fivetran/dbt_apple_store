@@ -32,7 +32,7 @@ vars:
       - 'Subscribe'
 
 models:
-  apple_search_ads:
+  apple_store:
     materialized: table
     +schema: apple_store
     intermediate:
