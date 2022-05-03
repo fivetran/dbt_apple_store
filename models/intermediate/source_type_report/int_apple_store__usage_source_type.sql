@@ -11,7 +11,6 @@ aggregated as (
         app_id,
         source_type,
         sum(active_devices) as active_devices,
-        sum(active_devices_last_30_days) as active_devices_last_30_days,
         sum(deletions) as deletions,
         sum(installations) as installations,
         sum(sessions) as sessions
