@@ -25,13 +25,13 @@ Refer to the table below for a detailed view of all models materialized by defau
 
 | **model**                  | **description**                                                                                                                                               |
 | -------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| [apple_store__app_version_report](https://dbt-apple-store.netlify.app/#!/model/model.apple_store.apple_store__app_version_report)             | Each record represents daily metrics for each by app_id, source_type and app version. |
-| [apple_store__device_report](https://dbt-apple-store.netlify.app/#!/model/model.apple_store.apple_store__device_report)     | Each record represents daily subscription metrics by app_id, source_type and device. |
-| [apple_store__overview_report](https://dbt-apple-store.netlify.app/#!/model/model.apple_store.apple_store__overview_report)     | Each record represents daily metrics for each app_id. |
-| [apple_store__platform_version_report](https://dbt-apple-store.netlify.app/#!/model/model.apple_store.apple_store__platform_version_report)    | Each record represents daily metrics for each by app_id, source_type and platform version. |
-| [apple_store__source_type_report](https://dbt-apple-store.netlify.app/#!/model/model.apple_store.apple_store__source_type_report)   | Each record represents daily metrics by app_id and source_type. |
-| [apple_store__subscription_report](https://dbt-apple-store.netlify.app/#!/model/model.apple_store.apple_store__subscription_report) | Each record represents daily subscription metrics by account, app, subscription name, country and state. |
-| [apple_store__territory_report](https://dbt-apple-store.netlify.app/#!/model/model.apple_store.apple_store__territory_report) | Each record represents daily subscription metrics by app_id, source_type and territory. |
+| [apple_store__app_version_report](https://github.com/fivetran/dbt_apple_store/blob/main/models/apple_store__app_version_report.sql)             | Each record represents daily metrics for each by app_id, source_type and app version. |
+| [apple_store__device_report](https://github.com/fivetran/dbt_apple_store/blob/main/models/apple_store__device_report.sql)     | Each record represents daily subscription metrics by app_id, source_type and device. |
+| [apple_store__overview_report](https://github.com/fivetran/dbt_apple_store/blob/main/models/apple_store__overview_report.sql)     | Each record represents daily metrics for each app_id. |
+| [apple_store__platform_version_report](https://github.com/fivetran/dbt_apple_store/blob/main/models/apple_store__platform_version_report.sql)    | Each record represents daily metrics for each by app_id, source_type and platform version. |
+| [apple_store__source_type_report](https://github.com/fivetran/dbt_apple_store/blob/main/models/apple_store__source_type_report.sql)   | Each record represents daily metrics by app_id and source_type. |
+| [apple_store__subscription_report](https://github.com/fivetran/dbt_apple_store/blob/main/models/apple_store__subscription_report.sql) | Each record represents daily subscription metrics by account, app, subscription name, country and state. |
+| [apple_store__territory_report](https://github.com/fivetran/dbt_apple_store/blob/main/models/apple_store__territory_report.sql) | Each record represents daily subscription metrics by app_id, source_type and territory. |
 # 🤔 Who is the target user of this dbt package?
 - You use Fivetran's [GitHub connector](https://fivetran.com/docs/applications/Github)
 - You use dbt
