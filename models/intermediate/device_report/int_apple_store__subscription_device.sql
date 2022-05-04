@@ -42,7 +42,7 @@ pivoted_subscription_events as (
         , app_name
         , device
         {% for event_val in var('apple_store__subscription_events') %}
-        , coalesce(sum(case when lower(event) = '{{ event_val | trim | lower }}' then quantity else 0 end),0) as {{ 'event_' ~ event_val | replace(' ', '_') | trim | lower }}
+        , sum(case when lower(event) = '{{ event_val | trim | lower }}' then quantity else 0 end) as {{ 'event_' ~ event_val | replace(' ', '_') | trim | lower }}
         {% endfor %}
     from filtered_subscription_events
     {{ dbt_utils.group_by(3) }}
@@ -57,7 +57,7 @@ joined as (
         subscription_summary.active_pay_as_you_go_introductory_offer_subscriptions,
         subscription_summary.active_pay_up_front_introductory_offer_subscriptions,
         subscription_summary.active_standard_price_subscriptions,
-        'No Associated Source Type' as source_type
+        cast('No Associated Source Type' as {{ dbt_utils.type_string() }}) as source_type
     from subscription_summary 
     left join pivoted_subscription_events
         on subscription_summary.date_day = pivoted_subscription_events.date_day
