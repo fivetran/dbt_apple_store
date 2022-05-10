@@ -106,7 +106,7 @@ This dbt package is dependent on the following dbt packages. For more informatio
 ```yml
 packages:
     - package: fivetran/apple_store_source
-      version: [">=0.5.0", "<0.6.0"]
+      version: [">=0.1.0", "<0.2.0"]
 
     - package: fivetran/fivetran_utils
       version: [">=0.3.0", "<0.4.0"]

@@ -6,7 +6,6 @@ version: '0.1.0'
 profile: 'integration_tests' 
 
 vars:
-  apple_store__using_subscriptions: true
   apple_store_source:
     app: "{{ ref('app') }}"
     app_store_device: "{{ ref('app_store_source_type_device') }}"
@@ -40,13 +39,6 @@ seeds:
       +column_types:
         _fivetran_synced: timestamp
         date: timestamp
-
-models:
-  apple_store:
-    materialized: table
-    +schema: apple_store
-    intermediate:
-      +materialized: ephemeral
 
 dispatch:
   - macro_namespace: dbt_utils
