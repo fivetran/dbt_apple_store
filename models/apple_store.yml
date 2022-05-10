@@ -26,6 +26,12 @@ models:
         description: '{{ doc("app_name") }}'
       - name: subscription_name
         description: '{{ doc("subscription_name") }}'
+      - name: country_name
+        description: '{{ doc("country_name") }}'
+      - name: region
+        description: '{{ doc("region") }}'
+      - name: sub_region
+        description: '{{ doc("sub_region") }}'
       - name: country
         description: '{{ doc("country") }}'
       - name: state
@@ -51,6 +57,12 @@ models:
         description: '{{ doc("source_type") }}'
       - name: territory
         description: '{{ doc("territory") }}'
+      - name: country_code_alpha_2
+        description: '{{ doc("country_code_alpha_2") }}'
+      - name: region
+        description: '{{ doc("region") }}'
+      - name: sub_region
+        description: '{{ doc("sub_region") }}'
       - name: impressions
         description: '{{ doc("impressions") }}'
       - name: impressions_unique_device

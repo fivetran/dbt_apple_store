@@ -12,6 +12,12 @@ subscription_events as (
     from {{ ref('int_apple_store__sales_subscription_events') }}
 ),
 
+country_codes as (
+    
+    select * 
+    from {{ var('apple_store_country_codes') }}
+),
+
 reporting_grain_combined as (
 
     select
@@ -53,6 +59,12 @@ joined as (
         reporting_grain.app_id,
         reporting_grain.app_name,
         reporting_grain.subscription_name, 
+        case 
+            when country_codes.alternative_country_name is null then country_codes.country_name
+            else country_codes.alternative_country_name
+        end as country_name,
+        country_codes.region, 
+        country_codes.sub_region,
         reporting_grain.country,
         reporting_grain.state,
         coalesce(subscription_summary.active_free_trial_introductory_offer_subscriptions, 0) as active_free_trial_introductory_offer_subscriptions,
@@ -79,6 +91,9 @@ joined as (
         and reporting_grain.subscription_name = subscription_events.subscription_name
         and reporting_grain.country = subscription_events.country
         and reporting_grain.state = subscription_events.state
+    left join country_codes
+        on reporting_grain.country = country_codes.country_code_alpha_2
+    
 )
 
 select * from joined

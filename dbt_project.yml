@@ -26,6 +26,8 @@ vars:
     sales_subscription_events: "{{ ref('stg_apple_store__sales_subscription_events') }}"
     sales_subscription_summary: "{{ ref('stg_apple_store__sales_subscription_summary') }}"
 
+    apple_store_country_codes: "{{ ref('apple_store_country_codes') }}"
+
     apple_store__subscription_events:
       - 'Renew'
       - 'Cancel'

@@ -10,6 +10,12 @@ app_store_territory as (
     from {{ var('app_store_territory') }}
 ),
 
+country_codes as (
+
+    select * 
+    from {{ var('apple_store_country_codes') }}
+),
+
 downloads_territory as (
 
     select *
@@ -40,6 +46,9 @@ joined as (
         app.app_name,
         reporting_grain.source_type,
         reporting_grain.territory,
+        coalesce(official_country_codes.country_code_alpha_2, alternative_country_codes.country_code_alpha_2) as country_code_alpha_2,
+        coalesce(official_country_codes.region, alternative_country_codes.region) as region,
+        coalesce(official_country_codes.sub_region, alternative_country_codes.sub_region) as sub_region,
         coalesce(app_store_territory.impressions, 0) as impressions,
         coalesce(app_store_territory.impressions_unique_device, 0) as impressions_unique_device,
         coalesce(app_store_territory.page_views, 0) as page_views,
@@ -70,6 +79,10 @@ joined as (
         and reporting_grain.app_id = usage_territory.app_id 
         and reporting_grain.source_type = usage_territory.source_type
         and reporting_grain.territory = usage_territory.territory
+    left join country_codes as official_country_codes
+        on reporting_grain.territory = official_country_codes.country_name
+    left join country_codes as alternative_country_codes
+        on reporting_grain.territory = alternative_country_codes.country_name
 )
 
 select * from joined
