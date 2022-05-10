@@ -84,7 +84,7 @@ Additionally, by default, `Subscribe`, `Renew` and `Cancel` subscription events 
 ```
 ## (Optional) Step 4: Additional Configurations
 ### Change the Build Schema
-By default, this package builds the Apple App Store staging models within a schema titled (<target_schema> + `_stg_apple_store`) and your Apple App Store modeling models within a schema titled (<target_schema> + `_apple_store`) in your target database. If this is not where you would like your Apple App Store staging data to be written to, add the following configuration to your root `dbt_project.yml` file:
+By default, this package builds the Apple App Store staging models within a schema titled (<target_schema> + `_apple_store_source`) and your Apple App Store modeling models within a schema titled (<target_schema> + `_apple_store`) in your target database. If this is not where you would like your Apple App Store staging data to be written to, add the following configuration to your root `dbt_project.yml` file:
 
 ```yml
 models:
