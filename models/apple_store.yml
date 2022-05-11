@@ -11,7 +11,7 @@ models:
             - account_id
             - app_id
             - subscription_name
-            - country
+            - territory_long
             - state
     columns:
       - name: date_day
@@ -32,8 +32,8 @@ models:
         description: '{{ doc("region") }}'
       - name: sub_region
         description: '{{ doc("sub_region") }}'
-      - name: country
-        description: '{{ doc("country") }}'
+      - name: territory_long
+        description: '{{ doc("territory_long") }}'
       - name: state
         description: '{{ doc("state") }}'
 
@@ -45,7 +45,7 @@ models:
             - date_day
             - app_id
             - source_type
-            - territory
+            - territory_long
     columns:
       - name: date_day
         description: '{{ doc("date_day") }}'
@@ -55,10 +55,10 @@ models:
         description: '{{ doc("app_name") }}'
       - name: source_type
         description: '{{ doc("source_type") }}'
-      - name: territory
-        description: '{{ doc("territory") }}'
-      - name: country_code_alpha_2
-        description: '{{ doc("country_code_alpha_2") }}'
+      - name: territory_long
+        description: '{{ doc("territory_long") }}'
+      - name: territory_short
+        description: '{{ doc("territory_short") }}'
       - name: region
         description: '{{ doc("region") }}'
       - name: sub_region

@@ -1,0 +1,4 @@
+{% docs territory_long %} The territory (aka country) full name associated with the report's respective metric(s). Territory_long uses source territories for the following: downloads, usage and app store; territory_long is inferred from ISO-3166 using the 2-character country code for subscription events and subscription summary. ([Original Source](https://github.com/lukes/ISO-3166-Countries-with-Regional-Codes/blob/master/all/all.csv)) {% enddocs %}
+
+{% docs territory_short %} The 2-character country code associated with the report's respective metric(s). Territory_short uses source 2-character country codes for the subscription events and subscription summary; territory_short is inferred from ISO-3166 using source territories for the following: downloads, usage and app store. ([Original Source](https://github.com/lukes/ISO-3166-Countries-with-Regional-Codes/blob/master/all/all.csv)) {% enddocs %}
+
