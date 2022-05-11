@@ -62,11 +62,11 @@ joined as (
         case 
             when country_codes.alternative_country_name is null then country_codes.country_name
             else country_codes.alternative_country_name
-        end as country_name,
+        end as territory_long,
+        reporting_grain.country as territory_short,
+        reporting_grain.state,
         country_codes.region, 
         country_codes.sub_region,
-        reporting_grain.country,
-        reporting_grain.state,
         coalesce(subscription_summary.active_free_trial_introductory_offer_subscriptions, 0) as active_free_trial_introductory_offer_subscriptions,
         coalesce(subscription_summary.active_pay_as_you_go_introductory_offer_subscriptions, 0) as active_pay_as_you_go_introductory_offer_subscriptions,
         coalesce(subscription_summary.active_pay_up_front_introductory_offer_subscriptions, 0) as active_pay_up_front_introductory_offer_subscriptions,
