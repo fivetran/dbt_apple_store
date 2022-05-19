@@ -82,7 +82,7 @@ joined as (
     left join country_codes as official_country_codes
         on reporting_grain.territory = official_country_codes.country_name
     left join country_codes as alternative_country_codes
-        on reporting_grain.territory = alternative_country_codes.country_name
+        on reporting_grain.territory = alternative_country_codes.alternative_country_name
 )
 
 select * from joined
