@@ -69,4 +69,5 @@ joined as (
         and reporting_grain.app_version = usage_app_version_report.app_version
 )
 
-select * from joined
+select * 
+from joined

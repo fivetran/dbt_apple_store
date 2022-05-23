@@ -125,4 +125,5 @@ joined as (
         and reporting_grain.device = usage_device.device
 )
 
-select * from joined
+select * 
+from joined

@@ -85,4 +85,5 @@ joined as (
         on reporting_grain.territory = alternative_country_codes.alternative_country_name
 )
 
-select * from joined
+select * 
+from joined

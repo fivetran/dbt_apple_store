@@ -14,4 +14,5 @@ aggregated as (
     {{ dbt_utils.group_by(2) }}
 )
 
-select * from aggregated
+select * 
+from aggregated

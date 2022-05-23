@@ -64,4 +64,5 @@ joined as (
         and reporting_grain.source_type = usage_source_type.source_type
 )
 
-select * from joined
+select * 
+from joined

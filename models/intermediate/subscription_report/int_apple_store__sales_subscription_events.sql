@@ -70,4 +70,5 @@ joined as (
         on pivoted.account_id = sales_account.account_id
 )
 
-select * from joined
+select * 
+from joined

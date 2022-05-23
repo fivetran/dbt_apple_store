@@ -65,7 +65,7 @@ joined as (
         and subscription_summary.device = pivoted_subscription_events.device
     left join app 
         on subscription_summary.app_name = app.app_name
-    
 )
 
-select * from joined
+select * 
+from joined
