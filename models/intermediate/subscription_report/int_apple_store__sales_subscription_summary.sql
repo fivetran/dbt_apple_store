@@ -41,4 +41,5 @@ joined as (
     {{ dbt_utils.group_by(8) }}
 )
 
-select * from joined
+select * 
+from joined

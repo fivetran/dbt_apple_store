@@ -41,4 +41,5 @@ joined as (
         and subscription_summary.app_id = subscription_events.app_id 
 )
 
-select * from joined
+select * 
+from joined

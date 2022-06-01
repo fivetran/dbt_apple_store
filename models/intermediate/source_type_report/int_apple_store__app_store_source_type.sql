@@ -14,7 +14,7 @@ aggregated as (
         sum(page_views) as page_views
     from base 
     {{ dbt_utils.group_by(3) }}
-
 )
 
-select * from aggregated
+select * 
+from aggregated

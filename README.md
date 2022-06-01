@@ -26,13 +26,13 @@ The following table provides a detailed list of all models materialized within t
 
 | **model**                  | **description**                                                                                                                                               |
 | -------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| [apple_store__app_version_report](https://github.com/fivetran/dbt_apple_store/blob/main/models/apple_store__app_version_report.sql)             | Each record represents daily metrics for each by app_id, source_type and app version. |
-| [apple_store__device_report](https://github.com/fivetran/dbt_apple_store/blob/main/models/apple_store__device_report.sql)     | Each record represents daily subscription metrics by app_id, source_type and device. |
-| [apple_store__overview_report](https://github.com/fivetran/dbt_apple_store/blob/main/models/apple_store__overview_report.sql)     | Each record represents daily metrics for each app_id. |
-| [apple_store__platform_version_report](https://github.com/fivetran/dbt_apple_store/blob/main/models/apple_store__platform_version_report.sql)    | Each record represents daily metrics for each by app_id, source_type and platform version. |
-| [apple_store__source_type_report](https://github.com/fivetran/dbt_apple_store/blob/main/models/apple_store__source_type_report.sql)   | Each record represents daily metrics by app_id and source_type. |
-| [apple_store__subscription_report](https://github.com/fivetran/dbt_apple_store/blob/main/models/apple_store__subscription_report.sql) | Each record represents daily subscription metrics by account, app, subscription name, country and state. |
-| [apple_store__territory_report](https://github.com/fivetran/dbt_apple_store/blob/main/models/apple_store__territory_report.sql) | Each record represents daily subscription metrics by app_id, source_type and territory. |
+| [apple_store__app_version_report](https://fivetran.github.io/dbt_apple_store/#!/model/model.apple_store.apple_store__app_version_report)             | Each record represents daily metrics for each by app_id, source_type and app version. |
+| [apple_store__device_report](https://fivetran.github.io/dbt_apple_store/#!/model/model.apple_store.apple_store__device_report)     | Each record represents daily subscription metrics by app_id, source_type and device. |
+| [apple_store__overview_report](https://fivetran.github.io/dbt_apple_store/#!/model/model.apple_store.apple_store__overview_report)     | Each record represents daily metrics for each app_id. |
+| [apple_store__platform_version_report](https://fivetran.github.io/dbt_apple_store/#!/model/model.apple_store.apple_store__platform_version_report)    | Each record represents daily metrics for each by app_id, source_type and platform version. |
+| [apple_store__source_type_report](https://fivetran.github.io/dbt_apple_store/#!/model/model.apple_store.apple_store__source_type_report)   | Each record represents daily metrics by app_id and source_type. |
+| [apple_store__subscription_report](https://fivetran.github.io/dbt_apple_store/#!/model/model.apple_store.apple_store__subscription_report) | Each record represents daily subscription metrics by account, app, subscription name, country and state. |
+| [apple_store__territory_report](https://fivetran.github.io/dbt_apple_store/#!/model/model.apple_store.apple_store__source_type_report) | Each record represents daily subscription metrics by app_id, source_type and territory. |
 
 # 🎯 How do I use the dbt package?
 
@@ -101,7 +101,7 @@ If an individual source table has a different name than the package expects, add
 
 ```yml
 vars:
-    apple_store_<default_source_table_name>_identifier: your_table_name 
+    <default_source_table_name>_identifier: your_table_name 
 ```
 </details>
 
@@ -135,6 +135,9 @@ The Fivetran team maintaining this package _only_ maintains the latest version o
 A small team of analytics engineers at Fivetran develops these dbt packages. However, the packages are made better by community contributions! 
 
 We highly encourage and welcome contributions to this package. Check out [this dbt Discourse article](https://discourse.getdbt.com/t/contributing-to-a-dbt-package/657) on the best workflow for contributing to a package!
+
+## Opinionated Decisions
+In creating this package, which is meant for a wide range of use cases, we had to take opinionated stances on a few different questions we came across during development. We've consolidated significant choices we made in the [DECISIONLOG.md](https://github.com/fivetran/dbt_apple_store/blob/main/DECISIONLOG.md), and will continue to update as the package evolves. We are always open to and encourage feedback on these choices, and the package in general.
 
 # 🏪 Are there any resources available?
 - If you have questions or want to reach out for help, please refer to the [GitHub Issue](https://github.com/fivetran/dbt_apple_store/issues/new/choose) section to find the right avenue of support for you.

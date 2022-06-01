@@ -99,4 +99,5 @@ joined as (
         and reporting_grain.platform_version = usage_platform_version.platform_version
 )
 
-select * from joined
+select * 
+from joined

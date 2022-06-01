@@ -94,4 +94,5 @@ joined as (
         and reporting_grain.app_id = usage.app_id        
 )
 
-select * from joined
+select * 
+from joined
