@@ -57,7 +57,7 @@ joined as (
         subscription_summary.active_pay_as_you_go_introductory_offer_subscriptions,
         subscription_summary.active_pay_up_front_introductory_offer_subscriptions,
         subscription_summary.active_standard_price_subscriptions,
-        cast(null as {{ dbt_utils.type_string() }}) as source_type
+        cast(null as {{ dbt.type_string() }}) as source_type
     from subscription_summary 
     left join pivoted_subscription_events
         on subscription_summary.date_day = pivoted_subscription_events.date_day
