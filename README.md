@@ -6,7 +6,7 @@
         href="https://fivetran.com/docs/getting-started/core-concepts#releasephases">
         <img src="https://img.shields.io/badge/Fivetran Release Phase-_Beta-orange.svg" /></a>
     <a alt="dbt-core">
-        <img src="https://img.shields.io/badge/dbt_Core™_version->=1.0.0_,<2.0.0-orange.svg" /></a>
+        <img src="https://img.shields.io/badge/dbt_Core™_version->=1.3.0_,<2.0.0-orange.svg" /></a>
     <a alt="Maintained?">
         <img src="https://img.shields.io/badge/Maintained%3F-yes-green.svg" /></a>
     <a alt="PRs">
@@ -48,7 +48,7 @@ Include the following apple_store package version in your `packages.yml` file:
 ```yaml
 packages:
   - package: fivetran/apple_store
-    version: [">=0.1.0", "<0.2.0"]
+    version: [">=0.2.0", "<0.3.0"]
 
 ```
 ## Step 3: Define database and schema variables
@@ -119,13 +119,13 @@ This dbt package is dependent on the following dbt packages. Please be aware tha
 ```yml
 packages:
     - package: fivetran/apple_store_source
-      version: [">=0.1.0", "<0.2.0"]
+      version: [">=0.2.0", "<0.3.0"]
 
     - package: fivetran/fivetran_utils
-      version: [">=0.3.0", "<0.4.0"]
+      version: [">=0.4.0", "<0.5.0"]
 
     - package: dbt-labs/dbt_utils
-      version: [">=0.8.0", "<0.9.0"]
+      version: [">=1.0.0", "<1.1.0"]
 ```
 # 🙌 How is this package maintained and can I contribute?
 ## Package Maintenance
