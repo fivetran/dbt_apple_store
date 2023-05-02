@@ -48,7 +48,7 @@ Include the following apple_store package version in your `packages.yml` file:
 ```yaml
 packages:
   - package: fivetran/apple_store
-    version: [">=0.2.0", "<0.3.0"] # we recommend using ranges to capture non-breaking changes automatically
+    version: [">=0.3.0", "<0.4.0"] # we recommend using ranges to capture non-breaking changes automatically
 ```
 
 Do NOT include the `apple_store_source` package in this file. The transformation package itself has a dependency on it and will install the source package as well.
