@@ -6,6 +6,7 @@
   - This is a 🚨**breaking change**🚨 as you will need to re-seed (`dbt seed --full-refresh`) the `apple_store_country_codes` file again.
 
 ## Under the Hood:
+[PR #10](https://github.com/fivetran/dbt_apple_store/pull/10) includes the following changes:
 - Incorporated the new `fivetran_utils.drop_schemas_automation` macro into the end of each Buildkite integration test job.
 - Updated the pull request [templates](/.github).
 
