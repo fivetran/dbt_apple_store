@@ -1,9 +1,15 @@
-# dbt_apple_store v0.UPDATE.UPDATE
+# dbt_apple_store v0.3.0
 
- ## Under the Hood:
+## Bug Fixes
+[PR #11](https://github.com/fivetran/dbt_apple_store/pull/11) includes the following changes:
+- This version of the transform package points to a [breaking change in the source package](https://github.com/fivetran/dbt_apple_store_source/blob/main/CHANGELOG.md) in which the [country code](https://github.com/fivetran/dbt_apple_store_source/blob/main/seeds/apple_store_country_codes.csv) mapping table was updated to align with Apple's [format and inclusion list](https://developer.apple.com/help/app-store-connect/reference/app-store-localizations/) of country names.
+  - This is a 🚨**breaking change**🚨 as you will need to re-seed (`dbt seed --full-refresh`) the `apple_store_country_codes` file again.
 
+## Under the Hood:
+[PR #10](https://github.com/fivetran/dbt_apple_store/pull/10) includes the following changes:
 - Incorporated the new `fivetran_utils.drop_schemas_automation` macro into the end of each Buildkite integration test job.
 - Updated the pull request [templates](/.github).
+
 # dbt_apple_store v0.2.0
 
 ## 🚨 Breaking Changes 🚨:
