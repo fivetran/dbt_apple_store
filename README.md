@@ -71,7 +71,13 @@ vars:
   apple_store__using_subscriptions: true # by default this is assumed to be false
 ```
 
-## (Optional) Step 5: Additional configurations
+## Step 5: Seed `country_codes` mapping table (once)
+
+In order to map longform territory names to their ISO country codes, we have adapted the CSV from [lukes/ISO-3166-Countries-with-Regional-Codes](https://github.com/lukes/ISO-3166-Countries-with-Regional-Codes) to align with Apple's country output [format](https://developer.apple.com/help/app-store-connect/reference/app-store-localizations/). 
+
+You will need to `dbt seed` the `apple_store_country_codes` [file](https://github.com/fivetran/dbt_apple_store_source/blob/main/seeds/apple_store_country_codes.csv) just once.
+
+## (Optional) Step 6: Additional configurations
 <details><summary>Expand for configurations</summary>
 
 ### Defining subscription events
@@ -108,7 +114,7 @@ vars:
 ```
 </details>
 
-## (Optional) Step 6: Orchestrate your models with Fivetran Transformations for dbt Core™
+## (Optional) Step 7: Orchestrate your models with Fivetran Transformations for dbt Core™
 <details><summary>Expand for details</summary>
 <br>
     
