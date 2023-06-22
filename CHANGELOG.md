@@ -1,3 +1,9 @@
+# dbt_apple_store v0.UPDATE.UPDATE
+
+## Under the Hood:
+[PR #13](https://github.com/fivetran/dbt_apple_store/pull/13) includes the following changes:
+- Added rows to seed data `app_store_territory_source_type` to test for countries with variant spellings in the  `territory` column.
+
 # dbt_apple_store v0.3.0
 
 ## Bug Fixes
