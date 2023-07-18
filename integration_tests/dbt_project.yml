@@ -3,7 +3,7 @@ config-version: 2
 name: 'apple_store_integration_tests'
 version: '0.3.1'
 
-profile: 'integration_tests' 
+profile: 'integration_tests'
 
 vars:
   apple_store_schema: apple_store_integration_tests_1
