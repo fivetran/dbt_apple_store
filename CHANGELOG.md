@@ -1,4 +1,6 @@
-# dbt_apple_store v0.UPDATE.UPDATE
+# dbt_apple_store v0.3.1
+
+## 
 
 ## Under the Hood:
 [PR #13](https://github.com/fivetran/dbt_apple_store/pull/13) includes the following changes:
