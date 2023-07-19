@@ -26,16 +26,24 @@ models:
         description: '{{ doc("app_name") }}'
       - name: subscription_name
         description: '{{ doc("subscription_name") }}'
-      - name: country_name
-        description: '{{ doc("country_name") }}'
+      - name: territory_long
+        description: '{{ doc("territory_long") }}'
+      - name: territory_short
+        description: '{{ doc("country") }}'
       - name: region
         description: '{{ doc("region") }}'
       - name: sub_region
         description: '{{ doc("sub_region") }}'
-      - name: territory_long
-        description: '{{ doc("territory_long") }}'
       - name: state
         description: '{{ doc("state") }}'
+      - name: active_free_trial_introductory_offer_subscriptions
+        description: '{{ doc("active_free_trial_introductory_offer_subscriptions") }}'
+      - name: active_pay_as_you_go_introductory_offer_subscriptions
+        description: '{{ doc("active_pay_as_you_go_introductory_offer_subscriptions") }}'
+      - name: active_pay_up_front_introductory_offer_subscriptions
+        description: '{{ doc("active_pay_up_front_introductory_offer_subscriptions") }}'
+      - name: active_standard_price_subscriptions
+        description: '{{ doc("active_standard_price_subscriptions") }}'
 
   - name: apple_store__territory_report
     description: Each record represents daily subscription metrics by app_id, source_type and territory
@@ -273,22 +281,22 @@ models:
         description: '{{ doc("source_type") }}'
       - name: app_version
         description: '{{ doc("app_version") }}'
-      - name: crashes
-        description: '{{ doc("crashes") }}'
-      - name: impressions
-        description: '{{ doc("impressions") }}'
-      - name: impressions_unique_device
-        description: '{{ doc("impressions_unique_device") }}'
-      - name: page_views
-        description: '{{ doc("page_views") }}'
-      - name: page_views_unique_device
-        description: '{{ doc("page_views_unique_device") }}'
-      - name: first_time_downloads
-        description: '{{ doc("first_time_downloads") }}'
-      - name: redownloads
-        description: '{{ doc("redownloads") }}'
-      - name: total_downloads
-        description: '{{ doc("total_downloads") }}'
+      # - name: crashes
+      #   description: '{{ doc("crashes") }}'
+      # - name: impressions
+      #   description: '{{ doc("impressions") }}'
+      # - name: impressions_unique_device
+      #   description: '{{ doc("impressions_unique_device") }}'
+      # - name: page_views
+      #   description: '{{ doc("page_views") }}'
+      # - name: page_views_unique_device
+      #   description: '{{ doc("page_views_unique_device") }}'
+      # - name: first_time_downloads
+      #   description: '{{ doc("first_time_downloads") }}'
+      # - name: redownloads
+      #   description: '{{ doc("redownloads") }}'
+      # - name: total_downloads
+      #   description: '{{ doc("total_downloads") }}'
       - name: active_devices
         description: '{{ doc("active_devices") }}'
       - name: active_devices_last_30_days
