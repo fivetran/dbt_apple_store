@@ -31,6 +31,11 @@ vars:
       - 'Cancel'
       - 'Subscribe'
 
+models:
+  +persist_docs:
+    relation: true
+    columns: true
+
 seeds:
   apple_store_integration_tests:
       +quote_columns: "{{ true if target.type == 'redshift' else false }}"
