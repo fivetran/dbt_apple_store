@@ -6,7 +6,7 @@ version: '0.3.1'
 profile: 'integration_tests'
 
 vars:
-  apple_store_schema: apple_store_integration_tests_1
+  apple_store_schema: apple_store_integration_tests_21
   apple_store__using_subscriptions: True
   apple_store_source:
     app_identifier: "app"
@@ -33,8 +33,8 @@ vars:
 
 models:
   +persist_docs:
-    relation: true
-    columns: true
+    relation: "{{ false if target.type in ('spark','databricks') else true }}"
+    columns: "{{ false if target.type in ('spark','databricks') else true }}"
 
 seeds:
   apple_store_integration_tests:
