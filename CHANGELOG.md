@@ -1,12 +1,11 @@
 # dbt_apple_store v0.3.1
 
+This package version includes the following updates:
 ## Bug Fix
-[PR #14](https://github.com/fivetran/dbt_apple_store/pull/14) includes the following update:
-- Shortened the field description for `source_type`. This was causing an error if the persist docs config was enabled because the description size exceeded warehouse constraints.
+- Shortened the field description for `source_type`. This was causing an error if the persist docs config was enabled because the description size exceeded warehouse constraints. This was updated upstream in the dbt_apple_store_source package ([PR #11](https://github.com/fivetran/dbt_apple_store_source/pull/11))
 
 ## Under the Hood:
-[PR #13](https://github.com/fivetran/dbt_apple_store/pull/13) includes the following changes:
-- Added rows to seed data `app_store_territory_source_type` to test for countries with variant spellings in the  `territory` column.
+- Added rows to seed data `app_store_territory_source_type` to test for countries with variant spellings in the  `territory` column ([PR #13](https://github.com/fivetran/dbt_apple_store/pull/13))
 
 # dbt_apple_store v0.3.0
 
