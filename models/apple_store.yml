@@ -281,22 +281,9 @@ models:
         description: '{{ doc("source_type") }}'
       - name: app_version
         description: '{{ doc("app_version") }}'
-      # - name: crashes
-      #   description: '{{ doc("crashes") }}'
-      # - name: impressions
-      #   description: '{{ doc("impressions") }}'
-      # - name: impressions_unique_device
-      #   description: '{{ doc("impressions_unique_device") }}'
-      # - name: page_views
-      #   description: '{{ doc("page_views") }}'
-      # - name: page_views_unique_device
-      #   description: '{{ doc("page_views_unique_device") }}'
-      # - name: first_time_downloads
-      #   description: '{{ doc("first_time_downloads") }}'
-      # - name: redownloads
-      #   description: '{{ doc("redownloads") }}'
-      # - name: total_downloads
-      #   description: '{{ doc("total_downloads") }}'
+      - name: crashes
+        description: '{{ doc("crashes") }}'
+        
       - name: active_devices
         description: '{{ doc("active_devices") }}'
       - name: active_devices_last_30_days
