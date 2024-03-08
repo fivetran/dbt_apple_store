@@ -83,14 +83,14 @@ joined as (
         and reporting_grain.app_name = subscription_summary.app_name
         and reporting_grain.subscription_name = subscription_summary.subscription_name
         and reporting_grain.country = subscription_summary.country
-        and reporting_grain.state = subscription_summary.state
+        and (reporting_grain.state = subscription_summary.state or (reporting_grain.state is null and subscription_summary.state is null))
     left join subscription_events
         on reporting_grain.date_day = subscription_events.date_day
         and reporting_grain.account_id =  subscription_events.account_id 
         and reporting_grain.app_name = subscription_events.app_name
         and reporting_grain.subscription_name = subscription_events.subscription_name
         and reporting_grain.country = subscription_events.country
-        and reporting_grain.state = subscription_events.state
+        and (reporting_grain.state = subscription_events.state or (reporting_grain.state is null and subscription_events.state is null))
     left join country_codes
         on reporting_grain.country = country_codes.country_code_alpha_2
     
