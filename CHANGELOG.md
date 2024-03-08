@@ -1,3 +1,9 @@
+# dbt_apple_store v0.3.2
+
+This package version includes the following updates:
+## Bug Fix
+- Replaced the `state` join condition in `apple_store__subscription_report`. The new condition will now check for null values correctly. This was causing wrong metrics if there was no state value. ([PR #11](https://github.com/fivetran/dbt_apple_store_source/pull/11))
+
 # dbt_apple_store v0.3.1
 
 This package version includes the following updates:
