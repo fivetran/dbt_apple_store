@@ -2,7 +2,7 @@
 
 [PR #18](https://github.com/fivetran/dbt_apple_store/pull/18) includes the following updates:
 ## Bug Fix
-- Replaced the `state` join condition in `apple_store__subscription_report`. The new condition will now check for null values correctly. This was causing wrong metrics if there was no state value.
+- Enhanced the `state` join condition in `apple_store__subscription_report`. The new condition will now check for null values correctly. This was causing wrong metrics if there was no state value.
 
 ## Under the Hood
 - Included auto-releaser GitHub Actions workflow to automate future releases.
