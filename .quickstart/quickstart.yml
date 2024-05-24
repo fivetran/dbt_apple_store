@@ -8,6 +8,8 @@ table_variables:
     - sales_subscription_summary
     - sales_subscription_event_summary
 
+requires_dbt_seed: true
+
 destination_configurations:
   databricks:
     dispatch:
