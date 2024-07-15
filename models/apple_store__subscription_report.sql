@@ -98,7 +98,6 @@ joined as (
         and (reporting_grain.state = subscription_events.state or (reporting_grain.state is null and subscription_events.state is null))
     left join country_codes
         on reporting_grain.country = country_codes.country_code_alpha_2
-        and reporting_grain.source_relation = country_codes.source_relation
     
 )
 

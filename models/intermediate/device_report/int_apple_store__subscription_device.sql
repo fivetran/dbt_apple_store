@@ -40,14 +40,14 @@ pivoted_subscription_events as (
     
     select
         source_relation,
-        date_day
-        , app_name
-        , device
+        date_day,
+        app_name,
+        device
         {% for event_val in var('apple_store__subscription_events') %}
         , sum(case when lower(event) = '{{ event_val | trim | lower }}' then quantity else 0 end) as {{ 'event_' ~ event_val | replace(' ', '_') | trim | lower }}
         {% endfor %}
     from filtered_subscription_events
-    {{ dbt_utils.group_by(5) }}
+    {{ dbt_utils.group_by(4) }}
 ),
 
 joined as (
