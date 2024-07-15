@@ -1,5 +1,3 @@
-ADD source_relation WHERE NEEDED + CHECK JOINS AND WINDOW FUNCTIONS! (Delete this line when done.)
-
 with base as (
 
     select * 
@@ -9,7 +7,7 @@ with base as (
 aggregated as (
 
     select 
-        .source_relation,
+        source_relation,
         date_day,
         app_id,
         source_type,

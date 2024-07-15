@@ -1,5 +1,3 @@
-ADD source_relation WHERE NEEDED + CHECK JOINS AND WINDOW FUNCTIONS! (Delete this line when done.)
-
 with app as (
 
     select * 
@@ -33,7 +31,7 @@ usage_platform_version as (
 reporting_grain_combined as (
 
     select
-        .source_relation,
+        source_relation,
         date_day,
         app_id,
         source_type,
@@ -41,7 +39,7 @@ reporting_grain_combined as (
     from app_store_platform_version
     union all
     select 
-        .source_relation,
+        source_relation,
         date_day,
         app_id,
         source_type,

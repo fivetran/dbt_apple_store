@@ -1,5 +1,3 @@
-ADD source_relation WHERE NEEDED + CHECK JOINS AND WINDOW FUNCTIONS! (Delete this line when done.)
-
 {{ config(enabled=var('apple_store__using_subscriptions', False)) }}
 
 with subscription_summary as (
@@ -23,7 +21,7 @@ country_codes as (
 reporting_grain_combined as (
 
     select
-        .source_relation,
+        source_relation,
         cast(date_day as date) as date_day,
         account_id,
         account_name,
@@ -35,7 +33,7 @@ reporting_grain_combined as (
     from subscription_summary
     union all
     select
-        .source_relation,
+        source_relation,
         cast(date_day as date) as date_day,
         account_id,
         account_name,

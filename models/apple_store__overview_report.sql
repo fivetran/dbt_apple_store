@@ -1,5 +1,3 @@
-ADD source_relation WHERE NEEDED + CHECK JOINS AND WINDOW FUNCTIONS! (Delete this line when done.)
-
 with app as (
 
     select * 
@@ -41,7 +39,7 @@ usage as (
 reporting_grain as (
 
     select distinct
-        .source_relation,
+        source_relation,
         date_day,
         app_id 
     from app_store

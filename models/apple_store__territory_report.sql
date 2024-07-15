@@ -1,5 +1,3 @@
-ADD source_relation WHERE NEEDED + CHECK JOINS AND WINDOW FUNCTIONS! (Delete this line when done.)
-
 with app as (
 
     select * 
@@ -33,7 +31,7 @@ usage_territory as (
 reporting_grain as (
 
     select distinct
-        .source_relation,
+        source_relation,
         date_day,
         app_id,
         source_type,
@@ -89,10 +87,8 @@ joined as (
         and reporting_grain.territory = usage_territory.territory
     left join country_codes as official_country_codes
         on reporting_grain.territory = official_country_codes.country_name
-        and official_country_codes.source_relation = reporting_grain.source_relation
     left join country_codes as alternative_country_codes
         on reporting_grain.territory = alternative_country_codes.alternative_country_name
-        and alternative_country_codes.source_relation = reporting_grain.source_relation
 )
 
 select * 
