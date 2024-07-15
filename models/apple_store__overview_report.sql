@@ -1,3 +1,5 @@
+ADD source_relation WHERE NEEDED + CHECK JOINS AND WINDOW FUNCTIONS! (Delete this line when done.)
+
 with app as (
 
     select * 
@@ -39,6 +41,7 @@ usage as (
 reporting_grain as (
 
     select distinct
+        .source_relation,
         date_day,
         app_id 
     from app_store
@@ -47,6 +50,7 @@ reporting_grain as (
 joined as (
 
     select 
+        reporting_grain.source_relation,
         reporting_grain.date_day,
         reporting_grain.app_id,
         app.app_name,
@@ -75,22 +79,28 @@ joined as (
     from reporting_grain
     left join app 
         on reporting_grain.app_id = app.app_id
+        and reporting_grain.source_relation = app.source_relation
     left join app_store 
         on reporting_grain.date_day = app_store.date_day
+        and reporting_grain.source_relation = app_store.source_relation
         and reporting_grain.app_id = app_store.app_id
     left join crashes
         on reporting_grain.date_day = crashes.date_day
+        and reporting_grain.source_relation = crashes.source_relation
         and reporting_grain.app_id = crashes.app_id
     left join downloads
         on reporting_grain.date_day = downloads.date_day
+        and reporting_grain.source_relation = downloads.source_relation
         and reporting_grain.app_id = downloads.app_id
     {% if var('apple_store__using_subscriptions', False) %}
     left join subscriptions 
         on reporting_grain.date_day = subscriptions.date_day
+        and reporting_grain.source_relation = subscriptions.source_relation
         and reporting_grain.app_id = subscriptions.app_id
     {% endif %}
     left join usage
         on reporting_grain.date_day = usage.date_day
+        and reporting_grain.source_relation = usage.source_relation
         and reporting_grain.app_id = usage.app_id        
 )
 

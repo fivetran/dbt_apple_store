@@ -1,3 +1,5 @@
+ADD source_relation WHERE NEEDED + CHECK JOINS AND WINDOW FUNCTIONS! (Delete this line when done.)
+
 {{ config(enabled=var('apple_store__using_subscriptions', False)) }}
 
 with base as (
@@ -46,12 +48,13 @@ pivoted as (
         , sum(case when lower(event) = '{{ event_val | trim | lower }}' then quantity else 0 end) as {{ 'event_' ~ event_val | replace(' ', '_') | trim | lower }}
         {% endfor %}
     from filtered
-    {{ dbt_utils.group_by(6) }}
+    {{ dbt_utils.group_by(7) }}
 ),
 
 joined as (
 
     select 
+        pivoted.source_relation,
         pivoted.date_day,
         pivoted.account_id,
         sales_account.account_name,
@@ -66,8 +69,10 @@ joined as (
     from pivoted
     left join app 
         on pivoted.app_name = app.app_name
+        and pivoted.source_relation = app.source_relation
     left join sales_account 
         on pivoted.account_id = sales_account.account_id
+        and pivoted.source_relation = sales_account.source_relation
 )
 
 select * 

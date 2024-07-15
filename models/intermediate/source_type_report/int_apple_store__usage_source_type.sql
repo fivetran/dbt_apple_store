@@ -1,3 +1,5 @@
+ADD source_relation WHERE NEEDED + CHECK JOINS AND WINDOW FUNCTIONS! (Delete this line when done.)
+
 with base as (
 
     select *
@@ -7,6 +9,7 @@ with base as (
 aggregated as (
 
     select 
+        .source_relation,
         date_day,
         app_id,
         source_type,
@@ -15,7 +18,7 @@ aggregated as (
         sum(installations) as installations,
         sum(sessions) as sessions
     from base
-    {{ dbt_utils.group_by(3) }}
+    {{ dbt_utils.group_by(4) }}
 )
 
 select * 

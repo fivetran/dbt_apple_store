@@ -1,3 +1,5 @@
+ADD source_relation WHERE NEEDED + CHECK JOINS AND WINDOW FUNCTIONS! (Delete this line when done.)
+
 {{ config(enabled=var('apple_store__using_subscriptions', False)) }}
 
 with base as (
@@ -21,6 +23,7 @@ sales_account as (
 joined as (
 
     select 
+        base.source_relation,
         base.date_day,
         base.account_id,
         sales_account.account_name,
@@ -36,9 +39,11 @@ joined as (
     from base
     left join app 
         on base.app_name = app.app_name
+        and base.source_relation = app.source_relation
     left join sales_account 
         on base.account_id = sales_account.account_id
-    {{ dbt_utils.group_by(8) }}
+        and base.source_relation = sales_account.source_relation
+    {{ dbt_utils.group_by(9) }}
 )
 
 select * 

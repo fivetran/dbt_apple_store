@@ -1,3 +1,14 @@
+# dbt_apple_store v0.4.0
+[PR #22](https://github.com/fivetran/dbt_apple_store/pull/22) includes the following updates:
+## Feature update 🎉
+- Unioning capability! This adds the ability to union source data from multiple apple_store connectors. Refer to the [README](https://github.com/fivetran/dbt_apple_store/blob/main/README.md) for more details.
+
+## Under the hood 🚘
+- In the source package, updated tmp models to union source data using the `fivetran_utils.union_data` macro. 
+- To distinguish which source each field comes from, added `source_relation` column in each staging and downstream model and applied the `fivetran_utils.source_relation` macro.
+- Updated tests to account for the new `source_relation` column.
+    - The `source_relation` column is included in all joins and window function partition clauses in the transform package. 
+
 # dbt_apple_store v0.3.2
 
 [PR #18](https://github.com/fivetran/dbt_apple_store/pull/18) includes the following updates:
