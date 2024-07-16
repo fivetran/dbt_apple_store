@@ -35,6 +35,7 @@ models:
   +persist_docs:
     relation: "{{ false if target.type in ('spark','databricks') else true }}"
     columns: "{{ false if target.type in ('spark','databricks') else true }}"
+  +schema: "apple_store_{{ var('directed_schema','dev') }}" ## To be used for validation testing
 
 seeds:
   apple_store_integration_tests:
