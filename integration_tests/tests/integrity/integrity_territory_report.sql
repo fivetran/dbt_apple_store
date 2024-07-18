@@ -31,7 +31,7 @@ have as predictable of a row count. */
     ),
 {% endif %}
 
-stg_count as (
+final_count as (
     select count(*) as row_count
     from {{ target.schema }}_apple_store_dev.apple_store__territory_report
 )
@@ -39,5 +39,5 @@ stg_count as (
 -- test will return values and fail if the row counts don't match
 select *
 from source_count
-join stg_count
-    on source_count.row_count != stg_count.row_count
+join final_count
+    on source_count.row_count != final_count.row_count
