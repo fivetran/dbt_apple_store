@@ -21,6 +21,7 @@ country_codes as (
 reporting_grain_combined as (
 
     select
+        source_relation,
         cast(date_day as date) as date_day,
         account_id,
         account_name,
@@ -32,6 +33,7 @@ reporting_grain_combined as (
     from subscription_summary
     union all
     select
+        source_relation,
         cast(date_day as date) as date_day,
         account_id,
         account_name,
@@ -53,6 +55,7 @@ reporting_grain as (
 joined as (
 
     select 
+        reporting_grain.source_relation,
         reporting_grain.date_day,
         reporting_grain.account_id,
         reporting_grain.account_name, 
@@ -79,6 +82,7 @@ joined as (
     from reporting_grain
     left join subscription_summary
         on reporting_grain.date_day = subscription_summary.date_day
+        and reporting_grain.source_relation = subscription_summary.source_relation
         and reporting_grain.account_id =  subscription_summary.account_id 
         and reporting_grain.app_name = subscription_summary.app_name
         and reporting_grain.subscription_name = subscription_summary.subscription_name
@@ -86,6 +90,7 @@ joined as (
         and (reporting_grain.state = subscription_summary.state or (reporting_grain.state is null and subscription_summary.state is null))
     left join subscription_events
         on reporting_grain.date_day = subscription_events.date_day
+        and reporting_grain.source_relation = subscription_events.source_relation
         and reporting_grain.account_id =  subscription_events.account_id 
         and reporting_grain.app_name = subscription_events.app_name
         and reporting_grain.subscription_name = subscription_events.subscription_name

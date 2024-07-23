@@ -31,6 +31,7 @@ usage_territory as (
 reporting_grain as (
 
     select distinct
+        source_relation,
         date_day,
         app_id,
         source_type,
@@ -41,6 +42,7 @@ reporting_grain as (
 joined as (
 
     select 
+        reporting_grain.source_relation,
         reporting_grain.date_day,
         reporting_grain.app_id,
         app.app_name,
@@ -64,18 +66,22 @@ joined as (
     from reporting_grain
     left join app 
         on reporting_grain.app_id = app.app_id
+        and reporting_grain.source_relation = app.source_relation
     left join app_store_territory 
         on reporting_grain.date_day = app_store_territory.date_day
+        and reporting_grain.source_relation = app_store_territory.source_relation
         and reporting_grain.app_id = app_store_territory.app_id 
         and reporting_grain.source_type = app_store_territory.source_type
         and reporting_grain.territory = app_store_territory.territory
     left join downloads_territory
         on reporting_grain.date_day = downloads_territory.date_day
+        and reporting_grain.source_relation = downloads_territory.source_relation
         and reporting_grain.app_id = downloads_territory.app_id 
         and reporting_grain.source_type = downloads_territory.source_type
         and reporting_grain.territory = downloads_territory.territory
     left join usage_territory
         on reporting_grain.date_day = usage_territory.date_day
+        and reporting_grain.source_relation = usage_territory.source_relation
         and reporting_grain.app_id = usage_territory.app_id 
         and reporting_grain.source_type = usage_territory.source_type
         and reporting_grain.territory = usage_territory.territory

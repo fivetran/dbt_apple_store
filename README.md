@@ -48,7 +48,7 @@ Include the following apple_store package version in your `packages.yml` file:
 ```yaml
 packages:
   - package: fivetran/apple_store
-    version: [">=0.3.0", "<0.4.0"] # we recommend using ranges to capture non-breaking changes automatically
+    version: [">=0.4.0", "<0.5.0"] # we recommend using ranges to capture non-breaking changes automatically
 ```
 
 Do NOT include the `apple_store_source` package in this file. The transformation package itself has a dependency on it and will install the source package as well.
@@ -78,7 +78,19 @@ In order to map longform territory names to their ISO country codes, we have ada
 You will need to `dbt seed` the `apple_store_country_codes` [file](https://github.com/fivetran/dbt_apple_store_source/blob/main/seeds/apple_store_country_codes.csv) just once.
 
 ## (Optional) Step 6: Additional configurations
-<details><summary>Expand for configurations</summary>
+<details open><summary>Expand/collapse configurations</summary>
+
+### Union multiple connectors
+If you have multiple apple_store connectors in Fivetran and would like to use this package on all of them simultaneously, we have provided functionality to do so. The package will union all of the data together and pass the unioned table into the transformations. You will be able to see which source it came from in the `source_relation` column of each model. To use this functionality, you will need to set either the `apple_store_union_schemas` OR `apple_store_union_databases` variables (cannot do both) in your root `dbt_project.yml` file:
+
+```yml
+vars:
+    apple_store_union_schemas: ['apple_store_usa','apple_store_canada'] # use this if the data is in different schemas/datasets of the same database/project
+    apple_store_union_databases: ['apple_store_usa','apple_store_canada'] # use this if the data is in different databases/projects but uses the same schema name
+```
+Please be aware that the native `source.yml` connection set up in the package will not function when the union schema/database feature is utilized. Although the data will be correctly combined, you will not observe the sources linked to the package models in the Directed Acyclic Graph (DAG). This happens because the package includes only one defined `source.yml`.
+
+To connect your multiple schema/database sources to the package models, follow the steps outlined in the [Union Data Defined Sources Configuration](https://github.com/fivetran/dbt_fivetran_utils/tree/releases/v0.4.latest#union_data-source) section of the Fivetran Utils documentation for the union_data macro. This will ensure a proper configuration and correct visualization of connections in the DAG.
 
 ### Defining subscription events
 By default, `Subscribe`, `Renew` and `Cancel` subscription events are included and required in this package for downstream usage. If you would like to add additional subscription events, please add the below to your `dbt_project.yml`:
@@ -110,7 +122,7 @@ If an individual source table has a different name than the package expects, add
 
 ```yml
 vars:
-    <default_source_table_name>_identifier: your_table_name 
+    apple_store_<default_source_table_name>_identifier: your_table_name 
 ```
 </details>
 
@@ -128,7 +140,7 @@ This dbt package is dependent on the following dbt packages. Please be aware tha
 ```yml
 packages:
     - package: fivetran/apple_store_source
-      version: [">=0.3.0", "<0.4.0"]
+      version: [">=0.4.0", "<0.5.0"]
 
     - package: fivetran/fivetran_utils
       version: [">=0.4.0", "<0.5.0"]

@@ -7,6 +7,7 @@ with base as (
 aggregated as (
 
     select 
+        source_relation,
         date_day,
         app_id,
         sum(active_devices) as active_devices,
@@ -14,7 +15,7 @@ aggregated as (
         sum(installations) as installations,
         sum(sessions) as sessions
     from base
-    {{ dbt_utils.group_by(2) }}
+    {{ dbt_utils.group_by(3) }}
 )
 
 select * 
