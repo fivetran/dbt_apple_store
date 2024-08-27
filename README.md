@@ -17,14 +17,16 @@
 ## What does this dbt package do?
 - Produces modeled tables that leverage Apple App Store data from [Fivetran's connector](https://fivetran.com/docs/connectors/applications/apple-app-store) in the format described by [this ERD](https://fivetran.com/docs/connectors/applications/apple-app-store#salesandfinancereportschema) and build off the output of our [Apple App Store source package](https://github.com/fivetran/dbt_apple_store_source).
 - Enables you to better understand your Apple App Store metrics at different granularities. It achieves this by:
-- Providing intuitive reporting at the App Version, Platform Version, Device, Source Type, Territory, Subscription and Overview levels
-- Aggregates all relevant application metrics into each of the reporting levels above
+  - Providing intuitive reporting at the App Version, Platform Version, Device, Source Type, Territory, Subscription and Overview levels
+  - Aggregates all relevant application metrics into each of the reporting levels above
 - Generates a comprehensive data dictionary of your source and modeled Apple App Store data through the [dbt docs site](https://fivetran.github.io/dbt_apple_store/).
+
+<!--section=“apple_store_transformation_model"-->
 
 The following table provides a detailed list of all models materialized within this package by default.
 > TIP: See more details about these models in the package's [dbt docs site](https://fivetran.github.io/dbt_apple_store/#!/overview?g_v=1).
 
-| **model**                  | **description**                                                                                                                                               |
+| **Table**                  | **Description**                                                                                                                                               |
 | -------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------- |
 | [apple_store__app_version_report](https://fivetran.github.io/dbt_apple_store/#!/model/model.apple_store.apple_store__app_version_report)             | Each record represents daily metrics for each by app_id, source_type and app version. |
 | [apple_store__device_report](https://fivetran.github.io/dbt_apple_store/#!/model/model.apple_store.apple_store__device_report)     | Each record represents daily subscription metrics by app_id, source_type and device. |
@@ -33,6 +35,8 @@ The following table provides a detailed list of all models materialized within t
 | [apple_store__source_type_report](https://fivetran.github.io/dbt_apple_store/#!/model/model.apple_store.apple_store__source_type_report)   | Each record represents daily metrics by app_id and source_type. |
 | [apple_store__subscription_report](https://fivetran.github.io/dbt_apple_store/#!/model/model.apple_store.apple_store__subscription_report) | Each record represents daily subscription metrics by account, app, subscription name, country and state. |
 | [apple_store__territory_report](https://fivetran.github.io/dbt_apple_store/#!/model/model.apple_store.apple_store__source_type_report) | Each record represents daily subscription metrics by app_id, source_type and territory. |
+
+<!--section-end-->
 
 ## How do I use the dbt package?
 
