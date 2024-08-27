@@ -15,3 +15,13 @@ destination_configurations:
     dispatch:
       - macro_namespace: dbt_utils
         search_order: [ 'spark_utils', 'dbt_utils' ]
+
+public_models: [
+  "apple_store__source_type_report",
+  "apple_store__subscription_report",
+  "apple_store__platform_version_report",
+  "apple_store__territory_report",
+  "apple_store__device_report",
+  "apple_store__app_version_report",
+  "apple_store__overview_report"
+]
