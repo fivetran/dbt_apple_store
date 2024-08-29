@@ -52,20 +52,20 @@ joined as (
     from reporting_grain
     left join app 
         on reporting_grain.app_id = app.app_id
-        and reporting_grain.source_relation = app.source_relation
+        {# and reporting_grain.source_relation = app.source_relation #}
     left join app_store_source_type
         on reporting_grain.date_day = app_store_source_type.date_day
-        and reporting_grain.source_relation = app_store_source_type.source_relation
+        {# and reporting_grain.source_relation = app_store_source_type.source_relation #}
         and reporting_grain.app_id = app_store_source_type.app_id 
         and reporting_grain.source_type = app_store_source_type.source_type
     left join downloads_source_type
         on reporting_grain.date_day = downloads_source_type.date_day
-        and reporting_grain.source_relation = downloads_source_type.source_relation
+        {# and reporting_grain.source_relation = downloads_source_type.source_relation #}
         and reporting_grain.app_id = downloads_source_type.app_id 
         and reporting_grain.source_type = downloads_source_type.source_type
     left join usage_source_type
         on reporting_grain.date_day = usage_source_type.date_day
-        and reporting_grain.source_relation = usage_source_type.source_relation
+        {# and reporting_grain.source_relation = usage_source_type.source_relation #}
         and reporting_grain.app_id = usage_source_type.app_id 
         and reporting_grain.source_type = usage_source_type.source_type
 )

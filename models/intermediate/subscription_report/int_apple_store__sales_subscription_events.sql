@@ -68,10 +68,10 @@ joined as (
     from pivoted
     left join app 
         on pivoted.app_name = app.app_name
-        and pivoted.source_relation = app.source_relation
+        {# and pivoted.source_relation = app.source_relation #}
     left join sales_account 
         on pivoted.account_id = sales_account.account_id
-        and pivoted.source_relation = sales_account.source_relation
+        {# and pivoted.source_relation = sales_account.source_relation #}
 )
 
 select * 

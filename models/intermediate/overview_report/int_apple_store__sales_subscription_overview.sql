@@ -40,7 +40,7 @@ joined as (
     from subscription_summary 
     left join subscription_events
         on subscription_summary.date_day = subscription_events.date_day
-        and subscription_summary.source_relation = subscription_events.source_relation
+        {# and subscription_summary.source_relation = subscription_events.source_relation #}
         and subscription_summary.app_id = subscription_events.app_id 
 )
 

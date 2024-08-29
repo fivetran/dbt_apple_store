@@ -63,12 +63,12 @@ joined as (
     from subscription_summary 
     left join pivoted_subscription_events
         on subscription_summary.date_day = pivoted_subscription_events.date_day
-        and subscription_summary.source_relation = pivoted_subscription_events.source_relation
+        {# and subscription_summary.source_relation = pivoted_subscription_events.source_relation #}
         and subscription_summary.app_name = pivoted_subscription_events.app_name
         and subscription_summary.device = pivoted_subscription_events.device
     left join app 
         on subscription_summary.app_name = app.app_name
-        and subscription_summary.source_relation = app.source_relation
+        {# and subscription_summary.source_relation = app.source_relation #}
 )
 
 select * 

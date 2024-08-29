@@ -60,16 +60,16 @@ joined as (
     from reporting_grain
     left join app 
         on reporting_grain.app_id = app.app_id
-        and reporting_grain.source_relation = app.source_relation
+        {# and reporting_grain.source_relation = app.source_relation #}
     left join crashes_app_version_report
         on reporting_grain.date_day = crashes_app_version_report.date_day
-        and reporting_grain.source_relation = crashes_app_version_report.source_relation
+        {# and reporting_grain.source_relation = crashes_app_version_report.source_relation #}
         and reporting_grain.app_id = crashes_app_version_report.app_id
         and reporting_grain.source_type = crashes_app_version_report.source_type
         and reporting_grain.app_version = crashes_app_version_report.app_version
     left join usage_app_version_report
         on reporting_grain.date_day = usage_app_version_report.date_day
-        and reporting_grain.source_relation = usage_app_version_report.source_relation
+        {# and reporting_grain.source_relation = usage_app_version_report.source_relation #}
         and reporting_grain.app_id = usage_app_version_report.app_id 
         and reporting_grain.source_type = usage_app_version_report.source_type
         and reporting_grain.app_version = usage_app_version_report.app_version

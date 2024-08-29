@@ -99,36 +99,36 @@ joined as (
     from reporting_grain
     left join app 
         on reporting_grain.app_id = app.app_id
-        and reporting_grain.source_relation = app.source_relation
+        {# and reporting_grain.source_relation = app.source_relation #}
     left join app_store_device 
         on reporting_grain.date_day = app_store_device.date_day
-        and reporting_grain.source_relation = app_store_device.source_relation
+        {# and reporting_grain.source_relation = app_store_device.source_relation #}
         and reporting_grain.app_id = app_store_device.app_id 
         and reporting_grain.source_type = app_store_device.source_type
         and reporting_grain.device = app_store_device.device
     left join crashes_device
         on reporting_grain.date_day = crashes_device.date_day
-        and reporting_grain.source_relation = crashes_device.source_relation
+        {# and reporting_grain.source_relation = crashes_device.source_relation #}
         and reporting_grain.app_id = crashes_device.app_id
         and reporting_grain.source_type = crashes_device.source_type
         and reporting_grain.device = crashes_device.device
     left join downloads_device
         on reporting_grain.date_day = downloads_device.date_day
-        and reporting_grain.source_relation = downloads_device.source_relation
+        {# and reporting_grain.source_relation = downloads_device.source_relation #}
         and reporting_grain.app_id = downloads_device.app_id 
         and reporting_grain.source_type = downloads_device.source_type
         and reporting_grain.device = downloads_device.device
     {% if var('apple_store__using_subscriptions', False) %}
     left join subscription_device
         on reporting_grain.date_day = subscription_device.date_day
-        and reporting_grain.source_relation = subscription_device.source_relation
+        {# and reporting_grain.source_relation = subscription_device.source_relation #}
         and reporting_grain.app_id = subscription_device.app_id 
         and reporting_grain.source_type = subscription_device.source_type
         and reporting_grain.device = subscription_device.device
     {% endif %}
     left join usage_device
         on reporting_grain.date_day = usage_device.date_day
-        and reporting_grain.source_relation = usage_device.source_relation
+        {# and reporting_grain.source_relation = usage_device.source_relation #}
         and reporting_grain.app_id = usage_device.app_id 
         and reporting_grain.source_type = usage_device.source_type
         and reporting_grain.device = usage_device.device

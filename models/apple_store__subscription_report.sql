@@ -82,7 +82,7 @@ joined as (
     from reporting_grain
     left join subscription_summary
         on reporting_grain.date_day = subscription_summary.date_day
-        and reporting_grain.source_relation = subscription_summary.source_relation
+        {# and reporting_grain.source_relation = subscription_summary.source_relation #}
         and reporting_grain.account_id =  subscription_summary.account_id 
         and reporting_grain.app_name = subscription_summary.app_name
         and reporting_grain.subscription_name = subscription_summary.subscription_name
@@ -90,7 +90,7 @@ joined as (
         and (reporting_grain.state = subscription_summary.state or (reporting_grain.state is null and subscription_summary.state is null))
     left join subscription_events
         on reporting_grain.date_day = subscription_events.date_day
-        and reporting_grain.source_relation = subscription_events.source_relation
+        {# and reporting_grain.source_relation = subscription_events.source_relation #}
         and reporting_grain.account_id =  subscription_events.account_id 
         and reporting_grain.app_name = subscription_events.app_name
         and reporting_grain.subscription_name = subscription_events.subscription_name
