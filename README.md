@@ -24,7 +24,7 @@
 <!--section=“apple_store_transformation_model"-->
 
 The following table provides a detailed list of all tables materialized within this package by default.
-> TIP: See more details about these models in the package's [dbt docs site](https://fivetran.github.io/dbt_apple_store/#!/overview?g_v=1).
+> TIP: See more details about these tables in the package's [dbt docs site](https://fivetran.github.io/dbt_apple_store/#!/overview?g_v=1).
 
 | **Table**                  | **Description**                                                                                                                                               |
 | -------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------- |
