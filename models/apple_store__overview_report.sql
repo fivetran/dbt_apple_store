@@ -38,11 +38,8 @@ usage as (
 
 reporting_grain as (
 
-    select distinct
-        source_relation,
-        date_day,
-        app_id 
-    from app_store
+    select *
+    from {{ ref('int_apple_store__app_store_report') }}
 ), 
 
 joined as (

@@ -30,13 +30,8 @@ usage_territory as (
 
 reporting_grain as (
 
-    select distinct
-        source_relation,
-        date_day,
-        app_id,
-        source_type,
-        territory 
-    from app_store_territory
+    select *
+    from {{ ref('int_apple_store__territory_report_grain') }}
 ),
 
 joined as (
