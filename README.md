@@ -15,7 +15,7 @@
 
 # Apple App Store Transformation dbt Package ([Docs](https://fivetran.github.io/dbt_apple_store/))
 ## What does this dbt package do?
-- Produces modeled tables that leverage Apple App Store data from [Fivetran's connector](https://fivetran.com/docs/connectors/applications/apple-app-store) in the format described by [this ERD](https://fivetran.com/docs/connectors/applications/apple-app-store#salesandfinancereportschema) and build off the output of our [Apple App Store source package](https://github.com/fivetran/dbt_apple_store_source).
+- Produces modeled tables that leverage Apple App Store data from [Fivetran's connector](https://fivetran.com/docs/connections/applications/apple-app-store) in the format described by [this ERD](https://fivetran.com/docs/connections/applications/apple-app-store#salesandfinancereportschema) and build off the output of our [Apple App Store source package](https://github.com/fivetran/dbt_apple_store_source).
 - Enables you to better understand your Apple App Store metrics at different granularities. It achieves this by:
   - Providing intuitive reporting at the App Version, Platform Version, Device, Source Type, Territory, Subscription and Overview levels
   - Aggregates all relevant application metrics into each of the reporting levels above
@@ -36,6 +36,8 @@ The following table provides a detailed list of all tables materialized within t
 | [apple_store__subscription_report](https://fivetran.github.io/dbt_apple_store/#!/model/model.apple_store.apple_store__subscription_report) | Each record represents daily subscription metrics by account, app, subscription name, country and state. |
 | [apple_store__territory_report](https://fivetran.github.io/dbt_apple_store/#!/model/model.apple_store.apple_store__source_type_report) | Each record represents daily subscription metrics by app_id, source_type and territory. |
 
+### Materialized Models
+Each Quickstart transformation job run materializes 38 models if all components of this data model are enabled. This count includes all staging, intermediate, and final models materialized as `view`, `table`, or `incremental`.
 <!--section-end-->
 
 ## How do I use the dbt package?
@@ -43,7 +45,7 @@ The following table provides a detailed list of all tables materialized within t
 ### Step 1: Prerequisites
 To use this dbt package, you must have the following:
 
-- At least one Fivetran Apple App Store connector syncing data into your destination.
+- At least one Fivetran Apple App Store connection syncing data into your destination.
 - A **BigQuery**, **Snowflake**, **Redshift**, **PostgreSQL**, or **Databricks** destination.
 
 ### Step 2: Install the package
@@ -84,8 +86,8 @@ You will need to `dbt seed` the `apple_store_country_codes` [file](https://githu
 ### (Optional) Step 6: Additional configurations
 <details open><summary>Expand/collapse configurations</summary>
 
-#### Union multiple connectors
-If you have multiple apple_store connectors in Fivetran and would like to use this package on all of them simultaneously, we have provided functionality to do so. The package will union all of the data together and pass the unioned table into the transformations. You will be able to see which source it came from in the `source_relation` column of each model. To use this functionality, you will need to set either the `apple_store_union_schemas` OR `apple_store_union_databases` variables (cannot do both) in your root `dbt_project.yml` file:
+#### Union multiple connections
+If you have multiple apple_store connections in Fivetran and would like to use this package on all of them simultaneously, we have provided functionality to do so. The package will union all of the data together and pass the unioned table into the transformations. You will be able to see which source it came from in the `source_relation` column of each model. To use this functionality, you will need to set either the `apple_store_union_schemas` OR `apple_store_union_databases` variables (cannot do both) in your root `dbt_project.yml` file:
 
 ```yml
 vars:

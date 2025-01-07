@@ -1,3 +1,9 @@
+# dbt_apple_store version.version
+
+## Documentation
+- Added Quickstart model counts to README. ([#31](https://github.com/fivetran/dbt_apple_store/pull/31))
+- Corrected references to connectors and connections in the README. ([#31](https://github.com/fivetran/dbt_apple_store/pull/31))
+
 # dbt_apple_store v0.4.0
 [PR #22](https://github.com/fivetran/dbt_apple_store/pull/22) includes the following updates:
 
