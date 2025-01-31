@@ -1,16 +1,11 @@
 {{ config(enabled=var('apple_store__using_subscriptions', False)) }}
 
-with app as (
-    select
-        app_id,
-        app_name,
-        source_relation
-    from {{ var('app_store_app') }}
-),
+with subscription_summary as (
 
-subscription_summary as (
     select
-        app_apple_id as app_id,
+        vendor_number,
+        app_apple_id,
+        app_name,
         date_day,
         subscription_name,
         country,
@@ -20,36 +15,64 @@ subscription_summary as (
         sum(active_pay_as_you_go_introductory_offer_subscriptions) as active_pay_as_you_go_introductory_offer_subscriptions,
         sum(active_pay_up_front_introductory_offer_subscriptions) as active_pay_up_front_introductory_offer_subscriptions,
         sum(active_standard_price_subscriptions) as active_standard_price_subscriptions
-    from {{ var('stg_apple_store__sales_subscription_summary') }}
-    group by 1,2,3,4,5,6
+    from {{ var('sales_subscription_summary') }}
+    {{ dbt_utils.group_by(8) }}
+),
+
+
+subscription_events_filtered as (
+
+    select *
+    from {{ var('sales_subscription_events') }}
+    where lower(event)
+        in (
+            {% for event_val in var('apple_store__subscription_events') %}
+                {% if loop.index0 != 0 %}
+                , 
+                {% endif %}
+                '{{ var("apple_store__subscription_events")[loop.index0] | trim | lower }}'
+            {% endfor %}   
+        )
 ),
 
 subscription_events as (
+    
     select
-        app_apple_id as app_id,
+        vendor_number,
+        app_apple_id,
+        app_name,
         date_day,
         subscription_name,
         country,
         state,
-        source_relation,
-        event,
-        sum(quantity) as event_count
-    from {{ var('stg_apple_store__sales_subscription_events') }}
-    group by 1,2,3,4,5,6,7
+        source_relation
+        {% for event_val in var('apple_store__subscription_events') %}
+        , sum(case when lower(event) = '{{ event_val | trim | lower }}' then quantity else 0 end) as {{ 'event_' ~ event_val | replace(' ', '_') | trim | lower }}
+        {% endfor %}
+    from subscription_events_filtered
+    {{ dbt_utils.group_by(8) }}
+),
+
+country_codes as (
+    
+    select * 
+    from {{ var('apple_store_country_codes') }}
 ),
 
 -- pre-reporting grain: unions all unique dimension values
 pre_reporting_grain as (
-    select date_day, app_id, subscription_name, country, state, source_relation from subscription_summary
+    select date_day, vendor_number, app_apple_id, app_name, subscription_name, country, state, source_relation from subscription_summary
     union all
-    select date_day, app_id, subscription_name, country, state, source_relation from subscription_events
+    select date_day, vendor_number, app_apple_id, app_name, subscription_name, country, state, source_relation from subscription_events
 ),
 
 -- reporting grain: ensures distinct combinations of all dimensions
 reporting_grain as (
     select distinct
         date_day,
-        app_id,
+        vendor_number,
+        app_apple_id,
+        app_name,
         subscription_name,
         country,
         state,
@@ -57,55 +80,51 @@ reporting_grain as (
     from pre_reporting_grain
 ),
 
--- pivot subscription events dynamically
--- subscription_events_pivoted as (
-    
--- ),
-
 -- final aggregation using reporting grain
 final as (
     select
         rg.date_day,
-        rg.app_id,
-        a.app_name,
+        rg.vendor_number,
+        rg.app_apple_id,
+        rg.app_name,
         rg.subscription_name,
+        case 
+            when country_codes.alternative_country_name is null then country_codes.country_name
+            else country_codes.alternative_country_name
+        end as territory_long,
         rg.country as territory_short,
         rg.state,
+        country_codes.region, 
+        country_codes.sub_region,
         rg.source_relation,
-        -- Placeholder for country code mapping
-        'placeholder for territory_long' as territory_long,
-        'placeholder for region' as region,
-        'placeholder for sub_region' as sub_region,
         coalesce(ss.active_free_trial_introductory_offer_subscriptions, 0) as active_free_trial_introductory_offer_subscriptions,
         coalesce(ss.active_pay_as_you_go_introductory_offer_subscriptions, 0) as active_pay_as_you_go_introductory_offer_subscriptions,
         coalesce(ss.active_pay_up_front_introductory_offer_subscriptions, 0) as active_pay_up_front_introductory_offer_subscriptions,
-        coalesce(ss.active_standard_price_subscriptions, 0) as active_standard_price_subscriptions,
-        se.*
+        coalesce(ss.active_standard_price_subscriptions, 0) as active_standard_price_subscriptions
+        {% for event_val in var('apple_store__subscription_events') %}
+        {% set event_column = 'event_' ~ event_val | replace(' ', '_') | trim | lower %}
+        , coalesce({{ 'se.' ~ event_column }}, 0)
+            as {{ event_column }} 
+        {% endfor %}
     from reporting_grain rg
-    left join app a 
-        on rg.app_id = a.app_id
-        and rg.source_relation = a.source_relation
     left join subscription_summary ss 
-        on rg.app_id = ss.app_id
+        on rg.vendor_number = ss.vendor_number
+        and rg.app_apple_id = ss.app_apple_id
         and rg.date_day = ss.date_day
         and rg.subscription_name = ss.subscription_name
         and rg.country = ss.country
         and rg.state = ss.state
         and rg.source_relation = ss.source_relation
     left join subscription_events se 
-        on rg.app_id = se.app_id
+        on rg.vendor_number = ss.vendor_number
+        and rg.app_apple_id = se.app_apple_id
         and rg.date_day = se.date_day
         and rg.subscription_name = se.subscription_name
         and rg.country = se.country
         and rg.state = se.state
         and rg.source_relation = se.source_relation
-    -- left join subscription_events_pivoted se 
-    --     on rg.app_id = se.app_id
-    --     and rg.date_day = se.date_day
-    --     and rg.subscription_name = se.subscription_name
-    --     and rg.country = se.country
-    --     and rg.state = se.state
-    --     and rg.source_relation = se.source_relation
+    left join country_codes
+        on rg.country = country_codes.country_code_alpha_2
 )
 
 select *
