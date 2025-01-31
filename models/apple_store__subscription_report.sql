@@ -59,14 +59,14 @@ country_codes as (
     from {{ var('apple_store_country_codes') }}
 ),
 
--- pre-reporting grain: unions all unique dimension values
+-- Unifying all dimension values before aggregation
 pre_reporting_grain as (
     select date_day, vendor_number, app_apple_id, app_name, subscription_name, country, state, source_relation from subscription_summary
     union all
     select date_day, vendor_number, app_apple_id, app_name, subscription_name, country, state, source_relation from subscription_events
 ),
 
--- reporting grain: ensures distinct combinations of all dimensions
+-- Ensuring distinct combinations of all dimensions
 reporting_grain as (
     select distinct
         date_day,
@@ -80,7 +80,7 @@ reporting_grain as (
     from pre_reporting_grain
 ),
 
--- final aggregation using reporting grain
+-- Final aggregation using reporting grain
 final as (
     select
         rg.date_day,

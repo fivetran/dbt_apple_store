@@ -13,11 +13,11 @@ impressions_and_page_views as (
         source_relation,
         sum(impressions) as impressions,
         sum(page_views) as page_views
-    from {{ ref('int_apple_store__app_store_discovery_and_engagement_detailed_daily') }}
+    from {{ ref('int_apple_store__app_store_discovery_and_engagement_daily') }}
     group by 1,2,3
 ),
 
-crashes as (
+app_crashes as (
     select
         app_id,
         date_day,
@@ -27,7 +27,7 @@ crashes as (
     group by 1,2,3
 ),
 
-downloads as (
+downloads_daily as (
     select
         app_id,
         date_day,
@@ -35,33 +35,78 @@ downloads as (
         sum(first_time_downloads) as first_time_downloads,
         sum(redownloads) as redownloads,
         sum(total_downloads) as total_downloads
-    from {{ ref('int_apple_store__app_store_download_detailed_daily') }}
+    from {{ ref('int_apple_store__app_store_download_daily') }}
     group by 1,2,3
 ),
 
-usage as (
+install_deletions as (
     select
         app_id,
         date_day,
         source_relation,
         sum(installations) as installations,
         sum(deletions) as deletions
-    from {{ ref('int_apple_store__app_store_installation_and_deletion_detailed_daily') }}
+    from {{ ref('int_apple_store__app_store_installation_and_deletion_daily') }}
     group by 1,2,3
 ),
 
-sessions as (
+sessions_activity as (
     select
         app_id,
         date_day,
         source_relation,
         sum(sessions) as sessions,
         sum(active_devices) as active_devices
-    from {{ ref('int_apple_store__app_session_detailed_daily') }}
+    from {{ ref('int_apple_store__app_session_daily') }}
     group by 1,2,3
 ),
 
--- unions all unique dimension values
+{% if var('apple_store__using_subscriptions', False) %}
+subscription_summary as (
+
+    select
+        app_name,
+        date_day,
+        source_relation,
+        sum(active_free_trial_introductory_offer_subscriptions) as active_free_trial_introductory_offer_subscriptions,
+        sum(active_pay_as_you_go_introductory_offer_subscriptions) as active_pay_as_you_go_introductory_offer_subscriptions,
+        sum(active_pay_up_front_introductory_offer_subscriptions) as active_pay_up_front_introductory_offer_subscriptions,
+        sum(active_standard_price_subscriptions) as active_standard_price_subscriptions
+    from {{ var('sales_subscription_summary') }}
+    {{ dbt_utils.group_by(3) }}
+),
+
+subscription_events_filtered as (
+
+    select *
+    from {{ var('sales_subscription_events') }} 
+    where lower(event)
+        in (
+            {% for event_val in var('apple_store__subscription_events') %}
+                {% if loop.index0 != 0 %}
+                , 
+                {% endif %}
+                '{{ var("apple_store__subscription_events")[loop.index0] | trim | lower }}'
+            {% endfor %}   
+        )
+),
+
+subscription_events as (
+    
+    select
+        app_name,
+        date_day,
+        source_relation
+        {% for event_val in var('apple_store__subscription_events') %}
+        , sum(case when lower(event) = '{{ event_val | trim | lower }}' then quantity else 0 end) as {{ 'event_' ~ event_val | replace(' ', '_') | trim | lower }}
+        {% endfor %}
+    from subscription_events_filtered
+    {{ dbt_utils.group_by(3) }}
+),
+
+{% endif %}
+
+-- Unifying all dimension values before aggregation
 pre_reporting_grain as (
     select date_day, app_id, source_relation from impressions_and_page_views
     union all
@@ -71,10 +116,10 @@ pre_reporting_grain as (
     union all
     select date_day, app_id, source_relation from usage
     union all
-    select date_day, app_id, source_relation from sessions
+    select date_day, app_id, source_relation from sessions_activity
 ),
 
--- ensures distinct combinations of all dimensions
+-- Ensuring distinct combinations of all dimensions
 reporting_grain as (
     select distinct
         date_day,
@@ -83,32 +128,32 @@ reporting_grain as (
     from pre_reporting_grain
 ),
 
--- final aggregation using reporting grain
+-- Final aggregation using reporting grain
 final as (
     select
         rg.source_relation,
         rg.date_day,
         rg.app_id,
-        app.app_name,
+        a.app_name,
         coalesce(ip.impressions, 0) as impressions,
         coalesce(ip.page_views, 0) as page_views,
-        coalesce(c.crashes, 0) as crashes,
+        coalesce(ac.crashes, 0) as crashes,
         coalesce(d.first_time_downloads, 0) as first_time_downloads,
         coalesce(d.redownloads, 0) as redownloads,
         coalesce(d.total_downloads, 0) as total_downloads,
-        coalesce(s.active_devices, 0) as active_devices,
-        coalesce(u.deletions, 0) as deletions,
-        coalesce(u.installations, 0) as installations,
-        coalesce(s.sessions, 0) as sessions
+        coalesce(sa.active_devices, 0) as active_devices,
+        coalesce(id.deletions, 0) as deletions,
+        coalesce(id.installations, 0) as installations,
+        coalesce(sa.sessions, 0) as sessions
         {% if var('apple_store__using_subscriptions', False) %}
         ,
-        coalesce(subscriptions.active_free_trial_introductory_offer_subscriptions, 0) as active_free_trial_introductory_offer_subscriptions,
-        coalesce(subscriptions.active_pay_as_you_go_introductory_offer_subscriptions, 0) as active_pay_as_you_go_introductory_offer_subscriptions,
-        coalesce(subscriptions.active_pay_up_front_introductory_offer_subscriptions, 0) as active_pay_up_front_introductory_offer_subscriptions,
-        coalesce(subscriptions.active_standard_price_subscriptions, 0) as active_standard_price_subscriptions
+        coalesce(ss.active_free_trial_introductory_offer_subscriptions, 0) as active_free_trial_introductory_offer_subscriptions,
+        coalesce(ss.active_pay_as_you_go_introductory_offer_subscriptions, 0) as active_pay_as_you_go_introductory_offer_subscriptions,
+        coalesce(ss.active_pay_up_front_introductory_offer_subscriptions, 0) as active_pay_up_front_introductory_offer_subscriptions,
+        coalesce(ss.active_standard_price_subscriptions, 0) as active_standard_price_subscriptions
         {% for event_val in var('apple_store__subscription_events') %}
         {% set event_column = 'event_' ~ event_val | replace(' ', '_') | trim | lower %}
-        , coalesce({{ 'subscriptions.' ~ event_column }}, 0)
+        , coalesce({{ 'se.' ~ event_column }}, 0)
             as {{ event_column }} 
         {% endfor %}
         {% endif %}
@@ -117,31 +162,35 @@ final as (
         on rg.app_id = ip.app_id
         and rg.date_day = ip.date_day
         and rg.source_relation = ip.source_relation
-    left join crashes c 
-        on rg.app_id = c.app_id
-        and rg.date_day = c.date_day
-        and rg.source_relation = c.source_relation
-    left join downloads d 
-        on rg.app_id = d.app_id
-        and rg.date_day = d.date_day
-        and rg.source_relation = d.source_relation
-    left join usage u 
-        on rg.app_id = u.app_id
-        and rg.date_day = u.date_day
-        and rg.source_relation = u.source_relation
-    left join sessions s 
-        on rg.app_id = s.app_id
-        and rg.date_day = s.date_day
-        and rg.source_relation = s.source_relation
-    left join app
-        on rg.app_id = app.app_id
-        and rg.source_relation = app.source_relation
+    left join app_crashes ac
+        on rg.app_id = ac.app_id
+        and rg.date_day = ac.date_day
+        and rg.source_relation = ac.source_relation
+    left join downloads_daily dd 
+        on rg.app_id = dd.app_id
+        and rg.date_day = dd.date_day
+        and rg.source_relation = dd.source_relation
+    left join install_deletions id 
+        on rg.app_id = id.app_id
+        and rg.date_day = id.date_day
+        and rg.source_relation = id.source_relation
+    left join sessions_activity sa 
+        on rg.app_id = sa.app_id
+        and rg.date_day = sa.date_day
+        and rg.source_relation = sa.source_relation
+    left join app a
+        on rg.app_id = a.app_id
+        and rg.source_relation = a.source_relation
 
     {% if var('apple_store__using_subscriptions', False) %}
-    left join subscriptions 
-        on reporting_grain.date_day = subscriptions.date_day
-        and reporting_grain.source_relation = subscriptions.source_relation
-        and reporting_grain.app_id = subscriptions.app_id
+    left join subscription_summary ss 
+        on rg.date_day = ss.date_day
+        and rg.source_relation = ss.source_relation
+        and rg.app_name = ss.app_name
+    left join subscription_events se 
+        on rg.date_day = se.date_day
+        and rg.source_relation = se.source_relation
+        and rg.app_name = se.app_name
     {% endif %}
 )
 

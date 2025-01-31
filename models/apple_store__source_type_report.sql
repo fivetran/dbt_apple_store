@@ -14,7 +14,7 @@ impressions_and_page_views as (
         source_relation,
         sum(impressions) as impressions,
         sum(page_views) as page_views
-    from {{ ref('int_apple_store__app_store_discovery_and_engagement_detailed_daily') }}
+    from {{ ref('int_apple_store__app_store_discovery_and_engagement_daily') }}
     group by 1,2,3,4
 ),
 
@@ -29,7 +29,7 @@ install_deletions as (
         sum(total_downloads) as total_downloads,
         sum(deletions) as deletions,
         sum(installations) as installations
-    from {{ ref('int_apple_store__app_store_installation_and_deletion_detailed_daily') }}
+    from {{ ref('int_apple_store__app_store_installation_and_deletion_daily') }}
     group by 1,2,3,4
 ),
 
@@ -41,7 +41,7 @@ sessions_activity as (
         source_relation,
         sum(active_devices) as active_devices,
         sum(sessions) as sessions
-    from {{ ref('int_apple_store__app_session_detailed_daily') }}
+    from {{ ref('int_apple_store__app_session_daily') }}
     group by 1,2,3,4
 ),
 
@@ -79,8 +79,8 @@ final as (
         coalesce(id.total_downloads, 0) as total_downloads,
         coalesce(id.deletions, 0) as deletions,
         coalesce(id.installations, 0) as installations,
-        coalesce(s.active_devices, 0) as active_devices,
-        coalesce(s.sessions, 0) as sessions
+        coalesce(sa.active_devices, 0) as active_devices,
+        coalesce(sa.sessions, 0) as sessions
     from reporting_grain rg
     left join impressions_and_page_views ip
         on rg.date_day = ip.date_day 
@@ -92,11 +92,11 @@ final as (
         and rg.app_id = id.app_id
         and rg.source_type = id.source_type
         and rg.source_relation = id.source_relation
-    left join sessions_activity s
-        on rg.date_day = s.date_day 
-        and rg.app_id = s.app_id 
-        and rg.source_type = s.source_type
-        and rg.source_relation = s.source_relation
+    left join sessions_activity sa
+        on rg.date_day = sa.date_day 
+        and rg.app_id = sa.app_id 
+        and rg.source_type = sa.source_type
+        and rg.source_relation = sa.source_relation
     left join app a
         on rg.app_id = a.app_id
         and rg.source_relation = a.source_relation

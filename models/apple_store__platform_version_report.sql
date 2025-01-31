@@ -29,7 +29,7 @@ impressions_and_page_views as (
         sum(impressions_unique_device) as impressions_unique_device,
         sum(page_views) as page_views,
         sum(page_views_unique_device) as page_views_unique_device
-    from {{ ref('int_apple_store__app_store_discovery_and_engagement_detailed_daily') }}
+    from {{ ref('int_apple_store__app_store_discovery_and_engagement_daily') }}
     group by 1,2,3,4,5
 ),
 
@@ -43,7 +43,7 @@ downloads_daily as (
         sum(first_time_downloads) as first_time_downloads,
         sum(redownloads) as redownloads,
         sum(total_downloads) as total_downloads
-    from {{ ref('int_apple_store__app_store_download_detailed_daily') }}
+    from {{ ref('int_apple_store__app_store_download_daily') }}
     group by 1,2,3,4,5
 ),
 
@@ -56,7 +56,7 @@ install_deletions as (
         source_relation,
         sum(installations) as installations,
         sum(deletions) as deletions
-    from {{ ref('int_apple_store__app_store_installation_and_deletion_detailed_daily') }}
+    from {{ ref('int_apple_store__app_store_installation_and_deletion_daily') }}
     group by 1,2,3,4,5
 ),
 
@@ -70,11 +70,11 @@ sessions_activity as (
         sum(sessions) as sessions,
         sum(active_devices) as active_devices,
         sum(active_devices_last_30_days) as active_devices_last_30_days
-    from {{ ref('int_apple_store__app_session_detailed_daily') }}
+    from {{ ref('int_apple_store__app_session_daily') }}
     group by 1,2,3,4,5
 ),
 
--- unions all unique dimension values
+-- Unifying all dimension values before aggregation
 pre_reporting_grain as (
     select date_day, app_id, platform_version, source_type, source_relation from app_crashes
     union all
@@ -87,7 +87,7 @@ pre_reporting_grain as (
     select date_day, app_id, platform_version, source_type, source_relation from sessions_activity
 ),
 
--- ensures distinct combinations of all dimensions
+-- Ensuring distinct combinations of all dimensions
 reporting_grain as (
     select distinct
         date_day,
@@ -98,8 +98,8 @@ reporting_grain as (
     from pre_reporting_grain
 ),
 
--- final aggregation using reporting grain
-final_report as (
+-- Final aggregation using reporting grain
+final as (
     select
         rg.source_relation,
         rg.date_day,
@@ -107,7 +107,7 @@ final_report as (
         a.app_name,
         rg.source_type,
         rg.platform_version,
-        coalesce(cd.crashes, 0) as crashes,
+        coalesce(ac.crashes, 0) as crashes,
         coalesce(ip.impressions, 0) as impressions,
         coalesce(ip.impressions_unique_device, 0) as impressions_unique_device,
         coalesce(ip.page_views, 0) as page_views,
@@ -115,21 +115,18 @@ final_report as (
         coalesce(dd.first_time_downloads, 0) as first_time_downloads,
         coalesce(dd.redownloads, 0) as redownloads,
         coalesce(dd.total_downloads, 0) as total_downloads,
-        coalesce(s.active_devices, 0) as active_devices,
-        coalesce(s.active_devices_last_30_days, 0) as active_devices_last_30_days,
-        coalesce(i.deletions, 0) as deletions,
-        coalesce(i.installations, 0) as installations,
-        coalesce(s.sessions, 0) as sessions
+        coalesce(sa.active_devices, 0) as active_devices,
+        coalesce(sa.active_devices_last_30_days, 0) as active_devices_last_30_days,
+        coalesce(id.deletions, 0) as deletions,
+        coalesce(id.installations, 0) as installations,
+        coalesce(sa.sessions, 0) as sessions
     from reporting_grain rg
-    left join app a 
-        on rg.app_id = a.app_id
-        and rg.source_relation = a.source_relation
-    left join app_crashes cd 
-        on rg.app_id = cd.app_id
-        and rg.platform_version = cd.platform_version
-        and rg.date_day = cd.date_day
-        and rg.source_type = cd.source_type
-        and rg.source_relation = cd.source_relation
+    left join app_crashes ac 
+        on rg.app_id = ac.app_id
+        and rg.platform_version = ac.platform_version
+        and rg.date_day = ac.date_day
+        and rg.source_type = ac.source_type
+        and rg.source_relation = ac.source_relation
     left join impressions_and_page_views ip 
         on rg.app_id = ip.app_id
         and rg.platform_version = ip.platform_version
@@ -142,20 +139,22 @@ final_report as (
         and rg.date_day = dd.date_day
         and rg.source_type = dd.source_type
         and rg.source_relation = dd.source_relation
-    left join install_deletions i 
-        on rg.app_id = i.app_id
-        and rg.platform_version = i.platform_version
-        and rg.date_day = i.date_day
-        and rg.source_type = i.source_type
-        and rg.source_relation = i.source_relation
-    left join sessions_activity s
-        on rg.app_id = s.app_id
-        and rg.platform_version = s.platform_version
-        and rg.date_day = s.date_day
-        and rg.source_type = s.source_type
-        and rg.source_relation = s.source_relation
+    left join install_deletions id 
+        on rg.app_id = id.app_id
+        and rg.platform_version = id.platform_version
+        and rg.date_day = id.date_day
+        and rg.source_type = id.source_type
+        and rg.source_relation = id.source_relation
+    left join sessions_activity sa
+        on rg.app_id = sa.app_id
+        and rg.platform_version = sa.platform_version
+        and rg.date_day = sa.date_day
+        and rg.source_type = sa.source_type
+        and rg.source_relation = sa.source_relation
+    left join app a 
+        on rg.app_id = a.app_id
+        and rg.source_relation = a.source_relation
 )
 
 select *
-from final_report
-order by date_day, app_id, platform_version
+from final
