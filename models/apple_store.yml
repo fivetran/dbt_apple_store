@@ -8,22 +8,21 @@ models:
           combination_of_columns:
             - source_relation
             - date_day
-            - account_id
-            - app_id
+            - vendor_number
+            - app_apple_id
             - subscription_name
+            - app_name
             - territory_long
             - state
     columns:
       - name: source_relation
         description: "{{ doc('source_relation') }}"
+      - name: vendor_number
+        description: "{{ doc('vendor_number') }}"
       - name: date_day
         description: '{{ doc("date_day") }}'
-      - name: account_id
-        description: '{{ doc("account_id") }}'
-      - name: account_name
-        description: '{{ doc("account_name") }}'
-      - name: app_id
-        description: '{{ doc("app_id") }}'
+      - name: app_apple_id
+        description: '{{ doc("app_apple_id") }}'
       - name: app_name
         description: '{{ doc("app_name") }}'
       - name: subscription_name
