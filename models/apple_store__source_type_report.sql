@@ -67,6 +67,7 @@ reporting_grain as (
 -- Final aggregation using reporting grain
 final as (
     select
+        rg.source_relation,
         rg.date_day,
         rg.app_id,
         a.app_name,
