@@ -17,7 +17,7 @@ impressions_and_page_views as (
         sum(impressions_unique_device) as impressions_unique_device,
         sum(page_views) as page_views,
         sum(page_views_unique_device) as page_views_unique_device
-    from {{ ref('int_apple_store__app_store_discovery_and_engagement_daily') }}
+    from {{ ref('int_apple_store__discovery_and_engagement_daily') }}
     group by 1,2,3,4,5
 ),
 
@@ -31,7 +31,7 @@ downloads_daily as (
         sum(first_time_downloads) as first_time_downloads,
         sum(redownloads) as redownloads,
         sum(total_downloads) as total_downloads
-    from {{ ref('int_apple_store__app_store_download_daily') }}
+    from {{ ref('int_apple_store__download_daily') }}
     group by 1,2,3,4,5
 ),
 
@@ -44,7 +44,7 @@ install_deletions as (
         source_relation,
         sum(installations) as installations,
         sum(deletions) as deletions
-    from {{ ref('int_apple_store__app_store_installation_and_deletion_daily') }}
+    from {{ ref('int_apple_store__installation_and_deletion_daily') }}
     group by 1,2,3,4,5
 ),
 
@@ -57,19 +57,25 @@ sessions_activity as (
         source_relation,
         sum(sessions) as sessions,
         sum(active_devices) as active_devices,
-        sum(active_devices_lip_30_days) as active_devices_lip_30_days
-    from {{ ref('int_apple_store__app_session_daily') }}
+        sum(active_devices_last_30_days) as active_devices_last_30_days
+    from {{ ref('int_apple_store__session_daily') }}
     group by 1,2,3,4,5
+),
+
+country_codes as (
+    
+    select * 
+    from {{ var('apple_store_country_codes') }}
 ),
 
 -- Unifying all dimension values before aggregation
 pre_reporting_grain as (
     select date_day, app_id, source_type, territory, source_relation from impressions_and_page_views
-    union
+    union all
     select date_day, app_id, source_type, territory, source_relation from downloads_daily
-    union
+    union all
     select date_day, app_id, source_type, territory, source_relation from install_deletions
-    union
+    union all
     select date_day, app_id, source_type, territory, source_relation from sessions_activity
 ),
 
@@ -81,7 +87,7 @@ reporting_grain as (
         source_type,
         territory,
         source_relation
-    from pre_rg
+    from pre_reporting_grain
 ),
 
 -- Final aggregation using reporting grain
@@ -103,8 +109,8 @@ final as (
         coalesce(dd.first_time_downloads, 0) as first_time_downloads,
         coalesce(dd.redownloads, 0) as redownloads,
         coalesce(dd.total_downloads, 0) as total_downloads,
-        coalesce(install_deletions.active_devices, 0) as active_devices,
-        coalesce(install_deletions.active_devices_lip_30_days, 0) as active_devices_lip_30_days,
+        coalesce(sa.active_devices, 0) as active_devices,
+        coalesce(sa.active_devices_last_30_days, 0) as active_devices_last_30_days,
         coalesce(id.deletions, 0) as deletions,
         coalesce(id.installations, 0) as installations,
         coalesce(sa.sessions, 0) as sessions

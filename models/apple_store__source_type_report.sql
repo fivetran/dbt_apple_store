@@ -14,7 +14,7 @@ impressions_and_page_views as (
         source_relation,
         sum(impressions) as impressions,
         sum(page_views) as page_views
-    from {{ ref('int_apple_store__app_store_discovery_and_engagement_daily') }}
+    from {{ ref('int_apple_store__discovery_and_engagement_daily') }}
     group by 1,2,3,4
 ),
 
@@ -29,7 +29,7 @@ install_deletions as (
         sum(total_downloads) as total_downloads,
         sum(deletions) as deletions,
         sum(installations) as installations
-    from {{ ref('int_apple_store__app_store_installation_and_deletion_daily') }}
+    from {{ ref('int_apple_store__installation_and_deletion_daily') }}
     group by 1,2,3,4
 ),
 
@@ -41,7 +41,7 @@ sessions_activity as (
         source_relation,
         sum(active_devices) as active_devices,
         sum(sessions) as sessions
-    from {{ ref('int_apple_store__app_session_daily') }}
+    from {{ ref('int_apple_store__session_daily') }}
     group by 1,2,3,4
 ),
 

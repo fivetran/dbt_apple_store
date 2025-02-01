@@ -13,7 +13,7 @@ impressions_and_page_views as (
         source_relation,
         sum(impressions) as impressions,
         sum(page_views) as page_views
-    from {{ ref('int_apple_store__app_store_discovery_and_engagement_daily') }}
+    from {{ ref('int_apple_store__discovery_and_engagement_daily') }}
     group by 1,2,3
 ),
 
@@ -35,7 +35,7 @@ downloads_daily as (
         sum(first_time_downloads) as first_time_downloads,
         sum(redownloads) as redownloads,
         sum(total_downloads) as total_downloads
-    from {{ ref('int_apple_store__app_store_download_daily') }}
+    from {{ ref('int_apple_store__download_daily') }}
     group by 1,2,3
 ),
 
@@ -46,7 +46,7 @@ install_deletions as (
         source_relation,
         sum(installations) as installations,
         sum(deletions) as deletions
-    from {{ ref('int_apple_store__app_store_installation_and_deletion_daily') }}
+    from {{ ref('int_apple_store__installation_and_deletion_daily') }}
     group by 1,2,3
 ),
 
@@ -57,7 +57,7 @@ sessions_activity as (
         source_relation,
         sum(sessions) as sessions,
         sum(active_devices) as active_devices
-    from {{ ref('int_apple_store__app_session_daily') }}
+    from {{ ref('int_apple_store__session_daily') }}
     group by 1,2,3
 ),
 
@@ -110,11 +110,11 @@ subscription_events as (
 pre_reporting_grain as (
     select date_day, app_id, source_relation from impressions_and_page_views
     union all
-    select date_day, app_id, source_relation from crashes
+    select date_day, app_id, source_relation from app_crashes
     union all
-    select date_day, app_id, source_relation from downloads
+    select date_day, app_id, source_relation from downloads_daily
     union all
-    select date_day, app_id, source_relation from usage
+    select date_day, app_id, source_relation from install_deletions
     union all
     select date_day, app_id, source_relation from sessions_activity
 ),
@@ -138,9 +138,9 @@ final as (
         coalesce(ip.impressions, 0) as impressions,
         coalesce(ip.page_views, 0) as page_views,
         coalesce(ac.crashes, 0) as crashes,
-        coalesce(d.first_time_downloads, 0) as first_time_downloads,
-        coalesce(d.redownloads, 0) as redownloads,
-        coalesce(d.total_downloads, 0) as total_downloads,
+        coalesce(dd.first_time_downloads, 0) as first_time_downloads,
+        coalesce(dd.redownloads, 0) as redownloads,
+        coalesce(dd.total_downloads, 0) as total_downloads,
         coalesce(sa.active_devices, 0) as active_devices,
         coalesce(id.deletions, 0) as deletions,
         coalesce(id.installations, 0) as installations,
@@ -186,11 +186,11 @@ final as (
     left join subscription_summary ss 
         on rg.date_day = ss.date_day
         and rg.source_relation = ss.source_relation
-        and rg.app_name = ss.app_name
+        and a.app_name = ss.app_name
     left join subscription_events se 
         on rg.date_day = se.date_day
         and rg.source_relation = se.source_relation
-        and rg.app_name = se.app_name
+        and a.app_name = se.app_name
     {% endif %}
 )
 

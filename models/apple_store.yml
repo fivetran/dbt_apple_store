@@ -149,6 +149,14 @@ models:
         description: '{{ doc("installations") }}'
       - name: sessions 
         description: '{{ doc("sessions") }}'
+      - name: active_free_trial_introductory_offer_subscriptions
+        description: '{{ doc("active_free_trial_introductory_offer_subscriptions") }}'
+      - name: active_pay_as_you_go_introductory_offer_subscriptions
+        description: '{{ doc("active_pay_as_you_go_introductory_offer_subscriptions") }}'
+      - name: active_pay_up_front_introductory_offer_subscriptions
+        description: '{{ doc("active_pay_up_front_introductory_offer_subscriptions") }}'
+      - name: active_standard_price_subscriptions
+        description: '{{ doc("active_standard_price_subscriptions") }}'
 
   - name: apple_store__source_type_report
     description: Each record represents daily metrics by app_id and source_type
@@ -226,6 +234,14 @@ models:
         description: '{{ doc("installations") }}'
       - name: sessions 
         description: '{{ doc("sessions") }}'
+      - name: active_free_trial_introductory_offer_subscriptions
+        description: '{{ doc("active_free_trial_introductory_offer_subscriptions") }}'
+      - name: active_pay_as_you_go_introductory_offer_subscriptions
+        description: '{{ doc("active_pay_as_you_go_introductory_offer_subscriptions") }}'
+      - name: active_pay_up_front_introductory_offer_subscriptions
+        description: '{{ doc("active_pay_up_front_introductory_offer_subscriptions") }}'
+      - name: active_standard_price_subscriptions
+        description: '{{ doc("active_standard_price_subscriptions") }}'
 
   - name: apple_store__platform_version_report
     description: Each record represents daily metrics for each by app_id, source_type and platform version

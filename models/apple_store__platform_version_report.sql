@@ -29,7 +29,7 @@ impressions_and_page_views as (
         sum(impressions_unique_device) as impressions_unique_device,
         sum(page_views) as page_views,
         sum(page_views_unique_device) as page_views_unique_device
-    from {{ ref('int_apple_store__app_store_discovery_and_engagement_daily') }}
+    from {{ ref('int_apple_store__discovery_and_engagement_daily') }}
     group by 1,2,3,4,5
 ),
 
@@ -43,7 +43,7 @@ downloads_daily as (
         sum(first_time_downloads) as first_time_downloads,
         sum(redownloads) as redownloads,
         sum(total_downloads) as total_downloads
-    from {{ ref('int_apple_store__app_store_download_daily') }}
+    from {{ ref('int_apple_store__download_daily') }}
     group by 1,2,3,4,5
 ),
 
@@ -56,7 +56,7 @@ install_deletions as (
         source_relation,
         sum(installations) as installations,
         sum(deletions) as deletions
-    from {{ ref('int_apple_store__app_store_installation_and_deletion_daily') }}
+    from {{ ref('int_apple_store__installation_and_deletion_daily') }}
     group by 1,2,3,4,5
 ),
 
@@ -70,7 +70,7 @@ sessions_activity as (
         sum(sessions) as sessions,
         sum(active_devices) as active_devices,
         sum(active_devices_last_30_days) as active_devices_last_30_days
-    from {{ ref('int_apple_store__app_session_daily') }}
+    from {{ ref('int_apple_store__session_daily') }}
     group by 1,2,3,4,5
 ),
 

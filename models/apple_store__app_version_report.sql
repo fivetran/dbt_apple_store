@@ -27,7 +27,7 @@ install_deletions as (
         source_relation,
         sum(installations) as installations,
         sum(deletions) as deletions
-    from {{ ref('int_apple_store__app_store_installation_and_deletion_daily') }}
+    from {{ ref('int_apple_store__installation_and_deletion_daily') }}
     group by 1,2,3,4,5
 ),
 
@@ -41,7 +41,7 @@ sessions_activity as (
         sum(sessions) as sessions,
         sum(active_devices) as active_devices,
         sum(active_devices_last_30_days) as active_devices_last_30_days
-    from {{ ref('int_apple_store__app_session_daily') }}
+    from {{ ref('int_apple_store__session_daily') }}
     group by 1,2,3,4,5
 ),
 

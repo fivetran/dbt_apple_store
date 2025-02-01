@@ -17,8 +17,8 @@ impressions_and_page_views as (
         sum(impressions_unique_device) as impressions_unique_device,
         sum(page_views) as page_views,
         sum(page_views_unique_device) as page_views_unique_device
-    from {{ ref('int_apple_store__app_store_discovery_and_engagement_daily') }}
-    group by 1,2,3,4,5
+    from {{ ref('int_apple_store__discovery_and_engagement_daily') }}
+    {{ dbt_utils.group_by(5) }}
 ),
 
 downloads_daily as (
@@ -31,8 +31,8 @@ downloads_daily as (
         sum(first_time_downloads) as first_time_downloads,
         sum(redownloads) as redownloads,
         sum(total_downloads) as total_downloads
-    from {{ ref('int_apple_store__app_store_download_daily') }}
-    group by 1,2,3,4,5
+    from {{ ref('int_apple_store__download_daily') }}
+    {{ dbt_utils.group_by(5) }}
 ),
 
 install_deletions as (
@@ -44,8 +44,8 @@ install_deletions as (
         source_relation,
         sum(installations) as installations,
         sum(deletions) as deletions
-    from {{ ref('int_apple_store__app_store_installation_and_deletion_daily') }}
-    group by 1,2,3,4,5
+    from {{ ref('int_apple_store__installation_and_deletion_daily') }}
+    {{ dbt_utils.group_by(5) }}
 ),
 
 sessions_activity as (
@@ -58,8 +58,8 @@ sessions_activity as (
         sum(sessions) as sessions,
         sum(active_devices) as active_devices,
         sum(active_devices_last_30_days) as active_devices_last_30_days
-    from {{ ref('int_apple_store__app_session_daily') }}
-    group by 1,2,3,4,5
+    from {{ ref('int_apple_store__session_daily') }}
+    {{ dbt_utils.group_by(5) }}
 ),
 
 app_crashes as (
@@ -71,7 +71,7 @@ app_crashes as (
         source_relation,
         sum(crashes) as crashes
     from {{ var('app_crash_daily') }}
-    group by 1,2,3,4,5
+    {{ dbt_utils.group_by(5) }}
 ),
 
 
@@ -89,7 +89,7 @@ subscription_summary as (
         sum(active_pay_up_front_introductory_offer_subscriptions) as active_pay_up_front_introductory_offer_subscriptions,
         sum(active_standard_price_subscriptions) as active_standard_price_subscriptions
     from {{ var('sales_subscription_summary') }}
-    {{ dbt_utils.group_by(3) }}
+    {{ dbt_utils.group_by(5) }}
 ),
 
 subscription_events_filtered as (
@@ -114,19 +114,19 @@ subscription_events as (
         date_day,
         device,
         cast(null as {{ dbt.type_string() }}) as source_type,
-        source_relation,
+        source_relation
         {% for event_val in var('apple_store__subscription_events') %}
         , sum(case when lower(event) = '{{ event_val | trim | lower }}' then quantity else 0 end) as {{ 'event_' ~ event_val | replace(' ', '_') | trim | lower }}
         {% endfor %}
     from subscription_events_filtered
-    {{ dbt_utils.group_by(3) }}
+    {{ dbt_utils.group_by(5) }}
 ),
 
 {% endif %}
 
 -- Unifying all dimension values before aggregation
-pre_rg as (
-    select date_day, app_id, source_type, device, source_relation from app_store_device
+pre_reporting_grain as (
+    select date_day, app_id, source_type, device, source_relation from impressions_and_page_views
     union all
     select date_day, app_id, source_type, device, source_relation from downloads_daily
     union all
@@ -145,7 +145,7 @@ reporting_grain as (
         source_type,
         device,
         source_relation
-    from pre_rg
+    from pre_reporting_grain
 ),
 
 -- Final aggregation using reporting grain
@@ -174,7 +174,7 @@ final as (
         {% if var('apple_store__using_subscriptions', False) %}
         ,
         coalesce(ss.active_free_trial_introductory_offer_subscriptions, 0) as active_free_trial_introductory_offer_subscriptions,
-        coalesce(ss.active_pay_as_you_go_introductory_offer_subscriptions, 0) as active_pay_a_you_go_introductory_offer_subscriptions,
+        coalesce(ss.active_pay_as_you_go_introductory_offer_subscriptions, 0) as active_pay_as_you_go_introductory_offer_subscriptions,
         coalesce(ss.active_pay_up_front_introductory_offer_subscriptions, 0) as active_pay_up_front_introductory_offer_subscriptions,
         coalesce(ss.active_standard_price_subscriptions, 0) as active_standard_price_subscriptions
         {% for event_val in var('apple_store__subscription_events') %}

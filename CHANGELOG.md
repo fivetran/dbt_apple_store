@@ -1,5 +1,9 @@
 # dbt_apple_store version.version
 
+
+# Breaking Changes
+-- account_id and account_name have been removed
+
 ## Documentation
 - Added Quickstart model counts to README. ([#31](https://github.com/fivetran/dbt_apple_store/pull/31))
 - Corrected references to connectors and connections in the README. ([#31](https://github.com/fivetran/dbt_apple_store/pull/31))
