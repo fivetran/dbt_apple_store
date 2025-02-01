@@ -1,3 +1,9 @@
 packages:
-- package: fivetran/apple_store_source
-  version: [">=0.4.0", "<0.5.0"]
+# - package: fivetran/apple_store_source
+#   version: [">=0.5.0", "<0.6.0"]
+
+# - local: ../../dbt_apple_store_source
+
+  - git: https://github.com/fivetran/dbt_apple_store_source.git
+    revision: nov_2024_schema
+    warn-unpinned: false
