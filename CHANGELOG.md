@@ -1,8 +1,12 @@
-# dbt_apple_store version.version
+# dbt_apple_store v0.5.0
 
+## Breaking Changes: Schema Change
+- Following the connector's [Nov 2024 Update](https://fivetran.com/docs/connectors/applications/apple-app-store/changelog#november2024) to sync from the [App Store Connect API](https://developer.apple.com/documentation/appstoreconnectapi), we've updated this dbt package to reflect the new schema which includes the following changes:
 
 # Breaking Changes
--- account_id and account_name have been removed
+- The `account_id` and `account_name` fields have been removed.
+
+## to be complete
 
 ## Documentation
 - Added Quickstart model counts to README. ([#31](https://github.com/fivetran/dbt_apple_store/pull/31))
