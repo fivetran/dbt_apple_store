@@ -108,15 +108,43 @@ subscription_events as (
 
 -- Unifying all dimension values before aggregation
 pre_reporting_grain as (
-    select date_day, app_id, source_relation from impressions_and_page_views
+    select 
+        date_day, 
+        app_id, 
+        source_relation
+    from impressions_and_page_views
+
     union all
-    select date_day, app_id, source_relation from app_crashes
+
+    select 
+        date_day, 
+        app_id, 
+        source_relation
+    from app_crashes
+
     union all
-    select date_day, app_id, source_relation from downloads_daily
+
+    select 
+        date_day, 
+        app_id, 
+        source_relation
+    from downloads_daily
+
     union all
-    select date_day, app_id, source_relation from install_deletions
+
+    select 
+        date_day, 
+        app_id, 
+        source_relation
+    from install_deletions
+
     union all
-    select date_day, app_id, source_relation from sessions_activity
+
+    select 
+        date_day, 
+        app_id, 
+        source_relation
+    from sessions_activity
 ),
 
 -- Ensuring distinct combinations of all dimensions
@@ -157,37 +185,37 @@ final as (
             as {{ event_column }} 
         {% endfor %}
         {% endif %}
-    from reporting_grain rg
-    left join impressions_and_page_views ip 
+    from reporting_grain as rg
+    left join impressions_and_page_views as ip 
         on rg.app_id = ip.app_id
         and rg.date_day = ip.date_day
         and rg.source_relation = ip.source_relation
-    left join app_crashes ac
+    left join app_crashes as ac
         on rg.app_id = ac.app_id
         and rg.date_day = ac.date_day
         and rg.source_relation = ac.source_relation
-    left join downloads_daily dd 
+    left join downloads_daily as dd 
         on rg.app_id = dd.app_id
         and rg.date_day = dd.date_day
         and rg.source_relation = dd.source_relation
-    left join install_deletions id 
+    left join install_deletions as id 
         on rg.app_id = id.app_id
         and rg.date_day = id.date_day
         and rg.source_relation = id.source_relation
-    left join sessions_activity sa 
+    left join sessions_activity as sa 
         on rg.app_id = sa.app_id
         and rg.date_day = sa.date_day
         and rg.source_relation = sa.source_relation
-    left join app a
+    left join app as a
         on rg.app_id = a.app_id
         and rg.source_relation = a.source_relation
 
     {% if var('apple_store__using_subscriptions', False) %}
-    left join subscription_summary ss 
+    left join subscription_summary as ss 
         on rg.date_day = ss.date_day
         and rg.source_relation = ss.source_relation
         and a.app_name = ss.app_name
-    left join subscription_events se 
+    left join subscription_events as se 
         on rg.date_day = se.date_day
         and rg.source_relation = se.source_relation
         and a.app_name = se.app_name

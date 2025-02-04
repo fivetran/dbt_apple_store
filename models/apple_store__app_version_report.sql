@@ -47,11 +47,33 @@ sessions_activity as (
 
 -- Unifying all dimension values before aggregation
 pre_reporting_grain as (
-    select date_day, app_id, app_version, source_type, source_relation from app_crashes
+    select 
+        date_day, 
+        app_id, 
+        app_version, 
+        source_type, 
+        source_relation 
+    from app_crashes
+    
     union all
-    select date_day, app_id, app_version, source_type, source_relation from install_deletions
+    
+    select 
+        date_day, 
+        app_id, 
+        app_version, 
+        source_type, 
+        source_relation 
+    from install_deletions
+    
     union all
-    select date_day, app_id, app_version, source_type, source_relation from sessions_activity
+    
+    select 
+        date_day, 
+        app_id, 
+        app_version, 
+        source_type, 
+        source_relation 
+    from sessions_activity
 ),
 
 -- Ensuring distinct combinations of all dimensions
@@ -80,25 +102,25 @@ final as (
         coalesce(id.deletions, 0) as deletions,
         coalesce(id.installations, 0) as installations,
         coalesce(sa.sessions, 0) as sessions
-    from reporting_grain rg
-    left join app_crashes ac
+    from reporting_grain as rg
+    left join app_crashes as ac
         on rg.date_day = ac.date_day
         and rg.app_id = ac.app_id
         and rg.app_version = ac.app_version
         and rg.source_relation = ac.source_relation
-    left join install_deletions id
+    left join install_deletions as id
         on rg.date_day = id.date_day
         and rg.app_id = id.app_id
         and rg.app_version = id.app_version
         and rg.source_type = id.source_type
         and rg.source_relation = id.source_relation
-    left join sessions_activity sa
+    left join sessions_activity as sa
         on rg.date_day = sa.date_day
         and rg.app_id = sa.app_id
         and rg.app_version = sa.app_version
         and rg.source_type = sa.source_type
         and rg.source_relation = sa.source_relation
-    left join app a
+    left join app as a
         on rg.app_id = a.app_id
         and rg.source_relation = a.source_relation
 )

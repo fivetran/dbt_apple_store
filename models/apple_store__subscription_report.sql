@@ -61,9 +61,29 @@ country_codes as (
 
 -- Unifying all dimension values before aggregation
 pre_reporting_grain as (
-    select date_day, vendor_number, app_apple_id, app_name, subscription_name, country, state, source_relation from subscription_summary
+    select 
+        date_day, 
+        vendor_number, 
+        app_apple_id, 
+        app_name, 
+        subscription_name, 
+        country, 
+        state, 
+        source_relation
+    from subscription_summary
+
     union all
-    select date_day, vendor_number, app_apple_id, app_name, subscription_name, country, state, source_relation from subscription_events
+
+    select 
+        date_day, 
+        vendor_number, 
+        app_apple_id, 
+        app_name, 
+        subscription_name, 
+        country, 
+        state, 
+        source_relation
+    from subscription_events
 ),
 
 -- Ensuring distinct combinations of all dimensions
@@ -106,8 +126,8 @@ final as (
         , coalesce({{ 'se.' ~ event_column }}, 0)
             as {{ event_column }} 
         {% endfor %}
-    from reporting_grain rg
-    left join subscription_summary ss 
+    from reporting_grain as rg
+    left join subscription_summary as ss 
         on rg.vendor_number = ss.vendor_number
         and rg.app_apple_id = ss.app_apple_id
         and rg.date_day = ss.date_day
@@ -115,7 +135,7 @@ final as (
         and rg.country = ss.country
         and rg.state = ss.state
         and rg.source_relation = ss.source_relation
-    left join subscription_events se 
+    left join subscription_events as se
         on rg.vendor_number = ss.vendor_number
         and rg.app_apple_id = se.app_apple_id
         and rg.date_day = se.date_day
