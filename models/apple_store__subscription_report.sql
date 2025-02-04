@@ -1,6 +1,12 @@
 {{ config(enabled=var('apple_store__using_subscriptions', False)) }}
 
-with subscription_summary as (
+with date_spine as (
+    select
+        date_day 
+    from {{ ref('int_apple_store__date_spine') }}
+),
+
+subscription_summary as (
 
     select
         vendor_number,
@@ -18,7 +24,6 @@ with subscription_summary as (
     from {{ var('sales_subscription_summary') }}
     {{ dbt_utils.group_by(8) }}
 ),
-
 
 subscription_events_filtered as (
 
@@ -100,6 +105,20 @@ reporting_grain as (
     from pre_reporting_grain
 ),
 
+reporting_grain_date_join as (
+    select
+        ds.date_day,
+        ug.vendor_number,
+        ug.app_apple_id,
+        ug.app_name,
+        ug.subscription_name,
+        ug.country,
+        ug.state,
+        ug.source_relation
+    from date_spine as ds
+    cross join reporting_grain as ug
+),
+
 -- Final aggregation using reporting grain
 final as (
     select
@@ -126,7 +145,7 @@ final as (
         , coalesce({{ 'se.' ~ event_column }}, 0)
             as {{ event_column }} 
         {% endfor %}
-    from reporting_grain as rg
+    from reporting_grain_date_join as rg
     left join subscription_summary as ss 
         on rg.vendor_number = ss.vendor_number
         and rg.app_apple_id = ss.app_apple_id

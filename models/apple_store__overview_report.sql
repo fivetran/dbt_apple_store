@@ -1,4 +1,10 @@
-with app as (
+with date_spine as (
+    select
+        date_day 
+    from {{ ref('int_apple_store__date_spine') }}
+),
+
+app as (
     select
         app_id,
         app_name,
@@ -156,6 +162,15 @@ reporting_grain as (
     from pre_reporting_grain
 ),
 
+reporting_grain_date_join as (
+    select
+        ds.date_day,
+        ug.app_id,
+        ug.source_relation
+    from date_spine as ds
+    cross join reporting_grain as ug
+),
+
 -- Final aggregation using reporting grain
 final as (
     select
@@ -185,7 +200,7 @@ final as (
             as {{ event_column }} 
         {% endfor %}
         {% endif %}
-    from reporting_grain as rg
+    from reporting_grain_date_join as rg
     left join impressions_and_page_views as ip 
         on rg.app_id = ip.app_id
         and rg.date_day = ip.date_day

@@ -1,4 +1,10 @@
-with app as (
+with date_spine as (
+    select
+        date_day 
+    from {{ ref('int_apple_store__date_spine') }}
+),
+
+app as (
     select
         app_id,
         app_name,
@@ -56,8 +62,7 @@ sessions_activity as (
         device,
         source_relation,
         sum(sessions) as sessions,
-        sum(active_devices) as active_devices,
-        sum(active_devices_last_30_days) as active_devices_last_30_days
+        sum(active_devices) as active_devices
     from {{ ref('int_apple_store__session_daily') }}
     {{ dbt_utils.group_by(5) }}
 ),
@@ -186,6 +191,17 @@ reporting_grain as (
     from pre_reporting_grain
 ),
 
+reporting_grain_date_join as (
+    select
+        ds.date_day,
+        ug.app_id,
+        ug.source_type,
+        ug.device,
+        ug.source_relation
+    from date_spine as ds
+    cross join reporting_grain as ug
+),
+
 -- Final aggregation using reporting grain
 final as (
     select
@@ -204,7 +220,6 @@ final as (
         coalesce(dd.redownloads, 0) as redownloads,
         coalesce(dd.total_downloads, 0) as total_downloads,
         coalesce(sa.active_devices, 0) as active_devices,
-        coalesce(sa.active_devices_last_30_days, 0) as active_devices_last_30_days,
         coalesce(id.deletions, 0) as deletions,
         coalesce(id.installations, 0) as installations,
         coalesce(sa.sessions, 0) as sessions
@@ -222,7 +237,7 @@ final as (
         {% endfor %}
         {% endif %}
 
-    from reporting_grain as rg
+    from reporting_grain_date_join as rg
     left join impressions_and_page_views as ip
         on rg.app_id = ip.app_id
         and rg.date_day = ip.date_day

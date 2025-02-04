@@ -20,11 +20,8 @@ aggregated as (
         source_info,
         page_title,
         source_relation,
-        sum(sessions) AS sessions,
-        sum(unique_devices) AS active_devices,
-        sum(distinct
-            case when date_day between {{ dbt.dateadd('day', -30, 'date_day') }} and date_day then unique_devices end)
-        as active_devices_last_30_days
+        sum(sessions) as sessions,
+        sum(unique_devices) as active_devices
     from base
     {{ dbt_utils.group_by(13) }}
 
