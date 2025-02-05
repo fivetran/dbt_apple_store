@@ -72,13 +72,12 @@ app_crashes as (
         app_id,
         date_day,
         device,
-        cast(null as {{ dbt.type_string() }}) as source_type,
+        '' as source_type,
         source_relation,
         sum(crashes) as crashes
     from {{ var('app_crash_daily') }}
     {{ dbt_utils.group_by(5) }}
 ),
-
 
 {% if var('apple_store__using_subscriptions', False) %}
 subscription_summary as (
@@ -87,7 +86,7 @@ subscription_summary as (
         app_name,
         date_day,
         device,
-        cast(null as {{ dbt.type_string() }}) as source_type,
+        '' as source_type,
         source_relation,
         sum(active_free_trial_introductory_offer_subscriptions) as active_free_trial_introductory_offer_subscriptions,
         sum(active_pay_as_you_go_introductory_offer_subscriptions) as active_pay_as_you_go_introductory_offer_subscriptions,
@@ -118,7 +117,7 @@ subscription_events as (
         app_name,
         date_day,
         device,
-        cast(null as {{ dbt.type_string() }}) as source_type,
+        '' as source_type,
         source_relation
         {% for event_val in var('apple_store__subscription_events') %}
         , sum(case when lower(event) = '{{ event_val | trim | lower }}' then quantity else 0 end) as {{ 'event_' ~ event_val | replace(' ', '_') | trim | lower }}
@@ -174,10 +173,33 @@ pre_reporting_grain as (
     select 
         date_day, 
         app_id, 
-        null as source_type, 
+        source_type, 
         device, 
         source_relation 
     from app_crashes
+
+{% if var('apple_store__using_subscriptions', False) %}
+    union all
+
+    select 
+        date_day, 
+        app_id, 
+        source_type, 
+        device, 
+        source_relation 
+    from subscription_summary
+
+    union all
+
+    select 
+        date_day, 
+        app_id, 
+        source_type, 
+        device, 
+        source_relation 
+    from subscription_events
+{% endif %}
+
 ),
 
 -- Ensuring distinct combinations of all dimensions
@@ -195,7 +217,7 @@ reporting_grain_date_join as (
     select
         ds.date_day,
         ug.app_id,
-        ug.source_type,
+        coalesce(ug.source_type, '') as source_type, 
         ug.device,
         ug.source_relation
     from date_spine as ds
@@ -248,6 +270,7 @@ final as (
     left join app_crashes as ac
         on rg.app_id = ac.app_id
         and rg.date_day = ac.date_day
+        and coalesce(rg.source_type, '') = ac.source_type
         and rg.device = ac.device
         and rg.source_relation = ac.source_relation
     left join downloads_daily as dd 
@@ -277,13 +300,13 @@ final as (
         on rg.date_day = ss.date_day
         and rg.source_relation = ss.source_relation
         and a.app_name = ss.app_name 
-        and rg.source_type = ss.source_type
+        and coalesce(rg.source_type, '') = ss.source_type
         and rg.device = ss.device
     left join subscription_events as se
         on rg.date_day = se.date_day
         and rg.source_relation = se.source_relation
         and a.app_name = se.app_name 
-        and rg.source_type = se.source_type
+        and coalesce(rg.source_type, '') = se.source_type
         and rg.device = se.device
     {% endif %}
 )

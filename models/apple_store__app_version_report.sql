@@ -17,7 +17,7 @@ app_crashes as (
         app_id,
         app_version,
         date_day,
-        cast(null as {{ dbt.type_string() }}) as source_type,
+        '' as source_type,
         source_relation,
         sum(crashes) as crashes
     from {{ var('app_crash_daily') }}
@@ -97,7 +97,7 @@ reporting_grain_date_join as (
         ds.date_day,
         ug.app_id,
         ug.app_version,
-        ug.source_type,
+        coalesce(ug.source_type, '') as source_type, 
         ug.source_relation
     from date_spine as ds
     left join reporting_grain as ug
@@ -123,6 +123,7 @@ final as (
         on rg.date_day = ac.date_day
         and rg.app_id = ac.app_id
         and rg.app_version = ac.app_version
+        and coalesce(rg.source_type, '') = ac.source_type
         and rg.source_relation = ac.source_relation
     left join install_deletions as id
         on rg.date_day = id.date_day
