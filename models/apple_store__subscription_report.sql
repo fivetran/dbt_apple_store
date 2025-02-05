@@ -116,7 +116,8 @@ reporting_grain_date_join as (
         ug.state,
         ug.source_relation
     from date_spine as ds
-    cross join reporting_grain as ug
+    left join reporting_grain as ug
+        on ds.date_day = ug.date_day
 ),
 
 -- Final aggregation using reporting grain

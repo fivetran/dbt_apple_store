@@ -23,7 +23,6 @@
 
 {%- set first_date = dbt_utils.get_single_value(first_date_query) %}
 
-
 select
     cast(date_day as date) as date_day 
 from (
