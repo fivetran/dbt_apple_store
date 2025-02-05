@@ -23,7 +23,7 @@ aggregated as (
         source_relation, 
         sum(case when lower(download_type) = 'first-time download' then counts else 0 end) as first_time_downloads,
         sum(case when lower(download_type) = 'redownload' then counts else 0 end) as redownloads,
-        sum(case when lower(download_type) in ('first-time download','redownload') then counts else 0 end) as total_downloads,
+        sum(case when lower(download_type) in ('first-time download','redownload') then counts else 0 end) as total_downloads
     from base
     {{ dbt_utils.group_by(14) }}
 

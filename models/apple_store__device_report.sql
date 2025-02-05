@@ -177,29 +177,6 @@ pre_reporting_grain as (
         device, 
         source_relation 
     from app_crashes
-
-{% if var('apple_store__using_subscriptions', False) %}
-    union all
-
-    select 
-        date_day, 
-        app_id, 
-        source_type, 
-        device, 
-        source_relation 
-    from subscription_summary
-
-    union all
-
-    select 
-        date_day, 
-        app_id, 
-        source_type, 
-        device, 
-        source_relation 
-    from subscription_events
-{% endif %}
-
 ),
 
 -- Ensuring distinct combinations of all dimensions
