@@ -5,6 +5,9 @@
 -- depends_on: {{ ref('stg_apple_store__app_store_download_daily') }}
 -- depends_on: {{ ref('stg_apple_store__app_store_installation_and_deletion_daily') }}
 -- depends_on: {{ ref('stg_apple_store__app_session_daily') }}
+with spine as (
+
+    {% if execute and flags.WHICH in ('run', 'build') %}
 
 {% set first_date_query %}
 
@@ -25,14 +28,22 @@
 
 {%- set first_date = dbt_utils.get_single_value(first_date_query) %}
 
+{% else %}
+{%- set first_date = '2024-11-01' %}
+
+{% endif %}
+
+{{
+    dbt_utils.date_spine(
+        datepart="day",
+        start_date = "cast('" ~ first_date ~ "' as date)",
+        end_date=dbt.dateadd("day", 1, dbt.current_timestamp())
+    )   
+}} 
+
+)
+
 select
     cast(date_day as date) as date_day 
-from (
-        {{
-            dbt_utils.date_spine(
-                datepart="day",
-                start_date = "cast('" ~ first_date ~ "' as date)",
-                end_date=dbt.dateadd("day", 1, dbt.current_timestamp())
-            )   
-        }} 
-    ) as date_spine
+from spine
+
