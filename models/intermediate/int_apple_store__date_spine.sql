@@ -1,3 +1,5 @@
+{{ config(materialized='table') }}
+
 -- depends_on: {{ ref('stg_apple_store__app_store_discovery_and_engagement_daily') }}
 -- depends_on: {{ ref('stg_apple_store__app_crash_daily') }}
 -- depends_on: {{ ref('stg_apple_store__app_store_download_daily') }}
