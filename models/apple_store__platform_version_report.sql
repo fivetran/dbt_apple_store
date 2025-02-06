@@ -17,7 +17,7 @@ app_crashes as (
         app_id,
         platform_version,
         date_day,
-        '' as source_type,
+        source_type,
         source_relation,
         sum(crashes) as crashes
     from {{ var('app_crash_daily') }}
@@ -146,7 +146,7 @@ reporting_grain_date_join as (
         ds.date_day,
         ug.app_id,
         ug.platform_version,
-        coalesce(ug.source_type, '') as source_type, 
+        ug.source_type, 
         ug.source_relation
     from date_spine as ds
     left join reporting_grain as ug
@@ -179,7 +179,7 @@ final as (
         on rg.app_id = ac.app_id
         and rg.platform_version = ac.platform_version
         and rg.date_day = ac.date_day
-        and coalesce(rg.source_type, '') = ac.source_type
+        and rg.source_type = ac.source_type
         and rg.source_relation = ac.source_relation
     left join impressions_and_page_views as ip 
         on rg.app_id = ip.app_id
