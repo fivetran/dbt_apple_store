@@ -13,41 +13,18 @@ app as (
 ),
 
 app_crashes as (
-    select
-        app_id,
-        app_version,
-        date_day,
-        source_type,
-        source_relation,
-        sum(crashes) as crashes
-    from {{ var('app_crash_daily') }}
-    group by 1,2,3,4,5
+    select * 
+    from {{ ref('int_apple_store__app_version_app_crashes') }}
 ),
 
 install_deletions as (
-    select
-        app_id,
-        app_version,
-        date_day,
-        source_type,
-        source_relation,
-        sum(installations) as installations,
-        sum(deletions) as deletions
-    from {{ ref('int_apple_store__installation_and_deletion_daily') }}
-    group by 1,2,3,4,5
+    select *
+    from {{ ref('int_apple_store__app_version_install_deletions') }}
 ),
 
 sessions_activity as (
-    select
-        date_day,
-        app_id,
-        app_version,
-        source_type,
-        source_relation,
-        sum(sessions) as sessions,
-        sum(active_devices) as active_devices
-    from {{ ref('int_apple_store__session_daily') }}
-    group by 1,2,3,4,5
+    select *
+    from {{ ref('int_apple_store__app_version_sessions_activity') }}
 ),
 
 -- Ensuring distinct combinations of all dimensions

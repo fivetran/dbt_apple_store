@@ -1,68 +1,26 @@
 with app_crashes as (
-    select
-        app_id,
-        platform_version,
-        date_day,
-        source_type,
-        source_relation,
-        sum(crashes) as crashes
-    from {{ var('app_crash_daily') }}
-    group by 1,2,3,4,5
+    select * 
+    from {{ ref('int_apple_store__platform_version_app_crashes') }}
 ),
 
 impressions_and_page_views as (
-    select
-        app_id,
-        platform_version,
-        date_day,
-        source_type,
-        source_relation,
-        sum(impressions) as impressions,
-        sum(impressions_unique_device) as impressions_unique_device,
-        sum(page_views) as page_views,
-        sum(page_views_unique_device) as page_views_unique_device
-    from {{ ref('int_apple_store__discovery_and_engagement_daily') }}
-    group by 1,2,3,4,5
+    select * 
+    from {{ ref('int_apple_store__platform_version_impressions_pv') }}
 ),
 
 downloads_daily as (
-    select
-        app_id,
-        platform_version,
-        date_day,
-        source_type,
-        source_relation,
-        sum(first_time_downloads) as first_time_downloads,
-        sum(redownloads) as redownloads,
-        sum(total_downloads) as total_downloads
-    from {{ ref('int_apple_store__download_daily') }}
-    group by 1,2,3,4,5
+    select * 
+    from {{ ref('int_apple_store__platform_version_downloads_daily') }}
 ),
 
 install_deletions as (
-    select
-        app_id,
-        platform_version,
-        date_day,
-        source_type,
-        source_relation,
-        sum(installations) as installations,
-        sum(deletions) as deletions
-    from {{ ref('int_apple_store__installation_and_deletion_daily') }}
-    group by 1,2,3,4,5
+    select * 
+    from {{ ref('int_apple_store__platform_version_install_deletions') }}
 ),
 
 sessions_activity as (
-    select
-        app_id,
-        platform_version,
-        date_day,
-        source_type,
-        source_relation,
-        sum(sessions) as sessions,
-        sum(active_devices) as active_devices
-    from {{ ref('int_apple_store__session_daily') }}
-    group by 1,2,3,4,5
+    select * 
+    from {{ ref('int_apple_store__platform_version_sessions_activity') }}
 ),
 
 -- Unifying all dimension values before aggregation
