@@ -113,63 +113,13 @@ subscription_events as (
 {% endif %}
 
 -- Unifying all dimension values before aggregation
-pre_reporting_grain as (
-    select 
-        date_day, 
-        app_id, 
-        source_relation
-    from impressions_and_page_views
-
-    union all
-
-    select 
-        date_day, 
-        app_id, 
-        source_relation
-    from app_crashes
-
-    union all
-
-    select 
-        date_day, 
-        app_id, 
-        source_relation
-    from downloads_daily
-
-    union all
-
-    select 
-        date_day, 
-        app_id, 
-        source_relation
-    from install_deletions
-
-    union all
-
-    select 
-        date_day, 
-        app_id, 
-        source_relation
-    from sessions_activity
-),
-
--- Ensuring distinct combinations of all dimensions
 reporting_grain as (
-    select distinct
-        date_day,
-        app_id,
-        source_relation
-    from pre_reporting_grain
-),
-
-reporting_grain_date_join as (
     select
         ds.date_day,
-        ug.app_id,
-        ug.source_relation
+        app.app_id,
+        app.source_relation
     from date_spine as ds
-    left join reporting_grain as ug
-        on ds.date_day = ug.date_day
+    cross join app as app
 ),
 
 -- Final aggregation using reporting grain
@@ -201,7 +151,7 @@ final as (
             as {{ event_column }} 
         {% endfor %}
         {% endif %}
-    from reporting_grain_date_join as rg
+    from reporting_grain as rg
     left join impressions_and_page_views as ip 
         on rg.app_id = ip.app_id
         and rg.date_day = ip.date_day
