@@ -91,8 +91,6 @@ models:
         description: '{{ doc("total_downloads") }}'
       - name: active_devices
         description: '{{ doc("active_devices") }}'
-      - name: active_devices_last_30_days
-        description: '{{ doc("active_devices_last_30_days") }}'
       - name: deletions
         description: '{{ doc("deletions") }}'
       - name: installations
@@ -141,8 +139,6 @@ models:
         description: '{{ doc("total_downloads") }}'
       - name: active_devices
         description: '{{ doc("active_devices") }}'
-      - name: active_devices_last_30_days
-        description: '{{ doc("active_devices_last_30_days") }}'
       - name: deletions
         description: '{{ doc("deletions") }}'
       - name: installations
@@ -284,8 +280,6 @@ models:
         description: '{{ doc("total_downloads") }}'
       - name: active_devices
         description: '{{ doc("active_devices") }}'
-      - name: active_devices_last_30_days
-        description: '{{ doc("active_devices_last_30_days") }}'
       - name: deletions
         description: '{{ doc("deletions") }}'
       - name: installations
@@ -320,8 +314,6 @@ models:
         description: '{{ doc("crashes") }}'
       - name: active_devices
         description: '{{ doc("active_devices") }}'
-      - name: active_devices_last_30_days
-        description: '{{ doc("active_devices_last_30_days") }}'
       - name: deletions
         description: '{{ doc("deletions") }}'
       - name: installations

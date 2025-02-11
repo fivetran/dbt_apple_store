@@ -55,7 +55,6 @@ Include the following apple_store package version in your `packages.yml` file:
 packages:
   - package: fivetran/apple_store
     version: 0.5.0-a1
-    # version: [">=0.5.0", "<0.6.0"] # we recommend using ranges to capture non-breaking changes automatically
 ```
 
 Do NOT include the `apple_store_source` package in this file. The transformation package itself has a dependency on it and will install the source package as well.
@@ -146,8 +145,9 @@ This dbt package is dependent on the following dbt packages. These dependencies 
     
 ```yml
 packages:
-    - package: fivetran/apple_store_source
-      version: [">=0.5.0", "<0.6.0"]
+    - git: https://github.com/fivetran/dbt_apple_store_source.git  
+      revision: nov_2024_schema  
+      warn-unpinned: false  
 
     - package: fivetran/fivetran_utils
       version: [">=0.4.0", "<0.5.0"]

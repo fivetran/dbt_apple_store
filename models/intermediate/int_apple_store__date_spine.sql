@@ -13,15 +13,15 @@ with spine as (
 
     select min(date_day) as min_date_day
     from (
-        select date_day from {{ ref('stg_apple_store__app_store_discovery_and_engagement_daily') }}
+        select min(date_day) as date_day from {{ ref('stg_apple_store__app_store_discovery_and_engagement_daily') }}
         union all
-        select date_day from {{ ref('stg_apple_store__app_crash_daily') }}
+        select min(date_day) as date_day from {{ ref('stg_apple_store__app_crash_daily') }}
         union all
-        select date_day from {{ ref('stg_apple_store__app_store_download_daily') }}
+        select min(date_day) as date_day from {{ ref('stg_apple_store__app_store_download_daily') }}
         union all
-        select date_day from {{ ref('stg_apple_store__app_store_installation_and_deletion_daily') }}
+        select min(date_day) as date_day from {{ ref('stg_apple_store__app_store_installation_and_deletion_daily') }}
         union all
-        select date_day from {{ ref('stg_apple_store__app_session_daily') }}
+        select min(date_day) as date_day from {{ ref('stg_apple_store__app_session_daily') }}
     ) as all_dates
 
 {% endset %}
@@ -29,7 +29,7 @@ with spine as (
 {%- set first_date = dbt_utils.get_single_value(first_date_query) %}
 
 {% else %}
-{%- set first_date = '2024-11-01' %}
+{%- set first_date = '2024-01-01' %}
 
 {% endif %}
 
