@@ -146,9 +146,8 @@ This dbt package is dependent on the following dbt packages. These dependencies 
     
 ```yml
 packages:
-    - git: https://github.com/fivetran/dbt_apple_store_source.git  
-      revision: nov_2024_schema  
-      warn-unpinned: false  
+    - package: fivetran/apple_store_source
+      version: v0.5.0-a1
 
     - package: fivetran/fivetran_utils
       version: [">=0.4.0", "<0.5.0"]
