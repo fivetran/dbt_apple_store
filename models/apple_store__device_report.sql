@@ -128,60 +128,10 @@ subscription_events as (
 
 {% endif %}
 
--- Unifying all dimension values before aggregation
-pre_reporting_grain as (
-    select 
-        app_id, 
-        source_type, 
-        device, 
-        source_relation 
-    from impressions_and_page_views
-    
-    union all
-
-    select 
-        app_id, 
-        source_type, 
-        device, 
-        source_relation 
-    from downloads_daily
-    
-    union all
-
-    select 
-        app_id, 
-        source_type, 
-        device, 
-        source_relation 
-    from install_deletions
-    
-    union all
-
-    select 
-        app_id, 
-        source_type, 
-        device, 
-        source_relation 
-    from sessions_activity
-    
-    union all
-
-    select 
-        app_id, 
-        source_type, 
-        device, 
-        source_relation 
-    from app_crashes
-),
-
 -- Ensuring distinct combinations of all dimensions
-distinct_combos as (
-    select distinct
-        app_id,
-        source_type,
-        device,
-        source_relation
-    from pre_reporting_grain
+pre_reporting_grain as (
+    select *
+    from {{ ref('int_apple_store__device_report') }}
 ),
 
 reporting_grain as (
@@ -192,7 +142,7 @@ reporting_grain as (
         ug.device,
         ug.source_relation
     from date_spine as ds
-    cross join distinct_combos as ug
+    cross join pre_reporting_grain as ug
 ),
 
 -- Final aggregation using reporting grain

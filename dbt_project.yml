@@ -23,5 +23,7 @@ models:
   apple_store:
     materialized: table
     +schema: apple_store
-    intermediate:
+    intermediate:      
       +materialized: ephemeral
+      reporting_grain:
+        +materialized: table

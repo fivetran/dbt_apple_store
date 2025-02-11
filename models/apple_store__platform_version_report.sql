@@ -79,60 +79,10 @@ sessions_activity as (
     group by 1,2,3,4,5
 ),
 
--- Unifying all dimension values before aggregation
-pre_reporting_grain as (
-    select 
-        app_id, 
-        platform_version, 
-        source_type, 
-        source_relation 
-    from app_crashes
-
-    union all
-
-    select 
-        app_id, 
-        platform_version, 
-        source_type, 
-        source_relation 
-    from impressions_and_page_views
-
-    union all
-
-    select 
-        app_id, 
-        platform_version, 
-        source_type, 
-        source_relation 
-    from downloads_daily
-
-    union all
-
-    select 
-        app_id, 
-        platform_version, 
-        source_type, 
-        source_relation 
-    from install_deletions
-
-    union all
-
-    select 
-        app_id, 
-        platform_version, 
-        source_type, 
-        source_relation 
-    from sessions_activity
-),
-
 -- Ensuring distinct combinations of all dimensions
-distinct_combos as (
-    select distinct
-        app_id,
-        platform_version,
-        source_type,
-        source_relation
-    from pre_reporting_grain
+pre_reporting_grain as (
+    select *
+    from {{ ref('int_apple_store__platform_version_report') }}
 ),
 
 reporting_grain as (
@@ -143,7 +93,7 @@ reporting_grain as (
         ug.source_type, 
         ug.source_relation
     from date_spine as ds
-    cross join distinct_combos as ug
+    cross join pre_reporting_grain ug
 ),
 
 -- Final aggregation using reporting grain
