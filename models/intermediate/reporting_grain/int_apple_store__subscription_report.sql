@@ -16,12 +16,6 @@ subscription_events as (
     from {{ ref('int_apple_store__subscription_events') }}
 ),
 
-country_codes as (
-    
-    select * 
-    from {{ var('apple_store_country_codes') }}
-),
-
 -- Unifying all dimension values before aggregation
 pre_reporting_grain as (
     select 

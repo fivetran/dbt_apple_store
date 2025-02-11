@@ -7,6 +7,7 @@
 - The `account_id` and `account_name` fields have been removed.
 - `app_id` in apple_store__subscription_report has been replaced with `app_apple_id`.
 - Additionally, while the structure of the end models remains largely intact, the underlying logic has been adjusted to align with the new grain of the source tables. As a result, some values may differ from previous outputs.
+- For more information on the upstream breaking changes concerning the source tables, refer to the [source package pre-release notes](https://github.com/fivetran/dbt_apple_store_source/releases/tag/0.5.0-a1).
 
 ## Documentation
 - Added Quickstart model counts to README. ([#31](https://github.com/fivetran/dbt_apple_store/pull/31))

@@ -45,10 +45,10 @@ final as (
         rg.app_id,
         a.app_name,
         rg.source_type,
-        rg.territory as territory_long,
-        coalesce(official_country_codes.country_code_alpha_2, alternative_country_codes.country_code_alpha_2) as territory_short,
-        coalesce(official_country_codes.region, alternative_country_codes.region) as region,
-        coalesce(official_country_codes.sub_region, alternative_country_codes.sub_region) as sub_region,
+        coalesce(country_codes.alternative_country_name,country_codes.country_name) as territory_long,
+        coalesce(rg.territory, country_codes.country_code_alpha_2) as territory_short,
+        coalesce(country_codes.region) as region,
+        coalesce(country_codes.sub_region) as sub_region,
         coalesce(ip.impressions, 0) as impressions,
         coalesce(ip.impressions_unique_device, 0) as impressions_unique_device,
         coalesce(ip.page_views, 0) as page_views,
@@ -88,10 +88,8 @@ final as (
         and rg.source_type = sa.source_type
         and rg.territory = sa.territory
         and rg.source_relation = sa.source_relation
-    left join country_codes as official_country_codes
-        on rg.territory = official_country_codes.country_name
-    left join country_codes as alternative_country_codes
-        on rg.territory = alternative_country_codes.alternative_country_name
+    left join country_codes
+        on rg.territory = country_codes.country_code_alpha_2
 )
 
 select *
