@@ -1,4 +1,6 @@
-<p align="center">
+# Apple App Store Transformation dbt Package ([Docs](https://fivetran.github.io/dbt_apple_store/))
+
+<p align="left">
     <a alt="License"
         href="https://github.com/fivetran/dbt_apple_store/blob/main/LICENSE">
         <img src="https://img.shields.io/badge/License-Apache%202.0-blue.svg" /></a>
@@ -13,7 +15,6 @@
         <img src="https://img.shields.io/badge/Contributions-welcome-blueviolet" /></a>
 </p>
 
-# Apple App Store Transformation dbt Package ([Docs](https://fivetran.github.io/dbt_apple_store/))
 ## What does this dbt package do?
 - Produces modeled tables that leverage Apple App Store data from [Fivetran's connector](https://fivetran.com/docs/connectors/applications/apple-app-store) in the format described by [this ERD](https://fivetran.com/docs/connectors/applications/apple-app-store#salesandfinancereportschema) and build off the output of our [Apple App Store source package](https://github.com/fivetran/dbt_apple_store_source).
 - Enables you to better understand your Apple App Store metrics at different granularities. It achieves this by:

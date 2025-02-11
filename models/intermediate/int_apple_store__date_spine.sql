@@ -29,7 +29,7 @@ with spine as (
 {%- set first_date = dbt_utils.get_single_value(first_date_query) %}
 
 {% else %}
-{%- set first_date = '2024-01-01' %}
+{%- set first_date = '2023-01-01' %}
 
 {% endif %}
 

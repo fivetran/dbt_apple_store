@@ -1,4 +1,10 @@
-with impressions_and_page_views as (
+with date_spine as (
+    select
+        date_day 
+    from {{ ref('int_apple_store__date_spine') }}
+),
+
+impressions_and_page_views as (
     select * 
     from {{ ref('int_apple_store__source_type_impressions_page_views') }}
 ),
@@ -36,11 +42,26 @@ pre_reporting_grain as (
         source_type, 
         source_relation 
     from sessions_activity
-)
+),
 
 -- Ensuring distinct combinations of all dimensions
-select distinct
-    app_id,
-    source_type,
-    source_relation
-from pre_reporting_grain
+distinct_reporting_grain as (
+    select distinct
+        app_id,
+        source_type,
+        source_relation
+    from pre_reporting_grain
+),
+
+reporting_grain as (
+    select
+        ds.date_day,
+        ug.app_id,
+        ug.source_type,
+        ug.source_relation
+    from date_spine as ds
+    cross join distinct_reporting_grain as ug
+)
+
+select *
+from reporting_grain

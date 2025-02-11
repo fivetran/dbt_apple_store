@@ -1,10 +1,4 @@
-with date_spine as (
-    select
-        date_day 
-    from {{ ref('int_apple_store__date_spine') }}
-),
-
-app as (
+with app as (
     select
         app_id,
         app_name,
@@ -114,12 +108,8 @@ subscription_events as (
 
 -- Unifying all dimension values before aggregation
 reporting_grain as (
-    select
-        ds.date_day,
-        app.app_id,
-        app.source_relation
-    from date_spine as ds
-    cross join app as app
+    select *
+    from {{ ref('int_apple_store__overview') }}
 ),
 
 -- Final aggregation using reporting grain

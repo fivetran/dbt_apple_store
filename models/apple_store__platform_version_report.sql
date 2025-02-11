@@ -1,10 +1,4 @@
-with date_spine as (
-    select
-        date_day 
-    from {{ ref('int_apple_store__date_spine') }}
-),
-
-app as (
+with app as (
     select
         app_id,
         app_name,
@@ -37,21 +31,9 @@ sessions_activity as (
     from {{ ref('int_apple_store__platform_version_sessions_activity') }}
 ),
 
--- Ensuring distinct combinations of all dimensions
-pre_reporting_grain as (
+reporting_grain as (
     select *
     from {{ ref('int_apple_store__platform_version_report') }}
-),
-
-reporting_grain as (
-    select
-        ds.date_day,
-        ug.app_id,
-        ug.platform_version,
-        ug.source_type, 
-        ug.source_relation
-    from date_spine as ds
-    cross join pre_reporting_grain ug
 ),
 
 -- Final aggregation using reporting grain

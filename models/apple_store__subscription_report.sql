@@ -1,12 +1,6 @@
 {{ config(enabled=var('apple_store__using_subscriptions', False)) }}
 
-with date_spine as (
-    select
-        date_day 
-    from {{ ref('int_apple_store__date_spine') }}
-),
-
-subscription_summary as (
+with subscription_summary as (
     select * 
     from {{ ref('int_apple_store__subscription_summary') }}
 ),
@@ -22,24 +16,9 @@ country_codes as (
     from {{ var('apple_store_country_codes') }}
 ),
 
--- Ensuring distinct combinations of all dimensions
-pre_reporting_grain as (
+reporting_grain as (
     select *
     from {{ ref('int_apple_store__subscription_report') }}
-),
-
-reporting_grain as (
-    select
-        ds.date_day,
-        ug.vendor_number,
-        ug.app_apple_id,
-        ug.app_name,
-        ug.subscription_name,
-        ug.country,
-        ug.state,
-        ug.source_relation
-    from date_spine as ds
-    cross join pre_reporting_grain as ug
 ),
 
 -- Final aggregation using reporting grain
