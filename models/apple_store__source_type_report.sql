@@ -54,7 +54,6 @@ sessions_activity as (
 -- Unifying all dimension values before aggregation
 pre_reporting_grain as (
     select 
-        date_day, 
         app_id, 
         source_type, 
         source_relation 
@@ -63,7 +62,6 @@ pre_reporting_grain as (
     union all
 
     select 
-        date_day, 
         app_id, 
         source_type, 
         source_relation 
@@ -72,7 +70,6 @@ pre_reporting_grain as (
     union all
 
     select 
-        date_day, 
         app_id, 
         source_type, 
         source_relation 
@@ -80,24 +77,22 @@ pre_reporting_grain as (
 ),
 
 -- Ensuring distinct combinations of all dimensions
-reporting_grain as (
+distinct_combos as (
     select distinct
-        date_day,
         app_id,
         source_type,
         source_relation
     from pre_reporting_grain
 ),
 
-reporting_grain_date_join as (
+reporting_grain as (
     select
         ds.date_day,
         ug.app_id,
         ug.source_type,
         ug.source_relation
     from date_spine as ds
-    left join reporting_grain as ug
-        on ds.date_day = ug.date_day
+    cross join distinct_combos as ug
 ),
 
 -- Final aggregation using reporting grain
@@ -117,7 +112,7 @@ final as (
         coalesce(id.installations, 0) as installations,
         coalesce(sa.active_devices, 0) as active_devices,
         coalesce(sa.sessions, 0) as sessions
-    from reporting_grain_date_join as rg
+    from reporting_grain as rg
     left join impressions_and_page_views as ip
         on rg.date_day = ip.date_day
         and rg.app_id = ip.app_id

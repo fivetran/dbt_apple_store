@@ -92,7 +92,7 @@ pre_reporting_grain as (
 ),
 
 -- Ensuring distinct combinations of all dimensions
-reporting_grain as (
+distinct_combos as (
     select distinct
         date_day,
         vendor_number,
@@ -105,7 +105,7 @@ reporting_grain as (
     from pre_reporting_grain
 ),
 
-reporting_grain_date_join as (
+reporting_grain as (
     select
         ds.date_day,
         ug.vendor_number,
@@ -116,8 +116,7 @@ reporting_grain_date_join as (
         ug.state,
         ug.source_relation
     from date_spine as ds
-    left join reporting_grain as ug
-        on ds.date_day = ug.date_day
+    cross join distinct_combos as ug
 ),
 
 -- Final aggregation using reporting grain
@@ -146,7 +145,7 @@ final as (
         , coalesce({{ 'se.' ~ event_column }}, 0)
             as {{ event_column }} 
         {% endfor %}
-    from reporting_grain_date_join as rg
+    from reporting_grain as rg
     left join subscription_summary as ss 
         on rg.vendor_number = ss.vendor_number
         and rg.app_apple_id = ss.app_apple_id

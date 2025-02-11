@@ -82,7 +82,6 @@ sessions_activity as (
 -- Unifying all dimension values before aggregation
 pre_reporting_grain as (
     select 
-        date_day, 
         app_id, 
         platform_version, 
         source_type, 
@@ -92,7 +91,6 @@ pre_reporting_grain as (
     union all
 
     select 
-        date_day, 
         app_id, 
         platform_version, 
         source_type, 
@@ -102,7 +100,6 @@ pre_reporting_grain as (
     union all
 
     select 
-        date_day, 
         app_id, 
         platform_version, 
         source_type, 
@@ -112,7 +109,6 @@ pre_reporting_grain as (
     union all
 
     select 
-        date_day, 
         app_id, 
         platform_version, 
         source_type, 
@@ -122,7 +118,6 @@ pre_reporting_grain as (
     union all
 
     select 
-        date_day, 
         app_id, 
         platform_version, 
         source_type, 
@@ -131,9 +126,8 @@ pre_reporting_grain as (
 ),
 
 -- Ensuring distinct combinations of all dimensions
-reporting_grain as (
+distinct_combos as (
     select distinct
-        date_day,
         app_id,
         platform_version,
         source_type,
@@ -141,7 +135,7 @@ reporting_grain as (
     from pre_reporting_grain
 ),
 
-reporting_grain_date_join as (
+reporting_grain as (
     select
         ds.date_day,
         ug.app_id,
@@ -149,8 +143,7 @@ reporting_grain_date_join as (
         ug.source_type, 
         ug.source_relation
     from date_spine as ds
-    left join reporting_grain as ug
-        on ds.date_day = ug.date_day
+    cross join distinct_combos as ug
 ),
 
 -- Final aggregation using reporting grain
@@ -174,7 +167,7 @@ final as (
         coalesce(id.deletions, 0) as deletions,
         coalesce(id.installations, 0) as installations,
         coalesce(sa.sessions, 0) as sessions
-    from reporting_grain_date_join as rg
+    from reporting_grain as rg
     left join app_crashes as ac 
         on rg.app_id = ac.app_id
         and rg.platform_version = ac.platform_version
