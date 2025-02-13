@@ -109,7 +109,7 @@ subscription_events as (
 -- Unifying all dimension values before aggregation
 reporting_grain as (
     select *
-    from {{ ref('int_apple_store__overview') }}
+    from {{ ref('int_apple_store__app') }}
 ),
 
 -- Final aggregation using reporting grain
