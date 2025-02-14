@@ -1,138 +1,139 @@
 with app as (
+    select
+        app_id,
+        app_name,
+        source_relation
+    from {{ var('app_store_app') }}
+),
 
+impressions_and_page_views as (
+    select *
+    from {{ ref('int_apple_store__device_impressions_page_views') }}
+),
+
+downloads_daily as (
+    select *
+    from {{ ref('int_apple_store__device_downloads_daily') }}
+),
+
+install_deletions as (
+    select *
+    from {{ ref('int_apple_store__device_install_deletions') }}
+),
+
+sessions_activity as (
+    select *
+    from {{ ref('int_apple_store__device_sessions_activity') }}
+),
+
+app_crashes as (
     select * 
-    from {{ var('app') }}
-),
-
-app_store_device as (
-
-    select *
-    from {{ var('app_store_device') }}
-),
-
-downloads_device as (
-
-    select *
-    from {{ var('downloads_device') }}
-),
-
-usage_device as (
-
-    select *
-    from {{ var('usage_device') }}
-),
-
-crashes_device as (
-
-    select *
-    from {{ ref('int_apple_store__crashes_device') }}
+    from {{ ref('int_apple_store__device_app_crashes') }}
 ),
 
 {% if var('apple_store__using_subscriptions', False) %}
-subscription_device as (
-
+subscription_summary as (
     select *
-    from {{ ref('int_apple_store__subscription_device') }}
+    from {{ ref('int_apple_store__device_subscription_summary') }}
 ),
+
+subscription_events as (
+    select *
+    from {{ ref('int_apple_store__device_subscription_events') }}
+),
+
 {% endif %}
 
-reporting_grain_combined as (
-
-    select
-        source_relation,
-        date_day,
-        app_id,
-        source_type,
-        device 
-    from app_store_device
-    union all
-    select
-        source_relation,
-        date_day,
-        app_id,
-        source_type,
-        device
-    from crashes_device
-),
-
 reporting_grain as (
-    
-    select
-        distinct *
-    from reporting_grain_combined
+    select *
+    from {{ ref('int_apple_store__device_report') }}
 ),
 
-joined as (
+-- Final aggregation using reporting grain
+final as (
+    select
+        rg.source_relation,
+        rg.date_day,
+        rg.app_id,
+        a.app_name,
+        rg.source_type,
+        rg.device,
+        coalesce(ip.impressions, 0) as impressions,
+        coalesce(ip.impressions_unique_device, 0) as impressions_unique_device,
+        coalesce(ip.page_views, 0) as page_views,
+        coalesce(ip.page_views_unique_device, 0) as page_views_unique_device,
+        coalesce(ac.crashes, 0) as crashes,
+        coalesce(dd.first_time_downloads, 0) as first_time_downloads,
+        coalesce(dd.redownloads, 0) as redownloads,
+        coalesce(dd.total_downloads, 0) as total_downloads,
+        coalesce(sa.active_devices, 0) as active_devices,
+        coalesce(id.deletions, 0) as deletions,
+        coalesce(id.installations, 0) as installations,
+        coalesce(sa.sessions, 0) as sessions
 
-    select 
-        reporting_grain.source_relation,
-        reporting_grain.date_day,
-        reporting_grain.app_id, 
-        app.app_name,
-        reporting_grain.source_type,
-        reporting_grain.device,
-        coalesce(app_store_device.impressions, 0) as impressions,
-        coalesce(app_store_device.impressions_unique_device, 0) as impressions_unique_device,
-        coalesce(app_store_device.page_views, 0) as page_views,
-        coalesce(app_store_device.page_views_unique_device, 0) as page_views_unique_device,
-        coalesce(crashes_device.crashes, 0) as crashes,
-        coalesce(downloads_device.first_time_downloads, 0) as first_time_downloads,
-        coalesce(downloads_device.redownloads, 0) as redownloads,
-        coalesce(downloads_device.total_downloads, 0) as total_downloads,
-        coalesce(usage_device.active_devices, 0) as active_devices,
-        coalesce(usage_device.active_devices_last_30_days, 0) as active_devices_last_30_days,
-        coalesce(usage_device.deletions, 0) as deletions,
-        coalesce(usage_device.installations, 0) as installations,
-        coalesce(usage_device.sessions, 0) as sessions
         {% if var('apple_store__using_subscriptions', False) %}
         ,
-        coalesce(subscription_device.active_free_trial_introductory_offer_subscriptions, 0) as active_free_trial_introductory_offer_subscriptions,
-        coalesce(subscription_device.active_pay_as_you_go_introductory_offer_subscriptions, 0) as active_pay_a_you_go_introductory_offer_subscriptions,
-        coalesce(subscription_device.active_pay_up_front_introductory_offer_subscriptions, 0) as active_pay_up_front_introductory_offer_subscriptions,
-        coalesce(subscription_device.active_standard_price_subscriptions, 0) as active_standard_price_subscriptions
+        coalesce(ss.active_free_trial_introductory_offer_subscriptions, 0) as active_free_trial_introductory_offer_subscriptions,
+        coalesce(ss.active_pay_as_you_go_introductory_offer_subscriptions, 0) as active_pay_as_you_go_introductory_offer_subscriptions,
+        coalesce(ss.active_pay_up_front_introductory_offer_subscriptions, 0) as active_pay_up_front_introductory_offer_subscriptions,
+        coalesce(ss.active_standard_price_subscriptions, 0) as active_standard_price_subscriptions
         {% for event_val in var('apple_store__subscription_events') %}
         {% set event_column = 'event_' ~ event_val | replace(' ', '_') | trim | lower %}
-        , coalesce({{ 'subscription_device.' ~ event_column }}, 0)
+        , coalesce({{ 'se.' ~ event_column }}, 0)
             as {{ event_column }} 
         {% endfor %}
         {% endif %}
-    from reporting_grain
-    left join app 
-        on reporting_grain.app_id = app.app_id
-        and reporting_grain.source_relation = app.source_relation
-    left join app_store_device 
-        on reporting_grain.date_day = app_store_device.date_day
-        and reporting_grain.source_relation = app_store_device.source_relation
-        and reporting_grain.app_id = app_store_device.app_id 
-        and reporting_grain.source_type = app_store_device.source_type
-        and reporting_grain.device = app_store_device.device
-    left join crashes_device
-        on reporting_grain.date_day = crashes_device.date_day
-        and reporting_grain.source_relation = crashes_device.source_relation
-        and reporting_grain.app_id = crashes_device.app_id
-        and reporting_grain.source_type = crashes_device.source_type
-        and reporting_grain.device = crashes_device.device
-    left join downloads_device
-        on reporting_grain.date_day = downloads_device.date_day
-        and reporting_grain.source_relation = downloads_device.source_relation
-        and reporting_grain.app_id = downloads_device.app_id 
-        and reporting_grain.source_type = downloads_device.source_type
-        and reporting_grain.device = downloads_device.device
+
+    from reporting_grain as rg
+    left join impressions_and_page_views as ip
+        on rg.app_id = ip.app_id
+        and rg.date_day = ip.date_day
+        and rg.source_type = ip.source_type
+        and rg.device = ip.device
+        and rg.source_relation = ip.source_relation
+    left join app_crashes as ac
+        on rg.app_id = ac.app_id
+        and rg.date_day = ac.date_day
+        and rg.source_type = ac.source_type
+        and rg.device = ac.device
+        and rg.source_relation = ac.source_relation
+    left join downloads_daily as dd 
+        on rg.app_id = dd.app_id
+        and rg.date_day = dd.date_day
+        and rg.source_type = dd.source_type
+        and rg.device = dd.device
+        and rg.source_relation = dd.source_relation
+    left join install_deletions as id 
+        on rg.app_id = id.app_id
+        and rg.date_day = id.date_day
+        and rg.source_type = id.source_type
+        and rg.device = id.device
+        and rg.source_relation = id.source_relation
+    left join sessions_activity as sa
+        on rg.app_id = sa.app_id
+        and rg.date_day = sa.date_day
+        and rg.source_type = sa.source_type
+        and rg.device = sa.device
+        and rg.source_relation = sa.source_relation
+    left join app as a
+        on rg.app_id = a.app_id
+        and rg.source_relation = a.source_relation
+
     {% if var('apple_store__using_subscriptions', False) %}
-    left join subscription_device
-        on reporting_grain.date_day = subscription_device.date_day
-        and reporting_grain.source_relation = subscription_device.source_relation
-        and reporting_grain.app_id = subscription_device.app_id 
-        and reporting_grain.source_type = subscription_device.source_type
-        and reporting_grain.device = subscription_device.device
+    left join subscription_summary as ss
+        on rg.date_day = ss.date_day
+        and rg.source_relation = ss.source_relation
+        and a.app_name = ss.app_name 
+        and rg.source_type = ss.source_type
+        and rg.device = ss.device
+    left join subscription_events as se
+        on rg.date_day = se.date_day
+        and rg.source_relation = se.source_relation
+        and a.app_name = se.app_name 
+        and rg.source_type = se.source_type
+        and rg.device = se.device
     {% endif %}
-    left join usage_device
-        on reporting_grain.date_day = usage_device.date_day
-        and reporting_grain.source_relation = usage_device.source_relation
-        and reporting_grain.app_id = usage_device.app_id 
-        and reporting_grain.source_type = usage_device.source_type
-        and reporting_grain.device = usage_device.device
 )
 
-select * 
-from joined
+select *
+from final

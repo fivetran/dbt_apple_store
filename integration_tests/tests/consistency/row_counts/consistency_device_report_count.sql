@@ -7,6 +7,7 @@
 with prod as (
     select count(*) as prod_rows
     from {{ target.schema }}_apple_store_prod.apple_store__device_report_count
+),
 
 dev as (
     select count(*) as dev_rows
