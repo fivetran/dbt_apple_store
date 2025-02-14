@@ -1,7 +1,7 @@
 with base as (
 
     select *
-    from {{ var('app_store_installation_and_deletion_detailed_daily') }}
+    from {{ var('app_store_installation_and_deletion_standard_daily') }}
 
 ),
 aggregated as (
@@ -17,8 +17,6 @@ aggregated as (
         page_type,
         app_download_date,
         territory,
-        source_info,
-        page_title,
         source_relation,
         sum(case when lower(download_type) = 'first-time download' then counts else 0 end) as first_time_downloads,
         sum(case when lower(download_type) = 'redownload' then counts else 0 end) as redownloads,
@@ -26,7 +24,7 @@ aggregated as (
         sum(case when lower(event) = 'delete' then counts else 0 end) as deletions,
         sum(case when lower(event) = 'install' then counts else 0 end) as installations
     from base
-    {{ dbt_utils.group_by(13) }}
+    {{ dbt_utils.group_by(11) }}
 
 )
 

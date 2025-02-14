@@ -7,3 +7,6 @@ We chose not to include this metric in the end reporting models because we creat
 
 ## Subscriptions Report
 This model will **not** tie out to the Apple UI's Subscriptions as there currently isn't a clear way to map the current subscription events to how Apple calculates and group their events together. [(source)](https://help.apple.com/app-store-connect/#/itc484ef82a0)
+
+## Standard vs Detailed Reports
+Apple offers 2 versions of daily reports, standard and detailed. We chose to develop our data models with the standard reports. According to the [Apple documentation](https://developer.apple.com/documentation/analytics-reports/app-installs), standard reports include fields not easily related to uniquely identifiable user data. In other words, standard reports aggregate data to protect user privacy by ensuring that only summary-level, thresholded metrics are exposed, making it harder to re-identify individual users. Detailed reports include all fields and also include additional privacy measures for the data, to help protect uniquely identifiable information for individuals. In other words, certain records from detailed reports may be withheld if aggregate counts are too low and present a risk of privacy exposure. Therefore, we chose to work with the standard reports, in order to avoid potential undercounting. 

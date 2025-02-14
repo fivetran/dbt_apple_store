@@ -9,11 +9,11 @@ vars:
     sales_subscription_events: "{{ ref('stg_apple_store__sales_subscription_events') }}"
     sales_subscription_summary: "{{ ref('stg_apple_store__sales_subscription_summary') }}"
     apple_store_country_codes: "{{ ref('apple_store_country_codes') }}"
-    app_store_discovery_and_engagement_detailed_daily: "{{ ref('stg_apple_store__app_store_discovery_and_engagement_daily')}}"
+    app_store_discovery_and_engagement_standard_daily: "{{ ref('stg_apple_store__app_store_discovery_and_engagement_daily')}}"
     app_crash_daily: "{{ ref('stg_apple_store__app_crash_daily')}}"
-    app_store_download_detailed_daily: "{{ ref('stg_apple_store__app_store_download_daily')}}"
-    app_session_detailed_daily: "{{ ref('stg_apple_store__app_session_daily')}}"
-    app_store_installation_and_deletion_detailed_daily: "{{ ref('stg_apple_store__app_store_installation_and_deletion_daily')}}"
+    app_store_download_standard_daily: "{{ ref('stg_apple_store__app_store_download_daily')}}"
+    app_session_standard_daily: "{{ ref('stg_apple_store__app_session_daily')}}"
+    app_store_installation_and_deletion_standard_daily: "{{ ref('stg_apple_store__app_store_installation_and_deletion_daily')}}"
     apple_store__subscription_events:
     - 'Renew'
     - 'Cancel'
