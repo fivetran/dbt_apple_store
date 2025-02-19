@@ -4,4 +4,4 @@ packages:
     warn-unpinned: false
 
   # - package: fivetran/apple_store_source
-  #     version: 0.5.0-a1
+  #     version: 0.5.0
