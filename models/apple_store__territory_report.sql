@@ -1,95 +1,96 @@
 with app as (
-
-    select * 
-    from {{ var('app') }}
+    select
+        app_id,
+        app_name,
+        source_relation
+    from {{ var('app_store_app') }}
 ),
 
-app_store_territory as (
+impressions_and_page_views as (
+    select * 
+    from {{ ref('int_apple_store__territory_impressions_page_views') }}
+),
 
+downloads_daily as (
     select *
-    from {{ var('app_store_territory') }}
+    from {{ ref('int_apple_store__territory_downloads_daily') }}
+),
+
+install_deletions as (
+    select *
+    from {{ ref('int_apple_store__territory_install_deletions') }}
+),
+
+sessions_activity as (
+    select *
+    from {{ ref('int_apple_store__territory_sessions_activity') }}
 ),
 
 country_codes as (
-
+    
     select * 
     from {{ var('apple_store_country_codes') }}
 ),
 
-downloads_territory as (
-
-    select *
-    from {{ var('downloads_territory') }}
-),
-
-usage_territory as (
-
-    select * 
-    from {{ var('usage_territory') }}
-),
-
 reporting_grain as (
-
-    select distinct
-        source_relation,
-        date_day,
-        app_id,
-        source_type,
-        territory 
-    from app_store_territory
+    select *
+    from {{ ref('int_apple_store__territory_report') }}
 ),
 
-joined as (
-
-    select 
-        reporting_grain.source_relation,
-        reporting_grain.date_day,
-        reporting_grain.app_id,
-        app.app_name,
-        reporting_grain.source_type,
-        reporting_grain.territory as territory_long,
-        coalesce(official_country_codes.country_code_alpha_2, alternative_country_codes.country_code_alpha_2) as territory_short,
-        coalesce(official_country_codes.region, alternative_country_codes.region) as region,
-        coalesce(official_country_codes.sub_region, alternative_country_codes.sub_region) as sub_region,
-        coalesce(app_store_territory.impressions, 0) as impressions,
-        coalesce(app_store_territory.impressions_unique_device, 0) as impressions_unique_device,
-        coalesce(app_store_territory.page_views, 0) as page_views,
-        coalesce(app_store_territory.page_views_unique_device, 0) as page_views_unique_device,
-        coalesce(downloads_territory.first_time_downloads, 0) as first_time_downloads,
-        coalesce(downloads_territory.redownloads, 0) as redownloads,
-        coalesce(downloads_territory.total_downloads, 0) as total_downloads,
-        coalesce(usage_territory.active_devices, 0) as active_devices,
-        coalesce(usage_territory.active_devices_last_30_days, 0) as active_devices_last_30_days,
-        coalesce(usage_territory.deletions, 0) as deletions,
-        coalesce(usage_territory.installations, 0) as installations,
-        coalesce(usage_territory.sessions, 0) as sessions
-    from reporting_grain
-    left join app 
-        on reporting_grain.app_id = app.app_id
-        and reporting_grain.source_relation = app.source_relation
-    left join app_store_territory 
-        on reporting_grain.date_day = app_store_territory.date_day
-        and reporting_grain.source_relation = app_store_territory.source_relation
-        and reporting_grain.app_id = app_store_territory.app_id 
-        and reporting_grain.source_type = app_store_territory.source_type
-        and reporting_grain.territory = app_store_territory.territory
-    left join downloads_territory
-        on reporting_grain.date_day = downloads_territory.date_day
-        and reporting_grain.source_relation = downloads_territory.source_relation
-        and reporting_grain.app_id = downloads_territory.app_id 
-        and reporting_grain.source_type = downloads_territory.source_type
-        and reporting_grain.territory = downloads_territory.territory
-    left join usage_territory
-        on reporting_grain.date_day = usage_territory.date_day
-        and reporting_grain.source_relation = usage_territory.source_relation
-        and reporting_grain.app_id = usage_territory.app_id 
-        and reporting_grain.source_type = usage_territory.source_type
-        and reporting_grain.territory = usage_territory.territory
-    left join country_codes as official_country_codes
-        on reporting_grain.territory = official_country_codes.country_name
-    left join country_codes as alternative_country_codes
-        on reporting_grain.territory = alternative_country_codes.alternative_country_name
+-- Final aggregation using reporting grain
+final as (
+    select
+        rg.source_relation,
+        rg.date_day,
+        rg.app_id,
+        a.app_name,
+        rg.source_type,
+        coalesce(country_codes.alternative_country_name, country_codes.country_name) as territory_long,
+        coalesce(rg.territory, country_codes.country_code_alpha_2) as territory_short,
+        country_codes.region as region,
+        country_codes.sub_region as sub_region,
+        coalesce(ip.impressions, 0) as impressions,
+        coalesce(ip.impressions_unique_device, 0) as impressions_unique_device,
+        coalesce(ip.page_views, 0) as page_views,
+        coalesce(ip.page_views_unique_device, 0) as page_views_unique_device,
+        coalesce(dd.first_time_downloads, 0) as first_time_downloads,
+        coalesce(dd.redownloads, 0) as redownloads,
+        coalesce(dd.total_downloads, 0) as total_downloads,
+        coalesce(sa.active_devices, 0) as active_devices,
+        coalesce(id.deletions, 0) as deletions,
+        coalesce(id.installations, 0) as installations,
+        coalesce(sa.sessions, 0) as sessions
+    from reporting_grain as rg
+    left join app as a
+        on rg.app_id = a.app_id
+        and rg.source_relation = a.source_relation
+    left join impressions_and_page_views as ip 
+        on rg.app_id = ip.app_id
+        and rg.date_day = ip.date_day
+        and rg.source_type = ip.source_type
+        and rg.territory = ip.territory
+        and rg.source_relation = ip.source_relation
+    left join downloads_daily as dd
+        on rg.app_id = dd.app_id
+        and rg.date_day = dd.date_day
+        and rg.source_type = dd.source_type
+        and rg.territory = dd.territory
+        and rg.source_relation = dd.source_relation
+    left join install_deletions as id
+        on rg.app_id = id.app_id
+        and rg.date_day = id.date_day
+        and rg.source_type = id.source_type
+        and rg.territory = id.territory
+        and rg.source_relation = id.source_relation
+    left join sessions_activity as sa
+        on rg.app_id = sa.app_id
+        and rg.date_day = sa.date_day
+        and rg.source_type = sa.source_type
+        and rg.territory = sa.territory
+        and rg.source_relation = sa.source_relation
+    left join country_codes
+        on rg.territory = country_codes.country_code_alpha_2
 )
 
-select * 
-from joined
+select *
+from final

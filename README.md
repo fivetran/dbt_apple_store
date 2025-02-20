@@ -1,4 +1,6 @@
-<p align="center">
+# Apple App Store Transformation dbt Package ([Docs](https://fivetran.github.io/dbt_apple_store/))
+
+<p align="left">
     <a alt="License"
         href="https://github.com/fivetran/dbt_apple_store/blob/main/LICENSE">
         <img src="https://img.shields.io/badge/License-Apache%202.0-blue.svg" /></a>
@@ -13,7 +15,6 @@
         <img src="https://img.shields.io/badge/Contributions-welcome-blueviolet" /></a>
 </p>
 
-# Apple App Store Transformation dbt Package ([Docs](https://fivetran.github.io/dbt_apple_store/))
 ## What does this dbt package do?
 - Produces modeled tables that leverage Apple App Store data from [Fivetran's connector](https://fivetran.com/docs/connectors/applications/apple-app-store) in the format described by [this ERD](https://fivetran.com/docs/connectors/applications/apple-app-store#salesandfinancereportschema) and build off the output of our [Apple App Store source package](https://github.com/fivetran/dbt_apple_store_source).
 - Enables you to better understand your Apple App Store metrics at different granularities. It achieves this by:
@@ -33,7 +34,7 @@ The following table provides a detailed list of all tables materialized within t
 | [apple_store__overview_report](https://fivetran.github.io/dbt_apple_store/#!/model/model.apple_store.apple_store__overview_report)     | Each record represents daily metrics for each app_id. |
 | [apple_store__platform_version_report](https://fivetran.github.io/dbt_apple_store/#!/model/model.apple_store.apple_store__platform_version_report)    | Each record represents daily metrics for each by app_id, source_type and platform version. |
 | [apple_store__source_type_report](https://fivetran.github.io/dbt_apple_store/#!/model/model.apple_store.apple_store__source_type_report)   | Each record represents daily metrics by app_id and source_type. |
-| [apple_store__subscription_report](https://fivetran.github.io/dbt_apple_store/#!/model/model.apple_store.apple_store__subscription_report) | Each record represents daily subscription metrics by account, app, subscription name, country and state. |
+| [apple_store__subscription_report](https://fivetran.github.io/dbt_apple_store/#!/model/model.apple_store.apple_store__subscription_report) | Each record represents daily subscription metrics by app, subscription name, country and state. |
 | [apple_store__territory_report](https://fivetran.github.io/dbt_apple_store/#!/model/model.apple_store.apple_store__source_type_report) | Each record represents daily subscription metrics by app_id, source_type and territory. |
 
 ### Materialized Models
@@ -54,7 +55,7 @@ Include the following apple_store package version in your `packages.yml` file:
 ```yaml
 packages:
   - package: fivetran/apple_store
-    version: [">=0.4.0", "<0.5.0"] # we recommend using ranges to capture non-breaking changes automatically
+    version: [">=0.5.0", "<0.6.0"]
 ```
 
 Do NOT include the `apple_store_source` package in this file. The transformation package itself has a dependency on it and will install the source package as well.
@@ -146,7 +147,7 @@ This dbt package is dependent on the following dbt packages. These dependencies 
 ```yml
 packages:
     - package: fivetran/apple_store_source
-      version: [">=0.4.0", "<0.5.0"]
+      version: [">=0.5.0", "<0.6.0"]
 
     - package: fivetran/fivetran_utils
       version: [">=0.4.0", "<0.5.0"]
