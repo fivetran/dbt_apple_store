@@ -8,7 +8,7 @@
 - The `account_id` and `account_name` fields have been removed from the `apple_store__subscription_report`.
 - `app_id` in `apple_store__subscription_report` has been replaced with `app_apple_id`.
 - Additionally, while the structure of the end models remains largely intact, the underlying logic has been adjusted to align with the new grain of the source tables. As a result, some values may differ from previous outputs.
-- For more information on the upstream breaking changes concerning the source tables, refer to the [source package pre-release notes](https://github.com/fivetran/dbt_apple_store_source/releases/tag/0.5.0).
+- For more information on the upstream breaking changes concerning the source tables, refer to the [source package release notes](https://github.com/fivetran/dbt_apple_store_source/releases/tag/0.5.0).
 - The reporting grains are created in upstream intermediate models (found in the `intermediate/reporting_grain` folder). Along with the date spine (`int_apple_store__date_spine`), these reporting grain models are materialized as tables to enhance performance.
 
 ## Documentation
