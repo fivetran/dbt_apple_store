@@ -21,7 +21,7 @@ vars:
 
 models:
   apple_store:
-    materialized: table
+    +materialized: table
     +schema: apple_store
     intermediate:
       +materialized: ephemeral
