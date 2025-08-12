@@ -8,7 +8,7 @@ app as (
     select
         app_id,
         source_relation
-    from {{ var('app_store_app') }}
+    from {{ ref('stg_apple_store__app_store_app') }}
 ),
 
 -- Unifying all dimension values before aggregation

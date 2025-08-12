@@ -10,5 +10,5 @@ select
     sum(active_pay_as_you_go_introductory_offer_subscriptions) as active_pay_as_you_go_introductory_offer_subscriptions,
     sum(active_pay_up_front_introductory_offer_subscriptions) as active_pay_up_front_introductory_offer_subscriptions,
     sum(active_standard_price_subscriptions) as active_standard_price_subscriptions
-from {{ var('sales_subscription_summary') }}
+from {{ ref('stg_apple_store__sales_subscription_summary') }}
 {{ dbt_utils.group_by(5) }}

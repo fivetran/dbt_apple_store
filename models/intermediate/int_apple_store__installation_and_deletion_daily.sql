@@ -1,7 +1,7 @@
 with base as (
 
     select *
-    from {{ var('app_store_installation_and_deletion_standard_daily') }}
+    from {{ ref('stg_apple_store__app_store_installation_and_deletion_daily')}}
 
 ),
 aggregated as (

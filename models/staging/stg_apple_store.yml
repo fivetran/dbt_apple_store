@@ -1,0 +1,336 @@
+version: 2
+
+models:
+  - name: stg_apple_store__app_store_app
+    description: Table containing data about your application(s)
+    columns:
+      - name: source_relation
+        description: "{{ doc('source_relation') }}"
+      - name: app_id
+        description: '{{ doc("app_id") }}'
+      - name: app_name
+        description: '{{ doc("app_name") }}'
+
+  - name: stg_apple_store__sales_subscription_events
+    description: Daily subscription event report by app name, subscription name, event, country, state and device; this model is aggregated by date, app_name, country, state and subscription_name for easier transformations in the modeling package.
+    columns:
+      - name: source_relation
+        description: "{{ doc('source_relation') }}"
+      - name: _fivetran_id
+        description: '{{ doc("_fivetran_id") }}'
+      - name: vendor_number
+        description: '{{ doc("vendor_number") }}'
+      - name: date_day
+        description: '{{ doc("date_day") }}'
+      - name: event
+        description: '{{ doc("event") }}'
+      - name: app_name
+        description: '{{ doc("app_name") }}'
+      - name: app_apple_id
+        description: '{{ doc("app_apple_id") }}'
+      - name: subscription_name
+        description: '{{ doc("subscription_name") }}'
+      - name: subscription_apple_id
+        description: '{{ doc("subscription_apple_id") }}'
+      - name: subscription_group_id
+        description: '{{ doc("subscription_group_id") }}'
+      - name: standard_subscription_duration
+        description: '{{ doc("standard_subscription_duration") }}'
+      - name: subscription_offer_type
+        description: '{{ doc("subscription_offer_type") }}'
+      - name: subscription_offer_duration
+        description: '{{ doc("subscription_offer_duration") }}'
+      - name: marketing_opt_in
+        description: '{{ doc("marketing_opt_in") }}'
+      - name: marketing_opt_in_duration
+        description: '{{ doc("marketing_opt_in_duration") }}'
+      - name: preserved_pricing
+        description: '{{ doc("preserved_pricing") }}'
+      - name: proceeds_reason
+        description: '{{ doc("proceeds_reason") }}'
+      - name: promotional_offer_name
+        description: '{{ doc("promotional_offer_name") }}'
+      - name: promotional_offer_id
+        description: '{{ doc("promotional_offer_id") }}'
+      - name: consecutive_paid_periods
+        description: '{{ doc("consecutive_paid_periods") }}'
+      - name: original_start_date
+        description: '{{ doc("original_start_date") }}'
+      - name: device
+        description: '{{ doc("device") }}'
+      - name: client
+        description: '{{ doc("client") }}'
+      - name: state
+        description: '{{ doc("state") }}'
+      - name: country
+        description: '{{ doc("country") }}'
+      - name: previous_subscription_name
+        description: '{{ doc("previous_subscription_name") }}'
+      - name: previous_subscription_apple_id
+        description: '{{ doc("previous_subscription_apple_id") }}'
+      - name: days_before_canceling
+        description: '{{ doc("days_before_canceling") }}'
+      - name: cancellation_reason
+        description: '{{ doc("cancellation_reason") }}'
+      - name: days_canceled
+        description: '{{ doc("days_canceled") }}'
+      - name: quantity
+        description: '{{ doc("quantity") }}'
+      - name: paid_service_days_recovered
+        description: '{{ doc("paid_service_days_recovered") }}'
+      - name: source_type
+        description: A null field for this subscription data, but created to assist with joins downstream.
+
+
+
+  - name: stg_apple_store__sales_subscription_summary
+    description: Daily subscription summary report by app name, country, state and subscription name; this model is aggregated by date, app_name, country, state and subscription_name for easier transformations in the modeling package.
+    columns:
+      - name: _fivetran_id
+        description: '{{ doc("_fivetran_id") }}'
+      - name: source_relation
+        description: "{{ doc('source_relation') }}"
+      - name: vendor_number
+        description: '{{ doc("vendor_number") }}'
+      - name: app_name
+        description: '{{ doc("app_name") }}'
+      - name: app_apple_id
+        description: '{{ doc("app_apple_id") }}'
+      - name: subscription_name
+        description: '{{ doc("subscription_name") }}'
+      - name: subscription_apple_id
+        description: '{{ doc("subscription_apple_id") }}'
+      - name: subscription_group_id
+        description: '{{ doc("subscription_group_id") }}'
+      - name: standard_subscription_duration
+        description: '{{ doc("standard_subscription_duration") }}'
+      - name: customer_price
+        description: '{{ doc("customer_price") }}'
+      - name: customer_currency
+        description: '{{ doc("customer_currency") }}'
+      - name: developer_proceeds
+        description: '{{ doc("developer_proceeds") }}'
+      - name: proceeds_currency
+        description: '{{ doc("proceeds_currency") }}'
+      - name: preserved_pricing
+        description: '{{ doc("preserved_pricing") }}'
+      - name: proceeds_reason
+        description: '{{ doc("proceeds_reason") }}'
+      - name: subscription_offer_name
+        description: '{{ doc("subscription_offer_name") }}'
+      - name: promotional_offer_id
+        description: '{{ doc("promotional_offer_id") }}'
+      - name: state
+        description: '{{ doc("state") }}'
+      - name: country
+        description: '{{ doc("country") }}'
+      - name: device
+        description: '{{ doc("device") }}'
+      - name: client
+        description: '{{ doc("client") }}'
+      - name: active_standard_price_subscriptions
+        description: '{{ doc("active_standard_price_subscriptions") }}'
+      - name: active_free_trial_introductory_offer_subscriptions
+        description: '{{ doc("active_free_trial_introductory_offer_subscriptions") }}'
+      - name: active_pay_up_front_introductory_offer_subscriptions
+        description: '{{ doc("active_pay_up_front_introductory_offer_subscriptions") }}'
+      - name: active_pay_as_you_go_introductory_offer_subscriptions
+        description: '{{ doc("active_pay_as_you_go_introductory_offer_subscriptions") }}'
+      - name: free_trial_promotional_offer_subscriptions
+        description: '{{ doc("free_trial_promotional_offer_subscriptions") }}'
+      - name: pay_up_front_promotional_offer_subscriptions
+        description: '{{ doc("pay_up_front_promotional_offer_subscriptions") }}'
+      - name: pay_as_you_go_promotional_offer_subscriptions
+        description: '{{ doc("pay_as_you_go_promotional_offer_subscriptions") }}'
+      - name: marketing_opt_ins
+        description: '{{ doc("marketing_opt_ins") }}'
+      - name: billing_retry
+        description: '{{ doc("billing_retry") }}'
+      - name: grace_period
+        description: '{{ doc("grace_period") }}'
+      - name: free_trial_offer_code_subscriptions
+        description: '{{ doc("free_trial_offer_code_subscriptions") }}'
+      - name: pay_up_front_offer_code_subscriptions
+        description: '{{ doc("pay_up_front_offer_code_subscriptions") }}'
+      - name: pay_as_you_go_offer_code_subscriptions
+        description: '{{ doc("pay_as_you_go_offer_code_subscriptions") }}'
+      - name: subscribers
+        description: '{{ doc("subscribers") }}'
+      - name: date_day
+        description: '{{ doc("date_day") }}'
+      - name: source_type
+        description: A null field for this subscription data, but created to assist with joins downstream.
+
+
+  - name: stg_apple_store__app_crash_daily
+    description: Provides daily data on app crashes, helping you understand app stability across different versions and devices.
+    columns:
+      - name: _fivetran_id
+        description: '{{ doc("_fivetran_id") }}'
+      - name: source_relation
+        description: "{{ doc('source_relation') }}"
+      - name: date_day
+        description: '{{ doc("date_day") }}'
+      - name: app_id
+        description: '{{ doc("app_id") }}'
+      - name: app_version
+        description: '{{ doc("app_version") }}'
+      - name: device
+        description: '{{ doc("device") }}'
+      - name: platform_version
+        description: '{{ doc("platform_version") }}'
+      - name: crashes
+        description: '{{ doc("crashes") }}'
+      - name: unique_devices
+        description: '{{ doc("unique_devices") }}'
+      - name: source_type
+        description: A null field for crash data, but created to assist with joins downstream.
+
+  - name: stg_apple_store__app_session_daily
+    description: Provides standard daily metrics on user sessions within your app, including session duration and device information.
+    columns:
+      - name: _fivetran_id
+        description: '{{ doc("_fivetran_id") }}'
+      - name: source_relation
+        description: "{{ doc('source_relation') }}"
+      - name: date_day
+        description: '{{ doc("date_day") }}'
+      - name: app_id
+        description: '{{ doc("app_id") }}'
+      - name: app_version
+        description: '{{ doc("app_version") }}'
+      - name: device
+        description: '{{ doc("device") }}'
+      - name: platform_version
+        description: '{{ doc("platform_version") }}'
+      - name: source_type
+        description: '{{ doc("source_type") }}'
+      - name: page_type
+        description: '{{ doc("page_type") }}'
+      - name: app_download_date
+        description: Date when the app was downloaded on the user's device.
+      - name: territory
+        description: '{{ doc("territory") }}'
+      - name: sessions
+        description: '{{ doc("sessions") }}'
+      - name: total_session_duration
+        description: '{{ doc("total_session_duration") }}'
+      - name: unique_devices
+        description: '{{ doc("unique_devices") }}'
+
+  - name: stg_apple_store__app_store_download_daily
+    description: Contains standard daily metrics on app downloads, including download types and sources.
+    columns:
+      - name: _fivetran_id
+        description: '{{ doc("_fivetran_id") }}'
+      - name: source_relation
+        description: "{{ doc('source_relation') }}"
+      - name: date_day
+        description: '{{ doc("date_day") }}'
+      - name: app_id
+        description: '{{ doc("app_id") }}'
+      - name: download_type
+        description: '{{ doc("download_type") }}'
+      - name: app_version
+        description: '{{ doc("app_version") }}'
+      - name: device
+        description: '{{ doc("device") }}'
+      - name: platform_version
+        description: '{{ doc("platform_version") }}'
+      - name: source_type
+        description: '{{ doc("source_type") }}'
+      - name: page_type
+        description: '{{ doc("page_type") }}'
+      - name: pre_order
+        description: '{{ doc("pre_order") }}'
+      - name: territory
+        description: '{{ doc("territory") }}'
+      - name: counts
+        description: '{{ doc("counts") }}'
+
+  - name: stg_apple_store__app_store_installation_and_deletion_daily
+    description: Contains standard daily metrics on app installations and deletions, providing insights into user acquisition and retention.
+    columns:
+      - name: _fivetran_id
+        description: '{{ doc("_fivetran_id") }}'
+      - name: source_relation
+        description: "{{ doc('source_relation') }}"
+      - name: date_day
+        description: '{{ doc("date_day") }}'
+      - name: app_id
+        description: '{{ doc("app_id") }}'
+      - name: event
+        description: '{{ doc("event") }}'
+      - name: download_type
+        description: '{{ doc("download_type") }}'
+      - name: app_version
+        description: '{{ doc("app_version") }}'
+      - name: device
+        description: '{{ doc("device") }}'
+      - name: platform_version
+        description: '{{ doc("platform_version") }}'
+      - name: source_type
+        description: '{{ doc("source_type") }}'
+      - name: page_type
+        description: '{{ doc("page_type") }}'
+      - name: app_download_date
+        description: '{{ doc("app_download_date") }}'
+      - name: territory
+        description: '{{ doc("territory") }}'
+      - name: counts
+        description: '{{ doc("counts") }}'
+      - name: unique_devices
+        description: '{{ doc("unique_devices") }}'
+
+  - name: stg_apple_store__app_store_discovery_and_engagement_daily
+    description: Contains daily metrics on how users discover and engage with your app on the App Store.
+    columns:
+      - name: _fivetran_id
+        description: '{{ doc("_fivetran_id") }}'
+      - name: source_relation
+        description: "{{ doc('source_relation') }}"
+      - name: date_day
+        description: '{{ doc("date_day") }}'
+      - name: app_id
+        description: '{{ doc("app_id") }}'
+      - name: event
+        description: '{{ doc("event") }}'
+      - name: page_type
+        description: '{{ doc("page_type") }}'
+      - name: source_type
+        description: '{{ doc("source_type") }}'
+      - name: engagement_type
+        description: The type of user engagement action (e.g., Tap, Scroll).
+      - name: device
+        description: '{{ doc("device") }}'
+      - name: platform_version
+        description: '{{ doc("platform_version") }}'
+      - name: territory
+        description: '{{ doc("territory") }}'
+      - name: counts
+        description: '{{ doc("counts") }}'
+      - name: unique_counts
+        description: The number of unique devices associated with the event.
+
+seeds:
+  - name: apple_store_country_codes
+    description: ISO-3166 country mapping table
+    columns:
+      - name: country_name
+        description: '{{ doc("country_name") }}'
+      - name: alternative_country_name
+        description: '{{ doc("alternative_country_name") }}'
+      - name: country_code_numeric
+        description: '{{ doc("country_code_numeric") }}'
+      - name: country_code_alpha_2
+        description: '{{ doc("country_code_alpha_2") }}'
+      - name: country_code_alpha_3
+        description: '{{ doc("country_code_alpha_3") }}'
+      - name: region
+        description: '{{ doc("region") }}'
+      - name: region_code
+        description: '{{ doc("region_code") }}'
+      - name: sub_region
+        description: '{{ doc("sub_region") }}'
+      - name: sub_region_code
+        description: '{{ doc("sub_region_code") }}'

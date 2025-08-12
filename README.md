@@ -55,10 +55,10 @@ Include the following apple_store package version in your `packages.yml` file:
 ```yaml
 packages:
   - package: fivetran/apple_store
-    version: [">=0.6.0", "<0.7.0"]
+    version: [">=1.0.0", "<1.1.0"]
 ```
 
-Do NOT include the `apple_store_source` package in this file. The transformation package itself has a dependency on it and will install the source package as well.
+> All required sources and staging models are now bundled into this transformation package. Do not include `fivetran/apple_store_source` in your `packages.yml` since this package has been deprecated.
 
 
 ### Step 3: Define database and schema variables
@@ -116,10 +116,10 @@ By default, this package builds the apple_store staging models within a schema t
 
 ```yml
 models:
-    apple_store_source:
-      +schema: my_new_schema_name # leave blank for just the target_schema
     apple_store:
-      +schema: my_new_schema_name # leave blank for just the target_schema
+      +schema: my_new_schema_name # Leave +schema: blank to use the default target_schema.
+      staging:
+        +schema: my_new_schema_name # Leave +schema: blank to use the default target_schema.
 ```
     
 #### Change the source table references
@@ -146,9 +146,6 @@ This dbt package is dependent on the following dbt packages. These dependencies 
     
 ```yml
 packages:
-    - package: fivetran/apple_store_source
-      version: [">=0.6.0", "<0.7.0"]
-
     - package: fivetran/fivetran_utils
       version: [">=0.4.0", "<0.5.0"]
 

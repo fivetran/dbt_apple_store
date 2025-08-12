@@ -3,7 +3,7 @@ with app as (
         app_id,
         app_name,
         source_relation
-    from {{ var('app_store_app') }}
+    from {{ ref('stg_apple_store__app_store_app') }}
 ),
 
 impressions_and_page_views as (
@@ -23,7 +23,7 @@ app_crashes as (
         date_day,
         source_relation,
         sum(crashes) as crashes
-    from {{ var('app_crash_daily') }}
+    from {{ ref('stg_apple_store__app_crash_daily')}}
     group by 1,2,3
 ),
 
@@ -72,14 +72,14 @@ subscription_summary as (
         sum(active_pay_as_you_go_introductory_offer_subscriptions) as active_pay_as_you_go_introductory_offer_subscriptions,
         sum(active_pay_up_front_introductory_offer_subscriptions) as active_pay_up_front_introductory_offer_subscriptions,
         sum(active_standard_price_subscriptions) as active_standard_price_subscriptions
-    from {{ var('sales_subscription_summary') }}
+    from {{ ref('stg_apple_store__sales_subscription_summary') }}
     {{ dbt_utils.group_by(3) }}
 ),
 
 subscription_events_filtered as (
 
     select *
-    from {{ var('sales_subscription_events') }} 
+    from {{ ref('stg_apple_store__sales_subscription_events') }} 
     where lower(event)
         in (
             {% for event_val in var('apple_store__subscription_events') %}
