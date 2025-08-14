@@ -1,5 +1,4 @@
 # dbt_apple_store v1.0.0
-
 [PR #41](https://github.com/fivetran/dbt_apple_store/pull/41) includes the following updates:
 
 ## Breaking Changes
@@ -16,8 +15,11 @@
 - Updated package to maintain compatibility with dbt-core versions both before and after v1.10.6, which introduced a breaking change to multi-argument test syntax (e.g., `unique_combination_of_columns`).
 - Temporarily removed unsupported tests to avoid errors and ensure smoother upgrades across different dbt-core versions. These tests will be reintroduced once a safe migration path is available.
   - Removed all `dbt_utils.unique_combination_of_columns` tests.
-  - Removed all `accepted_values` tests.
   - Moved `loaded_at_field: _fivetran_synced` under the `config:` block in `src_apple_store.yml`.
+
+### Under the Hood
+- Updated conditions in `.github/workflows/auto-release.yml`.
+- Added `.github/workflows/generate-docs.yml`. 
 
 # dbt_apple_store v0.6.0
 [PR #36](https://github.com/fivetran/dbt_apple_store/pull/36) includes the following updates:
