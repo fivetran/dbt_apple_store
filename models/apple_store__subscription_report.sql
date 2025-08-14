@@ -13,7 +13,7 @@ subscription_events as (
 country_codes as (
     
     select * 
-    from {{ var('apple_store_country_codes') }}
+    from {{ ref('apple_store_country_codes') }}
 ),
 
 reporting_grain as (

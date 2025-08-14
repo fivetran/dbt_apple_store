@@ -3,7 +3,7 @@
 with subscription_events_filtered as (
 
     select *
-    from {{ var('sales_subscription_events') }}
+    from {{ ref('stg_apple_store__sales_subscription_events') }}
     where lower(event)
         in (
             {% for event_val in var('apple_store__subscription_events') %}

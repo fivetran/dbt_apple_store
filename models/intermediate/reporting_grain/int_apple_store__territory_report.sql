@@ -27,7 +27,7 @@ sessions_activity as (
 country_codes as (
     
     select * 
-    from {{ var('apple_store_country_codes') }}
+    from {{ ref('apple_store_country_codes') }}
 ),
 
 -- Unifying all dimension values before aggregation

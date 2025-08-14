@@ -1,7 +1,7 @@
 with base as (
 
     select *
-    from {{ var('app_session_standard_daily') }}
+    from {{ ref('stg_apple_store__app_session_daily')}}
 ),
 
 aggregated as (

@@ -3,7 +3,7 @@ with app as (
         app_id,
         app_name,
         source_relation
-    from {{ var('app_store_app') }}
+    from {{ ref('stg_apple_store__app_store_app') }}
 ),
 
 app_crashes as (
