@@ -1,4 +1,4 @@
-# Apple App Store Transformation dbt Package ([Docs](https://fivetran.github.io/dbt_apple_store/))
+# Apple App Store dbt Package ([Docs](https://fivetran.github.io/dbt_apple_store/))
 
 <p align="left">
     <a alt="License"
@@ -16,7 +16,7 @@
 </p>
 
 ## What does this dbt package do?
-- Produces modeled tables that leverage Apple App Store data from [Fivetran's connector](https://fivetran.com/docs/connectors/applications/apple-app-store) in the format described by [this ERD](https://fivetran.com/docs/connectors/applications/apple-app-store#salesandfinancereportschema) and build off the output of our [Apple App Store source package](https://github.com/fivetran/dbt_apple_store_source).
+- Produces modeled tables that leverage Apple App Store data from [Fivetran's connector](https://fivetran.com/docs/connectors/applications/apple-app-store) in the format described by [this ERD](https://fivetran.com/docs/connectors/applications/apple-app-store#salesandfinancereportschema).
 - Enables you to better understand your Apple App Store metrics at different granularities. It achieves this by:
   - Providing intuitive reporting at the App Version, Platform Version, Device, Source Type, Territory, Subscription and Overview levels
   - Aggregates all relevant application metrics into each of the reporting levels above
@@ -81,7 +81,7 @@ vars:
 
 In order to map longform territory names to their ISO country codes, we have adapted the CSV from [lukes/ISO-3166-Countries-with-Regional-Codes](https://github.com/lukes/ISO-3166-Countries-with-Regional-Codes) to align with Apple's country output [format](https://developer.apple.com/help/app-store-connect/reference/app-store-localizations/).
 
-You will need to `dbt seed` the `apple_store_country_codes` [file](https://github.com/fivetran/dbt_apple_store_source/blob/main/seeds/apple_store_country_codes.csv) just once.
+You will need to `dbt seed` the `apple_store_country_codes` [file](https://github.com/fivetran/dbt_apple_store/blob/main/seeds/apple_store_country_codes.csv) just once.
 
 ### (Optional) Step 6: Additional configurations
 <details open><summary>Expand/collapse configurations</summary>
@@ -111,7 +111,7 @@ By default, `Subscribe`, `Renew` and `Cancel` subscription events are included a
 ```
 
 #### Change the build schema
-By default, this package builds the apple_store staging models within a schema titled (`<target_schema>` + `_stg_apple_store`) and your apple_store modeling models within a schema titled (`<target_schema>` + `_apple_store`) in your destination. If this is not where you would like your apple_store data to be written to, add the following configuration to your root `dbt_project.yml` file:
+By default, this package builds the apple_store staging models within a schema titled (`<target_schema>` + `apple_store_source`) and your apple_store modeling models within a schema titled (`<target_schema>` + `_apple_store`) in your destination. If this is not where you would like your apple_store data to be written to, add the following configuration to your root `dbt_project.yml` file:
 
 ```yml
 models:
@@ -124,7 +124,7 @@ models:
 #### Change the source table references
 If an individual source table has a different name than the package expects, add the table name as it appears in your destination to the respective variable:
 
-> IMPORTANT: See this project's [`dbt_project.yml`](https://github.com/fivetran/dbt_apple_store_source/blob/main/dbt_project.yml) variable declarations to see the expected names.
+> IMPORTANT: See this project's [`dbt_project.yml`](https://github.com/fivetran/dbt_apple_store/blob/main/dbt_project.yml) variable declarations to see the expected names.
 
 ```yml
 vars:
@@ -150,6 +150,9 @@ packages:
 
     - package: dbt-labs/dbt_utils
       version: [">=1.0.0", "<2.0.0"]
+
+    - package: dbt-labs/spark_utils
+      version: [">=0.3.0", "<0.4.0"]
 ```
 ## How is this package maintained and can I contribute?
 ### Package Maintenance

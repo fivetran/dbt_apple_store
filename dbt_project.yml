@@ -28,5 +28,7 @@ models:
       reporting_grain:
         +materialized: table
     staging:
+      +materialized: table
       +schema: apple_store_source
-      +materialized: view
+      tmp:
+        +materialized: view
