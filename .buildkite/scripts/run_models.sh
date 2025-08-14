@@ -16,8 +16,8 @@ db=$1
 echo `pwd`
 cd integration_tests
 dbt deps
-dbt source freshness --target "$db" || echo "...Only verifying freshness runs…"
 dbt seed --target "$db" --full-refresh
+dbt source freshness --target "$db" || echo "...Only verifying freshness runs…"
 dbt run --target "$db" --full-refresh
 dbt test --target "$db"
 dbt run --vars '{apple_store__using_subscriptions: true}' --target "$db" --full-refresh

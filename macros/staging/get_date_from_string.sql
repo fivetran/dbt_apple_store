@@ -1,5 +1,5 @@
 {% macro get_date_from_string(string_text) %}
-  {{ return(adapter.dispatch('get_date_from_string') (string_text)) }}
+  {{ return(adapter.dispatch('get_date_from_string', 'apple_store') (string_text)) }}
 {% endmacro %}
 
 
