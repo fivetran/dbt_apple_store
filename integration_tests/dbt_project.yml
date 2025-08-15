@@ -1,12 +1,12 @@
 config-version: 2
 
 name: 'apple_store_integration_tests'
-version: '0.6.0'
+version: '1.0.0'
 
 profile: 'integration_tests'
 
 vars:
-  # apple_store__using_subscriptions: True # un-comment this line when generating docs!
+  # apple_store__using_subscriptions: True # @docs-include
   apple_store_schema: apple_store_integration_tests_14
   apple_store_source:
     apple_store_app_identifier: "app_store_app"
@@ -30,6 +30,8 @@ models:
   +schema: "apple_store_{{ var('directed_schema','dev') }}" ## To be used for validation testing
 
 seeds:
+  +docs:
+    show: False
   apple_store_integration_tests:
       +quote_columns: "{{ true if target.type == 'redshift' else false }}"
       +column_types:
@@ -42,3 +44,4 @@ dispatch:
 
 flags:
   send_anonymous_usage_stats: False
+  use_colors: True

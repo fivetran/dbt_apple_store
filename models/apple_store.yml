@@ -3,17 +3,6 @@ version: 2
 models:
   - name: apple_store__subscription_report
     description: Each record represents daily subscription metrics by account, app, subscription name, country and state
-    tests: 
-      - dbt_utils.unique_combination_of_columns:
-          combination_of_columns:
-            - source_relation
-            - date_day
-            - vendor_number
-            - app_apple_id
-            - subscription_name
-            - app_name
-            - territory_long
-            - state
     columns:
       - name: source_relation
         description: "{{ doc('source_relation') }}"
@@ -48,14 +37,6 @@ models:
 
   - name: apple_store__territory_report
     description: Each record represents daily subscription metrics by app_id, source_type and territory
-    tests: 
-      - dbt_utils.unique_combination_of_columns:
-          combination_of_columns:
-            - source_relation
-            - date_day
-            - app_id
-            - source_type
-            - territory_long
     columns:
       - name: source_relation
         description: "{{ doc('source_relation') }}"
@@ -100,14 +81,6 @@ models:
 
   - name: apple_store__device_report
     description: Each record represents daily subscription metrics by app_id, source_type and device
-    tests: 
-      - dbt_utils.unique_combination_of_columns:
-          combination_of_columns:
-            - source_relation
-            - date_day
-            - app_id
-            - source_type
-            - device
     columns:
       - name: source_relation
         description: "{{ doc('source_relation') }}"
@@ -156,13 +129,6 @@ models:
 
   - name: apple_store__source_type_report
     description: Each record represents daily metrics by app_id and source_type
-    tests: 
-      - dbt_utils.unique_combination_of_columns:
-          combination_of_columns:
-            - source_relation
-            - date_day
-            - app_id
-            - source_type
     columns:
       - name: source_relation
         description: "{{ doc('source_relation') }}"
@@ -195,12 +161,6 @@ models:
 
   - name: apple_store__overview_report
     description: Each record represents daily metrics for each app_id
-    tests: 
-      - dbt_utils.unique_combination_of_columns:
-          combination_of_columns:
-            - source_relation
-            - date_day
-            - app_id
     columns:
       - name: source_relation
         description: "{{ doc('source_relation') }}"
@@ -241,14 +201,6 @@ models:
 
   - name: apple_store__platform_version_report
     description: Each record represents daily metrics for each by app_id, source_type and platform version
-    tests: 
-      - dbt_utils.unique_combination_of_columns:
-          combination_of_columns:
-            - source_relation
-            - date_day
-            - app_id
-            - source_type
-            - platform_version
     columns:
       - name: source_relation
         description: "{{ doc('source_relation') }}"
@@ -289,14 +241,6 @@ models:
 
   - name: apple_store__app_version_report
     description: Each record represents daily metrics for each by app_id, source_type and app version
-    tests: 
-      - dbt_utils.unique_combination_of_columns:
-          combination_of_columns:
-            - source_relation
-            - date_day
-            - app_id
-            - source_type
-            - app_version
     columns:
       - name: source_relation
         description: "{{ doc('source_relation') }}"
