@@ -1,3 +1,9 @@
+# dbt_apple_store v1.0.1
+[PR #42](https://github.com/fivetran/dbt_apple_store/pull/42) includes the following updates:
+
+## Bug Fixes
+- Fixed a run error in `int_apple_store__date_spine` that occurred when one or more source tables used to determine the start date of the spine were missing.
+
 # dbt_apple_store v1.0.0
 [PR #41](https://github.com/fivetran/dbt_apple_store/pull/41) includes the following updates:
 
