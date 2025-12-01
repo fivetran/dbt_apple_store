@@ -1,9 +1,8 @@
 # dbt_apple_store v1.1.0
-
 [PR #44](https://github.com/fivetran/dbt_apple_store/pull/44) includes the following updates:
 
 ## Features
-  - Increases the required dbt version upper limit to v3.0.0
+- Increases the required dbt version upper limit to v3.0.0.
 
 # dbt_apple_store v1.0.1
 [PR #42](https://github.com/fivetran/dbt_apple_store/pull/42) includes the following updates:
