@@ -3,7 +3,7 @@
 [PR #45](https://github.com/fivetran/dbt_apple_store/pull/45) includes the following updates:
 
 ## Documentation
-- Updates README with standardized Fivetran formatting.
+- Updates README with standardized Fivetran formatting..
 
 ## Under the Hood
 - In the `quickstart.yml` file:
