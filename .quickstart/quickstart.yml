@@ -8,6 +8,9 @@ table_variables:
     - sales_subscription_summary
     - sales_subscription_event_summary
 
+  _fivetran_quickstart_app_crash_daily:
+    - app_crash_daily
+
 requires_dbt_seed: true
 
 destination_configurations:
@@ -25,3 +28,14 @@ public_models: [
   "apple_store__app_version_report",
   "apple_store__overview_report"
 ]
+
+supported_vars:
+  apple_store__subscription_events:
+    type: list
+    value:
+      - "subscribe"
+      - "renew"
+      - "cancel"
+    description: "Subscription events to be tracked and aggregated in `apple_store__subscription_report`, `apple_store__device_report`, and `apple_store__overview_report`."
+    display_name: "Subscription Events"
+
