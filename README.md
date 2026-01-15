@@ -22,8 +22,8 @@ This dbt package transforms data from Fivetran's Apple Store connector into anal
 
 - Number of materialized models¹: 38
 - Connector documentation
-  - [Apple Store connector documentation](https://fivetran.com/docs/connectors/applications/apple-store)
-  - [Apple Store ERD](https://fivetran.com/docs/connectors/applications/apple-store#schemainformation)
+  - [Apple Store connector documentation](https://fivetran.com/docs/connectors/applications/apple-app-store)
+  - [Apple Store ERD](https://fivetran.com/docs/connectors/applications/apple-app-store#schemainformation)
 - dbt package documentation
   - [GitHub repository](https://github.com/fivetran/dbt_apple_store)
   - [dbt Docs](https://fivetran.github.io/dbt_apple_store/#!/overview)
@@ -67,7 +67,7 @@ To use this dbt package, you must have the following:
 ## How do I use the dbt package?
 You can either add this dbt package in the Fivetran dashboard or import it into your dbt project:
 
-- To add the package in the Fivetran dashboard, follow our [Quickstart guide](https://fivetran.com/docs/transformations/dbt#transformationsfordbtcore).
+- To add the package in the Fivetran dashboard, follow our [Quickstart guide](https://fivetran.com/docs/transformations/data-models/quickstart-management#quickstartmanagement).
 - To add the package to your dbt project, follow the setup instructions in the dbt package's [README file](https://github.com/fivetran/dbt_apple_store/blob/main/README.md#how-do-i-use-the-dbt-package) to use this package.
 
 <!--section-end-->
