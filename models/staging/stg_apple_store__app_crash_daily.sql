@@ -15,10 +15,7 @@ fields as (
             )
         }}
         
-        {{ fivetran_utils.source_relation(
-            union_schema_variable='apple_store_union_schemas', 
-            union_database_variable='apple_store_union_databases') 
-        }}
+        {{ fivetran_utils.apply_source_relation(package_name='apple_store') }}
 
     from base
 
