@@ -8,6 +8,7 @@ sources:
 
     config:
       loaded_at_field: _fivetran_synced
+      enabled: "{{ var('apple_store_sources', []) == [] }}"
       freshness:
         warn_after: {count: 48, period: hour}
         error_after: {count: 168, period: hour}
@@ -28,7 +29,7 @@ sources:
         identifier: "{{ var('apple_store_sales_subscription_event_summary_identifier', 'sales_subscription_event_summary')}}"
         description: Daily subscription event report by account ID, app name, subscription name, event, country, state and device; this model is aggregated by date, app_name, account_id, country, state and subscription_name for easier transformations in the modeling package.
         config:
-          enabled: "{{ var('apple_store__using_subscriptions', false) }}"
+          enabled: "{{ var('apple_store__using_subscriptions', false) and var('apple_store_sources', []) == [] }}"
         columns:
             - name: _fivetran_id
               description: '{{ doc("_fivetran_id") }}'
@@ -99,7 +100,7 @@ sources:
         identifier: "{{ var('apple_store_sales_subscription_summary_identifier', 'sales_subscription_summary')}}"
         description: Daily subscription summary report by account ID, app name, country, state and subscription name; this model is aggregated by date, app_name, account_id, country, state and subscription_name for easier transformations in the modeling package.
         config:
-          enabled: "{{ var('apple_store__using_subscriptions', false) }}"
+          enabled: "{{ var('apple_store__using_subscriptions', false) and var('apple_store_sources', []) == [] }}"
         columns:
           - name: _fivetran_id
             description: '{{ doc("_fivetran_id") }}'
