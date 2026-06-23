@@ -1,3 +1,5 @@
+{% if var('apple_store_union_schemas', []) | length > 0 or var('apple_store_union_databases', []) | length > 0 %}
+
 {{
     fivetran_utils.union_data(
         table_identifier='app_session_standard_daily', 
@@ -10,3 +12,15 @@
         union_database_variable='apple_store_union_databases'
     )
 }}
+
+{% else %}
+
+{{
+    fivetran_utils.union_connections(
+        connection_dictionary='apple_store_sources',
+        single_source_name='apple_store',
+        single_table_name='app_session_standard_daily'
+    )
+}}
+
+{% endif %}

@@ -65,19 +65,46 @@ Include the following apple_store package version in your `packages.yml` file:
 ```yaml
 packages:
   - package: fivetran/apple_store
-    version: [">=1.2.0", "<1.3.0"]
+    version: [">=1.3.0", "<1.4.0"]
 ```
 
 > All required sources and staging models are now bundled into this transformation package. Do not include `fivetran/apple_store_source` in your `packages.yml` since this package has been deprecated.
 
 ### Define database and schema variables
-By default, this package runs using your destination and the `apple_store` schema. If this is not where your apple_store data is (for example, if your apple_store schema is named `apple_store_fivetran`), add the following configuration to your root `dbt_project.yml` file:
+#### Option A: Single connection
+By default, this package runs using your destination and the `apple_store` schema. If this is not where your Apple Store data is (for example, if your Apple Store schema is named `apple_store_fivetran`), add the following configuration to your root `dbt_project.yml` file:
 
 ```yml
 vars:
     apple_store_database: your_destination_name
-    apple_store_schema: your_schema_name 
+    apple_store_schema: your_schema_name
 ```
+
+#### Option B: Union multiple connections
+If you have multiple Apple Store connections in Fivetran and would like to use this package on all of them simultaneously, we have provided functionality to do so. For each source table, the package will union all of the data together and pass the unioned table into the transformations. The `source_relation` column in each model indicates the origin of each record.
+
+To use this functionality, you will need to set the `apple_store_sources` variable in your root `dbt_project.yml` file:
+
+```yml
+# dbt_project.yml
+
+vars:
+  apple_store:
+    apple_store_sources:
+      - database: connection_1_destination_name # Required
+        schema: connection_1_schema_name # Required
+        name: connection_1_source_name # Required only if following the step in the following subsection
+
+      - database: connection_2_destination_name
+        schema: connection_2_schema_name
+        name: connection_2_source_name
+```
+
+> Previous versions of this package employed two separate, mutually exclusive variables for unioning: `apple_store_union_schemas` and `apple_store_union_databases`. While these variables are still supported, `apple_store_sources` is the recommended variable to configure.
+
+#### Optional: Incorporate unioned sources into DAG
+
+If you use [Fivetran Transformations for dbt Core™](https://fivetran.com/docs/transformations/dbt#transformationsfordbtcore) and are unioning multiple Apple Store connections, you can define your sources in a property `.yml` file, [using this as a template](https://github.com/fivetran/dbt_apple_store/blob/main/models/staging/src_apple_store.yml). Set the variable `has_defined_sources: true` under the Apple Store namespace in your `dbt_project.yml`. Otherwise, your Apple Store connections won't appear in your DAG. See the `union_connections` macro [documentation](https://github.com/fivetran/dbt_fivetran_utils/tree/releases/v0.4.latest#optional-union-connections-defined-sources-configuration) for full configuration details.
 
 ### Disable models for non-existent sources
 Your Apple App Store connection might not sync every table that this package expects. If you use subscriptions and have the `sales_subscription_event_summary` and `sales_subscription_summary` tables synced, add the following variable to your `dbt_project.yml` file:
@@ -95,18 +122,6 @@ You will need to `dbt seed` the `apple_store_country_codes` [file](https://githu
 
 ### (Optional) Additional configurations
 <details open><summary>Expand/collapse configurations</summary>
-
-#### Union multiple connections
-If you have multiple apple_store connections in Fivetran and would like to use this package on all of them simultaneously, we have provided functionality to do so. The package will union all of the data together and pass the unioned table into the transformations. You will be able to see which source it came from in the `source_relation` column of each model. To use this functionality, you will need to set either the `apple_store_union_schemas` OR `apple_store_union_databases` variables (cannot do both) in your root `dbt_project.yml` file:
-
-```yml
-vars:
-    apple_store_union_schemas: ['apple_store_usa','apple_store_canada'] # use this if the data is in different schemas/datasets of the same database/project
-    apple_store_union_databases: ['apple_store_usa','apple_store_canada'] # use this if the data is in different databases/projects but uses the same schema name
-```
-> NOTE: The native `source.yml` connection set up in the package will not function when the union schema/database feature is utilized. Although the data will be correctly combined, you will not observe the sources linked to the package models in the Directed Acyclic Graph (DAG). This happens because the package includes only one defined `source.yml`.
-
-To connect your multiple schema/database sources to the package models, follow the steps outlined in the [Union Data Defined Sources Configuration](https://github.com/fivetran/dbt_fivetran_utils/tree/releases/v0.4.latest#union_data-source) section of the Fivetran Utils documentation for the union_data macro. This will ensure a proper configuration and correct visualization of connections in the DAG.
 
 #### Defining subscription events
 By default, `Subscribe`, `Renew` and `Cancel` subscription events are included and required in this package for downstream usage. If you would like to add additional subscription events, please add the below to your `dbt_project.yml`:
@@ -139,6 +154,14 @@ If an individual source table has a different name than the package expects, add
 ```yml
 vars:
     apple_store_<default_source_table_name>_identifier: your_table_name 
+```
+
+#### Source casing for case-sensitive destinations
+By default, the package applies case-insensitive comparisons when resolving `source_relation` values. If your destination is case-sensitive and you want downstream transformations to respect the exact casing of your source database and schema names, set the following variable:
+
+```yml
+vars:
+    fivetran_using_source_casing: true
 ```
 </details>
 
