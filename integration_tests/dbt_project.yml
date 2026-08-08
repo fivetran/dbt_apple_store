@@ -1,13 +1,13 @@
 config-version: 2
 
 name: 'apple_store_integration_tests'
-version: '1.3.0'
+version: '1.3.1'
 
 profile: 'integration_tests'
 
 vars:
-  # apple_store__using_subscriptions: True # @docs-include
-  apple_store_schema: apple_store_integration_tests
+  apple_store__using_subscriptions: True # @docs-include
+  apple_store_schema: zz_dbt_avinash_seed
   apple_store:
     apple_store_app_identifier: "app_store_app"
     apple_store_sales_subscription_event_summary_identifier: "sales_subscription_event_summary"
@@ -42,6 +42,7 @@ seeds:
         +column_types:
           _fivetran_synced: timestamp
           date: date
+          app_download_date: date
       app_store_app:
         +column_types:
           _fivetran_synced: timestamp
@@ -57,6 +58,7 @@ seeds:
         +column_types:
           _fivetran_synced: timestamp
           date: date
+          app_download_date: date
       sales_subscription_event_summary:
         +column_types:
           _fivetran_synced: timestamp

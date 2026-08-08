@@ -1,3 +1,10 @@
+# dbt_apple_store v1.3.1
+
+[PR #53](https://github.com/fivetran/dbt_apple_store/pull/53) includes the following updates:
+
+## Bug Fix
+- Fixes `int_apple_store__date_spine` compilation errors when the underlying sources are empty or contain no data. The model now falls back to a default start date of `2024-01-01` in this scenario.
+
 # dbt_apple_store v1.3.0
 
 [PR #50](https://github.com/fivetran/dbt_apple_store/pull/50) includes the following updates:

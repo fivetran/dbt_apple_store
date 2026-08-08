@@ -25,7 +25,7 @@ with spine as (
 
         {% endset %}
 
-        {%- set first_date = dbt_utils.get_single_value(first_date_query) %}
+        {%- set first_date = dbt_utils.get_single_value(first_date_query) or '2024-01-01' %}
 
         {% else %}
         {%- set first_date = '2024-01-01' %}
@@ -37,8 +37,8 @@ with spine as (
         datepart="day",
         start_date = "cast('" ~ first_date ~ "' as date)",
         end_date=dbt.dateadd("day", 1, dbt.current_timestamp())
-    )   
-}} 
+    )
+}}
 
 )
 
