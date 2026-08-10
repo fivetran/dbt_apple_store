@@ -3,7 +3,7 @@
 [PR #53](https://github.com/fivetran/dbt_apple_store/pull/53) includes the following updates:
 
 ## Bug Fix
-- Fixes `int_apple_store__date_spine` compilation errors when the underlying sources are empty or contain no data, falling back to a default one-year date range.
+- Fixes `int_apple_store__date_spine` compilation errors when the underlying `APP_STORE_*` sources are empty or contain no data, falling back to a default one-year date range.
 
 # dbt_apple_store v1.3.0
 
