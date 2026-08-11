@@ -36,14 +36,14 @@ seeds:
       +quote_columns: "{{ target.type == 'redshift' or var('fivetran_using_source_casing', false) }}"
       app_crash_daily:
         +column_types:
-          _fivetran_synced: "{{ 'string' if target.type in ('bigquery', 'spark', 'databricks') else 'varchar' }}"
+          _fivetran_synced: "{{ 'TIMESTAMPTZ' if target.type == 'duckdb' else 'timestamp' }}"
           date: date
           app_id: "{{ 'INT64' if target.type == 'bigquery' else 'bigint' }}"
           crashes: "{{ 'INT64' if target.type == 'bigquery' else 'bigint' }}"
           unique_devices: "{{ 'INT64' if target.type == 'bigquery' else 'bigint' }}"
       app_session_standard_daily:
         +column_types:
-          _fivetran_synced: "{{ 'string' if target.type in ('bigquery', 'spark', 'databricks') else 'varchar' }}"
+          _fivetran_synced: "{{ 'TIMESTAMPTZ' if target.type == 'duckdb' else 'timestamp' }}"
           date: date
           app_id: "{{ 'INT64' if target.type == 'bigquery' else 'bigint' }}"
           sessions: "{{ 'INT64' if target.type == 'bigquery' else 'bigint' }}"
@@ -52,23 +52,23 @@ seeds:
           app_download_date: date
       app_store_app:
         +column_types:
-          _fivetran_synced: "{{ 'string' if target.type in ('bigquery', 'spark', 'databricks') else 'varchar' }}"
+          _fivetran_synced: "{{ 'TIMESTAMPTZ' if target.type == 'duckdb' else 'timestamp' }}"
       app_store_discovery_and_engagement_standard_daily:
         +column_types:
-          _fivetran_synced: "{{ 'string' if target.type in ('bigquery', 'spark', 'databricks') else 'varchar' }}"
+          _fivetran_synced: "{{ 'TIMESTAMPTZ' if target.type == 'duckdb' else 'timestamp' }}"
           date: date
           app_id: "{{ 'INT64' if target.type == 'bigquery' else 'bigint' }}"
           counts: "{{ 'INT64' if target.type == 'bigquery' else 'bigint' }}"
           unique_counts: "{{ 'INT64' if target.type == 'bigquery' else 'bigint' }}"
       app_store_download_standard_daily:
         +column_types:
-          _fivetran_synced: "{{ 'string' if target.type in ('bigquery', 'spark', 'databricks') else 'varchar' }}"
+          _fivetran_synced: "{{ 'TIMESTAMPTZ' if target.type == 'duckdb' else 'timestamp' }}"
           date: date
           app_id: "{{ 'INT64' if target.type == 'bigquery' else 'bigint' }}"
           counts: "{{ 'INT64' if target.type == 'bigquery' else 'bigint' }}"
       app_store_installation_and_deletion_standard_daily:
         +column_types:
-          _fivetran_synced: "{{ 'string' if target.type in ('bigquery', 'spark', 'databricks') else 'varchar' }}"
+          _fivetran_synced: "{{ 'TIMESTAMPTZ' if target.type == 'duckdb' else 'timestamp' }}"
           date: date
           app_id: "{{ 'INT64' if target.type == 'bigquery' else 'bigint' }}"
           counts: "{{ 'INT64' if target.type == 'bigquery' else 'bigint' }}"
@@ -76,7 +76,7 @@ seeds:
           app_download_date: date
       sales_subscription_event_summary:
         +column_types:
-          _fivetran_synced: "{{ 'string' if target.type in ('bigquery', 'spark', 'databricks') else 'varchar' }}"
+          _fivetran_synced: "{{ 'TIMESTAMPTZ' if target.type == 'duckdb' else 'timestamp' }}"
           vendor_number: "{{ 'INT64' if target.type == 'bigquery' else 'bigint' }}"
           app_apple_id: "{{ 'INT64' if target.type == 'bigquery' else 'bigint' }}"
           subscription_apple_id: "{{ 'INT64' if target.type == 'bigquery' else 'bigint' }}"
@@ -89,7 +89,7 @@ seeds:
           paid_service_days_recovered: "{{ 'INT64' if target.type == 'bigquery' else 'bigint' }}"
       sales_subscription_summary:
         +column_types:
-          _fivetran_synced: "{{ 'string' if target.type in ('bigquery', 'spark', 'databricks') else 'varchar' }}"
+          _fivetran_synced: "{{ 'TIMESTAMPTZ' if target.type == 'duckdb' else 'timestamp' }}"
           date: date
           vendor_number: "{{ 'INT64' if target.type == 'bigquery' else 'bigint' }}"
           app_apple_id: "{{ 'INT64' if target.type == 'bigquery' else 'bigint' }}"
