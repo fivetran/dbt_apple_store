@@ -1,10 +1,14 @@
-# dbt_apple_store v1.3.1
-
+# dbt_apple_store v1.3.2
 [PR #52](https://github.com/fivetran/dbt_apple_store/pull/52) includes the following updates:
 
 ## Feature Updates
 - Adds DuckDB as a supported destination.
 
+# dbt_apple_store v1.3.1
+[PR #53](https://github.com/fivetran/dbt_apple_store/pull/53) includes the following updates:
+
+## Bug Fix
+- Fixes `int_apple_store__date_spine` compilation errors by falling back to a default one-year date range when the underlying `APP_STORE_*` tables aren't synced.
 
 # dbt_apple_store v1.3.0
 
