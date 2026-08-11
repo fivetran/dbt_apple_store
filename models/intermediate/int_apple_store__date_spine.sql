@@ -13,7 +13,7 @@ with spine as (
             select
                 coalesce(
                     min(date_day),
-                    cast({{ dbt.dateadd("day", -365, dbt.current_timestamp()) }} as date)
+                    cast({{ dbt.dateadd("year", -1, dbt.current_timestamp()) }} as date)
                 ) as min_date_day
             from (
                 select date_day from {{ ref('stg_apple_store__app_store_installation_and_deletion_daily') }}
