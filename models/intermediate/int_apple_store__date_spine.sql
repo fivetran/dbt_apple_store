@@ -8,9 +8,13 @@ with spine as (
 
     {% if execute and flags.WHICH in ('run', 'build') %}
 
-        {% set first_date_query %}
+        {%- set first_date_query %}
 
-            select min(date_day) as min_date_day
+            select
+                coalesce(
+                    min(date_day),
+                    cast({{ dbt.dateadd("year", -1, dbt.current_timestamp()) }} as date)
+                ) as min_date_day
             from (
                 select date_day from {{ ref('stg_apple_store__app_store_installation_and_deletion_daily') }}
                 union all
@@ -23,22 +27,24 @@ with spine as (
                 select date_day from {{ ref('stg_apple_store__app_session_daily') }}
             ) as all_dates
 
-        {% endset %}
+        {% endset -%}
 
-        {%- set first_date = dbt_utils.get_single_value(first_date_query) %}
-
-        {% else %}
-        {%- set first_date = '2024-01-01' %}
+    {% else %}
+        {%- set first_date_query %}
+            select cast({{ dbt.dateadd("year", -1, dbt.current_timestamp() ) }} as date) as min_date
+        {% endset -%}
 
     {% endif %}
+
+    {%- set first_date = dbt_utils.get_single_value(first_date_query)|string %}
 
 {{
     dbt_utils.date_spine(
         datepart="day",
         start_date = "cast('" ~ first_date ~ "' as date)",
         end_date=dbt.dateadd("day", 1, dbt.current_timestamp())
-    )   
-}} 
+    )
+}}
 
 )
 
