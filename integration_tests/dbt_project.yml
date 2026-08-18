@@ -1,7 +1,7 @@
 config-version: 2
 
 name: 'apple_store_integration_tests'
-version: '1.3.1'
+version: '1.3.2'
 
 profile: 'integration_tests'
 
@@ -36,36 +36,79 @@ seeds:
       +quote_columns: "{{ target.type == 'redshift' or var('fivetran_using_source_casing', false) }}"
       app_crash_daily:
         +column_types:
-          _fivetran_synced: timestamp
+          _fivetran_synced: "{{ 'TIMESTAMPTZ' if target.type == 'duckdb' else 'timestamp' }}"
           date: date
+          app_id: "{{ 'INT64' if target.type == 'bigquery' else 'bigint' }}"
+          crashes: "{{ 'INT64' if target.type == 'bigquery' else 'bigint' }}"
+          unique_devices: "{{ 'INT64' if target.type == 'bigquery' else 'bigint' }}"
       app_session_standard_daily:
         +column_types:
-          _fivetran_synced: timestamp
+          _fivetran_synced: "{{ 'TIMESTAMPTZ' if target.type == 'duckdb' else 'timestamp' }}"
           date: date
+          app_id: "{{ 'INT64' if target.type == 'bigquery' else 'bigint' }}"
+          sessions: "{{ 'INT64' if target.type == 'bigquery' else 'bigint' }}"
+          total_session_duration: "{{ 'INT64' if target.type == 'bigquery' else 'bigint' }}"
+          unique_devices: "{{ 'INT64' if target.type == 'bigquery' else 'bigint' }}"
           app_download_date: date
       app_store_app:
         +column_types:
-          _fivetran_synced: timestamp
+          _fivetran_synced: "{{ 'TIMESTAMPTZ' if target.type == 'duckdb' else 'timestamp' }}"
       app_store_discovery_and_engagement_standard_daily:
         +column_types:
-          _fivetran_synced: timestamp
+          _fivetran_synced: "{{ 'TIMESTAMPTZ' if target.type == 'duckdb' else 'timestamp' }}"
           date: date
+          app_id: "{{ 'INT64' if target.type == 'bigquery' else 'bigint' }}"
+          counts: "{{ 'INT64' if target.type == 'bigquery' else 'bigint' }}"
+          unique_counts: "{{ 'INT64' if target.type == 'bigquery' else 'bigint' }}"
       app_store_download_standard_daily:
         +column_types:
-          _fivetran_synced: timestamp
+          _fivetran_synced: "{{ 'TIMESTAMPTZ' if target.type == 'duckdb' else 'timestamp' }}"
           date: date
+          app_id: "{{ 'INT64' if target.type == 'bigquery' else 'bigint' }}"
+          counts: "{{ 'INT64' if target.type == 'bigquery' else 'bigint' }}"
       app_store_installation_and_deletion_standard_daily:
         +column_types:
-          _fivetran_synced: timestamp
+          _fivetran_synced: "{{ 'TIMESTAMPTZ' if target.type == 'duckdb' else 'timestamp' }}"
           date: date
+          app_id: "{{ 'INT64' if target.type == 'bigquery' else 'bigint' }}"
+          counts: "{{ 'INT64' if target.type == 'bigquery' else 'bigint' }}"
+          unique_devices: "{{ 'INT64' if target.type == 'bigquery' else 'bigint' }}"
           app_download_date: date
       sales_subscription_event_summary:
         +column_types:
-          _fivetran_synced: timestamp
+          _fivetran_synced: "{{ 'TIMESTAMPTZ' if target.type == 'duckdb' else 'timestamp' }}"
+          vendor_number: "{{ 'INT64' if target.type == 'bigquery' else 'bigint' }}"
+          app_apple_id: "{{ 'INT64' if target.type == 'bigquery' else 'bigint' }}"
+          subscription_apple_id: "{{ 'INT64' if target.type == 'bigquery' else 'bigint' }}"
+          subscription_group_id: "{{ 'INT64' if target.type == 'bigquery' else 'bigint' }}"
+          consecutive_paid_periods: "{{ 'INT64' if target.type == 'bigquery' else 'bigint' }}"
+          previous_subscription_apple_id: "{{ 'INT64' if target.type == 'bigquery' else 'bigint' }}"
+          days_before_canceling: "{{ 'INT64' if target.type == 'bigquery' else 'bigint' }}"
+          days_canceled: "{{ 'INT64' if target.type == 'bigquery' else 'bigint' }}"
+          quantity: "{{ 'INT64' if target.type == 'bigquery' else 'bigint' }}"
+          paid_service_days_recovered: "{{ 'INT64' if target.type == 'bigquery' else 'bigint' }}"
       sales_subscription_summary:
         +column_types:
-          _fivetran_synced: timestamp
+          _fivetran_synced: "{{ 'TIMESTAMPTZ' if target.type == 'duckdb' else 'timestamp' }}"
           date: date
+          vendor_number: "{{ 'INT64' if target.type == 'bigquery' else 'bigint' }}"
+          app_apple_id: "{{ 'INT64' if target.type == 'bigquery' else 'bigint' }}"
+          subscription_apple_id: "{{ 'INT64' if target.type == 'bigquery' else 'bigint' }}"
+          subscription_group_id: "{{ 'INT64' if target.type == 'bigquery' else 'bigint' }}"
+          active_standard_price_subscriptions: "{{ 'INT64' if target.type == 'bigquery' else 'bigint' }}"
+          active_free_trial_introductory_offer_subscriptions: "{{ 'INT64' if target.type == 'bigquery' else 'bigint' }}"
+          active_pay_up_front_introductory_offer_subscriptions: "{{ 'INT64' if target.type == 'bigquery' else 'bigint' }}"
+          active_pay_as_you_go_introductory_offer_subscriptions: "{{ 'INT64' if target.type == 'bigquery' else 'bigint' }}"
+          free_trial_promotional_offer_subscriptions: "{{ 'INT64' if target.type == 'bigquery' else 'bigint' }}"
+          pay_up_front_promotional_offer_subscriptions: "{{ 'INT64' if target.type == 'bigquery' else 'bigint' }}"
+          pay_as_you_go_promotional_offer_subscriptions: "{{ 'INT64' if target.type == 'bigquery' else 'bigint' }}"
+          marketing_opt_ins: "{{ 'INT64' if target.type == 'bigquery' else 'bigint' }}"
+          billing_retry: "{{ 'INT64' if target.type == 'bigquery' else 'bigint' }}"
+          grace_period: "{{ 'INT64' if target.type == 'bigquery' else 'bigint' }}"
+          free_trial_offer_code_subscriptions: "{{ 'INT64' if target.type == 'bigquery' else 'bigint' }}"
+          pay_up_front_offer_code_subscriptions: "{{ 'INT64' if target.type == 'bigquery' else 'bigint' }}"
+          pay_as_you_go_offer_code_subscriptions: "{{ 'INT64' if target.type == 'bigquery' else 'bigint' }}"
+          subscribers: "{{ 'INT64' if target.type == 'bigquery' else 'bigint' }}"
 
 dispatch:
   - macro_namespace: dbt_utils
