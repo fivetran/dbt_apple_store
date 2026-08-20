@@ -15,7 +15,7 @@ sources:
 
     tables:
       - name: app_store_app
-        identifier: "{{ var('apple_store_app_identifier', 'app')}}"
+        identifier: "{{ var('apple_store_app_store_app_identifier', 'app_store_app')}}"
         description: Table containing data about your application(s)
         columns:
           - name: id
