@@ -1,3 +1,9 @@
+# dbt_apple_store v1.3.3
+
+## Bug Fix
+- Corrects the default source table identifier for `app_store_app`, which pointed at the wrong table name and caused a runtime error in `stg_apple_store__app_store_app_tmp`. This default had no effect prior to v1.3.0's move to `fivetran_utils.union_connections`, which resolves the source table using this identifier.
+- Renames the `apple_store_app_identifier` variable to `apple_store_app_store_app_identifier` to match this package's variable naming convention. If you had set `apple_store_app_identifier` in your own project, update your configuration to use the new variable name.
+
 # dbt_apple_store v1.3.2
 [PR #52](https://github.com/fivetran/dbt_apple_store/pull/52) includes the following updates:
 
