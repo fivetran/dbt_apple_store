@@ -15,7 +15,7 @@ This dbt package transforms data from Fivetran's Apple Store connector into anal
   - [DAG](https://fivetran.github.io/dbt_apple_store/#!/overview?g_v=1)
   - [Changelog](https://github.com/fivetran/dbt_apple_store/blob/main/CHANGELOG.md)
 - dbt Core™ supported versions
-  - `>=1.3.0, <3.0.0`
+  - `>=1.10.0, <3.0.0`
 
 ## What does this dbt package do?
 This package enables you to better understand your Apple App Store metrics at different granularities and provides intuitive reporting at the App Version, Platform Version, Device, Source Type, Territory, Subscription and Overview levels. It creates enriched models with metrics focused on aggregating all relevant application metrics into each of the reporting levels.
@@ -65,7 +65,7 @@ Include the following apple_store package version in your `packages.yml` file:
 ```yaml
 packages:
   - package: fivetran/apple_store
-    version: [">=1.3.0", "<1.4.0"]
+    version: [">=1.4.0", "<1.5.0"]
 ```
 
 > All required sources and staging models are now bundled into this transformation package. Do not include `fivetran/apple_store_source` in your `packages.yml` since this package has been deprecated.
@@ -197,7 +197,7 @@ The Fivetran team maintaining this package only maintains the [latest version](h
 ### Contributions
 A small team of analytics engineers at Fivetran develops these dbt packages. However, the packages are made better by community contributions.
 
-We highly encourage and welcome contributions to this package. Learn how to contribute to a package in dbt's [Contributing to an external dbt package article](https://discourse.getdbt.com/t/contributing-to-a-dbt-package/657).
+We highly encourage and welcome contributions to this package. Learn how to contribute to a package by reading the guidelines in our [CONTRIBUTING.md](https://github.com/fivetran/dbt_apple_store/blob/main/CONTRIBUTING.md) document.
 
 ### Opinionated Decisions
 In creating this package, which is meant for a wide range of use cases, we had to take opinionated stances on a few different questions we came across during development. We've consolidated significant choices we made in the [DECISIONLOG.md](https://github.com/fivetran/dbt_apple_store/blob/main/DECISIONLOG.md), and will continue to update as the package evolves. We are always open to and encourage feedback on these choices, and the package in general.
