@@ -65,7 +65,7 @@ Include the following apple_store package version in your `packages.yml` file:
 ```yaml
 packages:
   - package: fivetran/apple_store
-    version: [">=1.5.0", "<1.6.0"]
+    version: [">=1.4.0", "<1.5.0"]
 ```
 
 > All required sources and staging models are now bundled into this transformation package. Do not include `fivetran/apple_store_source` in your `packages.yml` since this package has been deprecated.
