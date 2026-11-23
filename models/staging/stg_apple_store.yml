@@ -3,6 +3,12 @@ version: 2
 models:
   - name: stg_apple_store__app_store_app
     description: Table containing data about your application(s)
+    data_tests:
+      - dbt_utils.unique_combination_of_columns:
+          arguments:
+            combination_of_columns:
+              - source_relation
+              - app_id
     columns:
       - name: source_relation
         description: "{{ doc('source_relation') }}"
@@ -13,6 +19,13 @@ models:
 
   - name: stg_apple_store__sales_subscription_events
     description: Daily subscription event report by app name, subscription name, event, country, state and device; this model is aggregated by date, app_name, country, state and subscription_name for easier transformations in the modeling package.
+    data_tests:
+      - dbt_utils.unique_combination_of_columns:
+          arguments:
+            combination_of_columns:
+              - source_relation
+              - vendor_number
+              - _fivetran_id
     columns:
       - name: source_relation
         description: "{{ doc('source_relation') }}"
@@ -85,6 +98,13 @@ models:
 
   - name: stg_apple_store__sales_subscription_summary
     description: Daily subscription summary report by app name, country, state and subscription name; this model is aggregated by date, app_name, country, state and subscription_name for easier transformations in the modeling package.
+    data_tests:
+      - dbt_utils.unique_combination_of_columns:
+          arguments:
+            combination_of_columns:
+              - source_relation
+              - vendor_number
+              - _fivetran_id
     columns:
       - name: _fivetran_id
         description: '{{ doc("_fivetran_id") }}'
@@ -164,6 +184,14 @@ models:
 
   - name: stg_apple_store__app_crash_daily
     description: Provides daily data on app crashes, helping you understand app stability across different versions and devices.
+    data_tests:
+      - dbt_utils.unique_combination_of_columns:
+          arguments:
+            combination_of_columns:
+              - source_relation
+              - date_day
+              - app_id
+              - _fivetran_id
     columns:
       - name: _fivetran_id
         description: '{{ doc("_fivetran_id") }}'
@@ -188,6 +216,14 @@ models:
 
   - name: stg_apple_store__app_session_daily
     description: Provides standard daily metrics on user sessions within your app, including session duration and device information.
+    data_tests:
+      - dbt_utils.unique_combination_of_columns:
+          arguments:
+            combination_of_columns:
+              - source_relation
+              - date_day
+              - app_id
+              - _fivetran_id
     columns:
       - name: _fivetran_id
         description: '{{ doc("_fivetran_id") }}'
@@ -220,6 +256,14 @@ models:
 
   - name: stg_apple_store__app_store_download_daily
     description: Contains standard daily metrics on app downloads, including download types and sources.
+    data_tests:
+      - dbt_utils.unique_combination_of_columns:
+          arguments:
+            combination_of_columns:
+              - source_relation
+              - date_day
+              - app_id
+              - _fivetran_id
     columns:
       - name: _fivetran_id
         description: '{{ doc("_fivetran_id") }}'
@@ -250,6 +294,14 @@ models:
 
   - name: stg_apple_store__app_store_installation_and_deletion_daily
     description: Contains standard daily metrics on app installations and deletions, providing insights into user acquisition and retention.
+    data_tests:
+      - dbt_utils.unique_combination_of_columns:
+          arguments:
+            combination_of_columns:
+              - source_relation
+              - date_day
+              - app_id
+              - _fivetran_id
     columns:
       - name: _fivetran_id
         description: '{{ doc("_fivetran_id") }}'
@@ -284,6 +336,14 @@ models:
 
   - name: stg_apple_store__app_store_discovery_and_engagement_daily
     description: Contains daily metrics on how users discover and engage with your app on the App Store.
+    data_tests:
+      - dbt_utils.unique_combination_of_columns:
+          arguments:
+            combination_of_columns:
+              - source_relation
+              - date_day
+              - app_id
+              - _fivetran_id
     columns:
       - name: _fivetran_id
         description: '{{ doc("_fivetran_id") }}'
